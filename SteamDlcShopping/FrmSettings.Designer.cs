@@ -32,6 +32,9 @@
             this.txtSteamApiKey = new System.Windows.Forms.TextBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.lnkSteamPath = new System.Windows.Forms.LinkLabel();
+            this.lblSteamPath = new System.Windows.Forms.Label();
+            this.chkSteamIsInstalled = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblSteamApiKey
@@ -45,7 +48,7 @@
             // 
             // txtSteamApiKey
             // 
-            this.txtSteamApiKey.Location = new System.Drawing.Point(101, 12);
+            this.txtSteamApiKey.Location = new System.Drawing.Point(107, 12);
             this.txtSteamApiKey.Name = "txtSteamApiKey";
             this.txtSteamApiKey.Size = new System.Drawing.Size(250, 23);
             this.txtSteamApiKey.TabIndex = 1;
@@ -71,14 +74,50 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // lnkSteamPath
+            // 
+            this.lnkSteamPath.AutoSize = true;
+            this.lnkSteamPath.Enabled = false;
+            this.lnkSteamPath.Location = new System.Drawing.Point(107, 72);
+            this.lnkSteamPath.Name = "lnkSteamPath";
+            this.lnkSteamPath.Size = new System.Drawing.Size(162, 15);
+            this.lnkSteamPath.TabIndex = 3;
+            this.lnkSteamPath.TabStop = true;
+            this.lnkSteamPath.Text = "C:\\Program Files (x86)\\Steam";
+            this.lnkSteamPath.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSteamPath_LinkClicked);
+            // 
+            // lblSteamPath
+            // 
+            this.lblSteamPath.AutoSize = true;
+            this.lblSteamPath.Enabled = false;
+            this.lblSteamPath.Location = new System.Drawing.Point(12, 72);
+            this.lblSteamPath.Name = "lblSteamPath";
+            this.lblSteamPath.Size = new System.Drawing.Size(67, 15);
+            this.lblSteamPath.TabIndex = 0;
+            this.lblSteamPath.Text = "Steam Path";
+            // 
+            // chkSteamIsInstalled
+            // 
+            this.chkSteamIsInstalled.AutoSize = true;
+            this.chkSteamIsInstalled.Location = new System.Drawing.Point(12, 50);
+            this.chkSteamIsInstalled.Name = "chkSteamIsInstalled";
+            this.chkSteamIsInstalled.Size = new System.Drawing.Size(205, 19);
+            this.chkSteamIsInstalled.TabIndex = 4;
+            this.chkSteamIsInstalled.Text = "Steam is installed on this machine";
+            this.chkSteamIsInstalled.UseVisualStyleBackColor = true;
+            this.chkSteamIsInstalled.CheckedChanged += new System.EventHandler(this.chkSteamIsInstalled_CheckedChanged);
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(401, 161);
+            this.Controls.Add(this.chkSteamIsInstalled);
+            this.Controls.Add(this.lnkSteamPath);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.txtSteamApiKey);
+            this.Controls.Add(this.lblSteamPath);
             this.Controls.Add(this.lblSteamApiKey);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -99,5 +138,8 @@
         private TextBox txtSteamApiKey;
         private Button btnSave;
         private Button btnCancel;
+        private LinkLabel lnkSteamPath;
+        private Label lblSteamPath;
+        private CheckBox chkSteamIsInstalled;
     }
 }

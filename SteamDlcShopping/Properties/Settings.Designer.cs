@@ -58,5 +58,29 @@ namespace SteamDlcShopping.Properties {
                 this["SteamApiKey"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\Steam")]
+        public string SteamPath {
+            get {
+                return ((string)(this["SteamPath"]));
+            }
+            set {
+                this["SteamPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SteamIsInstalled {
+            get {
+                return ((bool)(this["SteamIsInstalled"]));
+            }
+            set {
+                this["SteamIsInstalled"] = value;
+            }
+        }
     }
 }

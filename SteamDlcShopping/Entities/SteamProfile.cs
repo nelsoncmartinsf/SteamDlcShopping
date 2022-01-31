@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SteamDlcShopping.Properties;
+﻿using SteamDlcShopping.Properties;
 using System.Net;
 using System.Xml;
 
@@ -9,18 +7,20 @@ namespace SteamDlcShopping.Entities
     public class SteamProfile
     {
         //Fields
-        private string _id;
+        private long? _id;
+
+        private long? _id3;
 
         private string _username;
 
         private string _avatarUrl;
 
         //Properties
-        public string Id
+        public long Id
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(_id))
+                if (_id == null)
                 {
                     string steamId = WebUtility.UrlDecode(Settings.Default.SteamLoginSecure);
                     int index = steamId.IndexOf('|', 0);
@@ -30,10 +30,24 @@ namespace SteamDlcShopping.Entities
                         steamId = steamId.Remove(index);
                     }
 
-                    _id = steamId;
+                    _id = Convert.ToInt64(steamId);
                 }
 
-                return _id;
+                return _id.Value;
+            }
+        }
+
+        public long Id3
+        {
+            get
+            {
+                if (_id3 == null)
+                {
+                    //Conversion from SteamID64 to the numeric part of SteamID3
+                    _id3 = Id - 0x0110000100000000;
+                }
+
+                return _id3.Value;
             }
         }
 
@@ -61,7 +75,7 @@ namespace SteamDlcShopping.Entities
         {
             get
             {
-                if (_avatarUrl == null)
+                if (string.IsNullOrWhiteSpace(_avatarUrl))
                 {
                     HttpClient httpClient = new();
                     string xml = httpClient.GetStringAsync($"{Url}/?xml=1").Result;
@@ -93,18 +107,17 @@ namespace SteamDlcShopping.Entities
             }
         }
 
-        public Library Library { get; private set; }
+        public Library Library { get; }
 
-        //Methods
-        public void LoadLibrary(string apiKey)
+        public SortedDictionary<string, List<string>> Collections { get; set; }
+
+        //Constructor
+        public SteamProfile()
         {
-            HttpClient httpClient = new();
-            string response = httpClient.GetStringAsync($"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={apiKey}&steamid={Id}&include_appinfo=true").Result;
-
-            JObject jObject = JObject.Parse(response);
-            Library = JsonConvert.DeserializeObject<Library>(jObject["response"].ToString());
-
-            Library.Games = Library.Games.Take(100).ToList();
+            _username = string.Empty;
+            _avatarUrl = string.Empty;
+            Library = new();
+            Collections = new();
         }
     }
 }

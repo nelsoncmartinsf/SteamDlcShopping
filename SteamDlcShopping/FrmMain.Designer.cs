@@ -48,10 +48,12 @@
             this.txtLibrarySearch = new System.Windows.Forms.TextBox();
             this.ddlLibrarySort = new System.Windows.Forms.ComboBox();
             this.grbLibrary = new System.Windows.Forms.GroupBox();
+            this.lblLibraryCost = new System.Windows.Forms.Label();
+            this.chkHideGamesNotOnSale = new System.Windows.Forms.CheckBox();
             this.lbldebug = new System.Windows.Forms.Label();
             this.mnuMenu = new System.Windows.Forms.MenuStrip();
             this.smiSettings = new System.Windows.Forms.ToolStripMenuItem();
-            this.chkHideGamesNotOnSale = new System.Windows.Forms.CheckBox();
+            this.btnCollectionFilter = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.grbLibrary.SuspendLayout();
             this.mnuMenu.SuspendLayout();
@@ -80,7 +82,7 @@
             this.btnLogin.Location = new System.Drawing.Point(82, 42);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(75, 23);
-            this.btnLogin.TabIndex = 2;
+            this.btnLogin.TabIndex = 1;
             this.btnLogin.Text = "Login";
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
@@ -90,7 +92,7 @@
             this.btnCalculate.Location = new System.Drawing.Point(163, 42);
             this.btnCalculate.Name = "btnCalculate";
             this.btnCalculate.Size = new System.Drawing.Size(75, 23);
-            this.btnCalculate.TabIndex = 2;
+            this.btnCalculate.TabIndex = 3;
             this.btnCalculate.Text = "Calculate";
             this.btnCalculate.UseVisualStyleBackColor = true;
             this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
@@ -204,7 +206,7 @@
             this.txtLibrarySearch.Location = new System.Drawing.Point(6, 22);
             this.txtLibrarySearch.Name = "txtLibrarySearch";
             this.txtLibrarySearch.Size = new System.Drawing.Size(200, 23);
-            this.txtLibrarySearch.TabIndex = 7;
+            this.txtLibrarySearch.TabIndex = 1;
             this.txtLibrarySearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // ddlLibrarySort
@@ -223,11 +225,12 @@
             this.ddlLibrarySort.Location = new System.Drawing.Point(437, 22);
             this.ddlLibrarySort.Name = "ddlLibrarySort";
             this.ddlLibrarySort.Size = new System.Drawing.Size(150, 23);
-            this.ddlLibrarySort.TabIndex = 8;
+            this.ddlLibrarySort.TabIndex = 3;
             this.ddlLibrarySort.SelectedIndexChanged += new System.EventHandler(this.ddlSort_SelectedIndexChanged);
             // 
             // grbLibrary
             // 
+            this.grbLibrary.Controls.Add(this.lblLibraryCost);
             this.grbLibrary.Controls.Add(this.chkHideGamesNotOnSale);
             this.grbLibrary.Controls.Add(this.txtLibrarySearch);
             this.grbLibrary.Controls.Add(this.ddlLibrarySort);
@@ -239,10 +242,29 @@
             this.grbLibrary.Location = new System.Drawing.Point(12, 97);
             this.grbLibrary.Name = "grbLibrary";
             this.grbLibrary.Size = new System.Drawing.Size(1240, 445);
-            this.grbLibrary.TabIndex = 9;
+            this.grbLibrary.TabIndex = 5;
             this.grbLibrary.TabStop = false;
             this.grbLibrary.Text = "Library";
-            this.grbLibrary.EnabledChanged += new System.EventHandler(this.grbLibrary_EnabledChanged);
+            // 
+            // lblLibraryCost
+            // 
+            this.lblLibraryCost.AutoSize = true;
+            this.lblLibraryCost.Location = new System.Drawing.Point(212, 424);
+            this.lblLibraryCost.Name = "lblLibraryCost";
+            this.lblLibraryCost.Size = new System.Drawing.Size(80, 15);
+            this.lblLibraryCost.TabIndex = 0;
+            this.lblLibraryCost.Text = "lblLibraryCost";
+            // 
+            // chkHideGamesNotOnSale
+            // 
+            this.chkHideGamesNotOnSale.AutoSize = true;
+            this.chkHideGamesNotOnSale.Location = new System.Drawing.Point(212, 24);
+            this.chkHideGamesNotOnSale.Name = "chkHideGamesNotOnSale";
+            this.chkHideGamesNotOnSale.Size = new System.Drawing.Size(150, 19);
+            this.chkHideGamesNotOnSale.TabIndex = 2;
+            this.chkHideGamesNotOnSale.Text = "Hide games not on sale";
+            this.chkHideGamesNotOnSale.UseVisualStyleBackColor = true;
+            this.chkHideGamesNotOnSale.CheckedChanged += new System.EventHandler(this.chkHideGamesNotOnSale_CheckedChanged);
             // 
             // lbldebug
             // 
@@ -250,7 +272,7 @@
             this.lbldebug.Location = new System.Drawing.Point(605, 24);
             this.lbldebug.Name = "lbldebug";
             this.lbldebug.Size = new System.Drawing.Size(38, 15);
-            this.lbldebug.TabIndex = 9;
+            this.lbldebug.TabIndex = 0;
             this.lbldebug.Text = "label1";
             // 
             // mnuMenu
@@ -260,7 +282,7 @@
             this.mnuMenu.Location = new System.Drawing.Point(0, 0);
             this.mnuMenu.Name = "mnuMenu";
             this.mnuMenu.Size = new System.Drawing.Size(1264, 24);
-            this.mnuMenu.TabIndex = 10;
+            this.mnuMenu.TabIndex = 0;
             this.mnuMenu.Text = "menuStrip1";
             // 
             // smiSettings
@@ -270,24 +292,24 @@
             this.smiSettings.Text = "Settings";
             this.smiSettings.Click += new System.EventHandler(this.smiSettings_Click);
             // 
-            // chkHideGamesNotOnSale
+            // btnCollectionFilter
             // 
-            this.chkHideGamesNotOnSale.AutoSize = true;
-            this.chkHideGamesNotOnSale.Location = new System.Drawing.Point(212, 24);
-            this.chkHideGamesNotOnSale.Name = "chkHideGamesNotOnSale";
-            this.chkHideGamesNotOnSale.Size = new System.Drawing.Size(150, 19);
-            this.chkHideGamesNotOnSale.TabIndex = 11;
-            this.chkHideGamesNotOnSale.Text = "Hide games not on sale";
-            this.chkHideGamesNotOnSale.UseVisualStyleBackColor = true;
-            this.chkHideGamesNotOnSale.CheckedChanged += new System.EventHandler(this.chkHideGamesNotOnSale_CheckedChanged);
+            this.btnCollectionFilter.Location = new System.Drawing.Point(163, 68);
+            this.btnCollectionFilter.Name = "btnCollectionFilter";
+            this.btnCollectionFilter.Size = new System.Drawing.Size(75, 23);
+            this.btnCollectionFilter.TabIndex = 4;
+            this.btnCollectionFilter.Text = "Collections";
+            this.btnCollectionFilter.UseVisualStyleBackColor = true;
+            this.btnCollectionFilter.Click += new System.EventHandler(this.btnCollectionFilter_Click);
             // 
-            // FrmCatalog
+            // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1264, 554);
             this.Controls.Add(this.lbldebug);
             this.Controls.Add(this.grbLibrary);
+            this.Controls.Add(this.btnCollectionFilter);
             this.Controls.Add(this.btnCalculate);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.btnLogin);
@@ -297,7 +319,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.mnuMenu;
             this.MaximizeBox = false;
-            this.Name = "FrmCatalog";
+            this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Steam DLC Shopping";
             this.Load += new System.EventHandler(this.frmCatalog_Load);
@@ -336,5 +358,7 @@
         private MenuStrip mnuMenu;
         private ToolStripMenuItem smiSettings;
         private CheckBox chkHideGamesNotOnSale;
+        private Button btnCollectionFilter;
+        private Label lblLibraryCost;
     }
 }

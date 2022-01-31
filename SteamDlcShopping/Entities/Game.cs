@@ -1,5 +1,4 @@
 ﻿using HtmlAgilityPack;
-using Newtonsoft.Json;
 using System.Globalization;
 using System.Net;
 
@@ -8,10 +7,8 @@ namespace SteamDlcShopping.Entities
     public class Game
     {
         //Properties
-        [JsonProperty("appid")]
         public int AppId { get; }
 
-        [JsonProperty("name")]
         public string Name { get; }
 
         public decimal DlcTotalPrice { get; private set; }
@@ -33,6 +30,7 @@ namespace SteamDlcShopping.Entities
         {
             AppId = appId;
             Name = name;
+            DlcList = new();
         }
 
         //Methods
@@ -49,71 +47,83 @@ namespace SteamDlcShopping.Entities
                     response = content.ReadAsStringAsync().Result;
                 }
 
-                if (response.Contains("gameAreaDLCSection"))
+                //The html dlc area was not found
+                if (!response.Contains("gameAreaDLCSection"))
                 {
-                    HtmlAgilityPack.HtmlDocument htmlDoc = new();
-                    htmlDoc.LoadHtml(response);
+                    return;
+                }
 
-                    if (htmlDoc.DocumentNode != null)
+                HtmlAgilityPack.HtmlDocument htmlDoc = new();
+                htmlDoc.LoadHtml(response);
+
+                //The html parse failed
+                if (htmlDoc.DocumentNode == null)
+                {
+                    return;
+                }
+
+                HtmlNodeCollection dlcList = htmlDoc.DocumentNode.SelectNodes("//a[contains(@class, 'game_area_dlc_row')]");
+
+                //The node selection found no results
+                if (dlcList == null || dlcList.Count == 0)
+                {
+                    return;
+                }
+
+                DlcList = new List<Dlc>();
+
+                foreach (HtmlNode node in dlcList)
+                {
+                    HtmlNode priceNode = node.SelectSingleNode("./div[@class='game_area_dlc_price']");
+
+                    string appId = node.Attributes["data-ds-appid"].Value;
+                    string name = WebUtility.HtmlDecode(node.SelectSingleNode("./div[@class='game_area_dlc_name']").InnerText.Trim());
+                    string price = priceNode.InnerText.Trim();
+
+                    string originalPrice = priceNode.SelectSingleNode(".//div[@class='discount_original_price']")?.InnerText.Trim();
+                    string salePrice = priceNode.SelectSingleNode(".//div[@class='discount_final_price']")?.InnerText.Trim();
+                    string salePercentage = priceNode.SelectSingleNode(".//div[@class='discount_pct']")?.InnerText.Trim();
+
+                    bool isFree = false;
+                    bool isNotAvailable = false;
+                    Sale sale = null;
+
+                    decimal dPrice = 0;
+
+                    switch (price.ToLower())
                     {
-                        HtmlNodeCollection dlcList = htmlDoc.DocumentNode.SelectNodes("//a[contains(@class, 'game_area_dlc_row')]");
-
-                        if (dlcList == null || dlcList.Count == 0)
-                        {
-                            return;
-                        }
-
-                        DlcList = new List<Dlc>();
-
-                        foreach (HtmlNode node in dlcList)
-                        {
-                            HtmlNode priceNode = node.SelectSingleNode("./div[@class='game_area_dlc_price']");
-
-                            string appId = node.Attributes["data-ds-appid"].Value;
-                            string name = WebUtility.HtmlDecode(node.SelectSingleNode("./div[@class='game_area_dlc_name']").InnerText.Trim());
-                            string price = priceNode.InnerText.Trim();
-
-                            string originalPrice = priceNode.SelectSingleNode(".//div[@class='discount_original_price']")?.InnerText.Trim();
-                            string salePrice = priceNode.SelectSingleNode(".//div[@class='discount_final_price']")?.InnerText.Trim();
-                            string salePercentage = priceNode.SelectSingleNode(".//div[@class='discount_pct']")?.InnerText.Trim();
-
-                            bool isFree = false;
-                            bool isNotAvailable = false;
-                            Sale sale = null;
-
-                            decimal dPrice = 0;
-
-                            switch (price.ToLower())
+                        case "free":
+                            isFree = true;
+                            break;
+                        case "n/a":
+                            isNotAvailable = true;
+                            break;
+                        default:
+                            //Dlc is currently on sale
+                            if (!string.IsNullOrWhiteSpace(salePrice))
                             {
-                                case "free":
-                                    isFree = true;
-                                    break;
-                                case "n/a":
-                                    isNotAvailable = true;
-                                    break;
-                                default:
-                                    //Dlc is currently on sale
-                                    if (!string.IsNullOrWhiteSpace(salePrice))
-                                    {
-                                        price = originalPrice;
-                                        int iSalePercentage = Convert.ToInt32(salePercentage[1..^1]);
-                                        decimal dSalePrice = decimal.Parse(salePrice, NumberStyles.Currency, new CultureInfo("pt-PT"));
+                                price = originalPrice;
+                                int iSalePercentage = Convert.ToInt32(salePercentage[1..^1]);
 
-                                        sale = new Sale(iSalePercentage, dSalePrice);
-                                    }
+                                //Formatting of rounded values with -- on the decimal part
+                                salePrice = salePrice.Replace('-', '0');
+                                decimal dSalePrice = decimal.Parse(salePrice, NumberStyles.Currency, new CultureInfo("pt-PT"));
 
-                                    dPrice = decimal.Parse(price, NumberStyles.Currency, new CultureInfo("pt-PT"));
-
-                                    break;
+                                sale = new Sale(iSalePercentage, dSalePrice);
                             }
 
-                            Dlc dlc = new(Convert.ToInt32(appId), name, dPrice, sale, isFree, isNotAvailable);
-                            DlcList.Add(dlc);
-                        }
+                            //Formatting of rounded values with -- on the decimal part
+                            price = price.Replace('-', '0');
+                            dPrice = decimal.Parse(price, NumberStyles.Currency, new CultureInfo("pt-PT"));
+
+                            break;
                     }
+
+                    Dlc dlc = new(Convert.ToInt32(appId), name, dPrice, sale, isFree, isNotAvailable);
+                    DlcList.Add(dlc);
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 //TODO
             }
