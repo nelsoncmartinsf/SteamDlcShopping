@@ -263,21 +263,6 @@ namespace SteamDlcShopping
         }
 
         /// <summary>
-        /// Removes the subnode with the given key. Can only be called on array nodes.
-        /// </summary>
-        /// <param name="key">Key of the subnode to remove</param>
-        /// <returns>True if node was removed, false if not found</returns>
-        public bool RemoveSubnode(string key)
-        {
-            if (NodeType != ValueType.Array)
-            {
-                return false;
-            }
-
-            return NodeArray.Remove(key);
-        }
-
-        /// <summary>
         /// Removes any array nodes without any value-type children
         /// </summary>
         public void CleanTree()
@@ -297,15 +282,6 @@ namespace SteamDlcShopping
                         NodeArray.Remove(key);
                     }
                 }
-            }
-        }
-
-        public void MakeArray()
-        {
-            if (NodeType != ValueType.Array)
-            {
-                NodeType = ValueType.Array;
-                NodeData = new Dictionary<string, VdfFileNode>(StringComparer.OrdinalIgnoreCase);
             }
         }
 
@@ -377,69 +353,6 @@ namespace SteamDlcShopping
             return thisLevel;
         }
 
-        /* This isn't perfect, and it's not needed for now, but it allows reading both the common AND extended elements from AppInfo.vdf
-        public static VdfFileNode LoadFromBinary_AppInfo( BinaryReader stream, int inNodeType, long streamLength ) {
-            if( stream.BaseStream.Position == streamLength ) return null;
-            VdfFileNode thisLevel = new VdfFileNode();
-
-            bool endOfStream = false;
-
-            while( !endOfStream ) {
-
-                byte nextByte = 0;
-                byte nextNextByte = 0;
-                try {
-                    nextByte = stream.ReadByte();
-                    nextNextByte = (byte)stream.PeekChar();
-                } catch( EndOfStreamException ) {
-                    endOfStream = true;
-                }
-                // Get key
-                string key = null;
-                if( endOfStream || stream.BaseStream.Position == streamLength ) {
-                    break;
-                }
-                if( nextByte == 8 ) {
-                    if( inNodeType == 2 || inNodeType == 3 ) {
-                        while( stream.PeekChar() == 8 ) stream.ReadByte();
-                    }
-                    break;
-                } else if( ( nextByte == 2 || nextByte == 3 ) && nextNextByte == 0 ) {
-                    stream.ReadByte();
-                    key = ReadBin_GetStringToken( stream );
-                    VdfFileNode newNode;
-                    newNode = LoadFromBinary_AppInfo( stream, nextByte, streamLength );
-                    thisLevel[key] = newNode;
-                    if( nextByte == 3 ) break;
-                } else if( nextNextByte == 0 ) {
-                    break;
-                } else if( nextByte == 0 ) {
-                    if( inNodeType == 2 || inNodeType == 3  ) {
-                    key = ReadBin_GetStringToken( stream );
-                    VdfFileNode newNode;
-                    newNode = LoadFromBinary_AppInfo( stream, 0, streamLength );
-                    thisLevel[key] = newNode;
-                    } else {
-                        break;
-                    }
-                } else if( nextByte == 1 ) {
-                    key = ReadBin_GetStringToken( stream );
-                    thisLevel[key] = new VdfFileNode( ReadBin_GetStringToken( stream ) );
-                } else if( nextByte == 2 ) {
-                    key = ReadBin_GetStringToken( stream );
-                    int val = stream.ReadInt32();
-                    thisLevel[key] = new VdfFileNode( val );
-                } else if( nextByte == 0xFF ) {
-                    return null;
-                } else {
-                    break;
-                    throw new ParseException( string.Format( GlobalStrings.TextVdfFile_UnexpectedCharacterKey, nextByte.ToString() ) );
-                }
-            }
-            return thisLevel;
-        }
-         */
-
         /// <summary>
         /// Writes this FileNode and childs to a stream
         /// </summary>
@@ -478,23 +391,6 @@ namespace SteamDlcShopping
                     }
 
                     break;
-            }
-        }
-
-        public static void ReadBin_SeekTo(BinaryReader stream, byte[] str, long fileLength)
-        {
-            int indexAt = 0;
-
-            while (indexAt < str.Length && stream.BaseStream.Position < fileLength)
-            {
-                if (stream.ReadByte() == str[indexAt])
-                {
-                    indexAt++;
-                }
-                else
-                {
-                    indexAt = 0;
-                }
             }
         }
 
@@ -799,7 +695,6 @@ namespace SteamDlcShopping
 
     public class ParseException : ApplicationException
     {
-        public ParseException() : base() { }
         public ParseException(string message) : base(message) { }
     }
 

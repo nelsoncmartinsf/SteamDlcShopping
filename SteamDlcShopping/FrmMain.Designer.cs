@@ -214,8 +214,6 @@
             this.ddlLibrarySort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ddlLibrarySort.FormattingEnabled = true;
             this.ddlLibrarySort.Items.AddRange(new object[] {
-            "App ID - Increasing",
-            "App ID - Decreasing",
             "Game - A to Z",
             "Game - Z to A",
             "Cost - Increasing",
@@ -226,7 +224,7 @@
             this.ddlLibrarySort.Name = "ddlLibrarySort";
             this.ddlLibrarySort.Size = new System.Drawing.Size(150, 23);
             this.ddlLibrarySort.TabIndex = 3;
-            this.ddlLibrarySort.SelectedIndexChanged += new System.EventHandler(this.ddlSort_SelectedIndexChanged);
+            this.ddlLibrarySort.SelectedIndexChanged += new System.EventHandler(this.ddlLibrarySort_SelectedIndexChanged);
             // 
             // grbLibrary
             // 

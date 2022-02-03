@@ -57,16 +57,16 @@ namespace SteamDlcShopping
             lblUsername.Text = "lblUsername";
         }
 
-        private void btnCalculate_Click(object sender, EventArgs e)
-        {
-            Timer tmrLibrary = new(_ => tmrLibrary_Tick(), null, 0, Timeout.Infinite);
-        }
-
         private void btnCollectionFilter_Click(object sender, EventArgs e)
         {
             frmCollections = new(SteamProfile.Id3);
             frmCollections.Show(this);
             (frmCollections.Controls["lsvCollections"] as ListView).ItemChecked += lsvCollections_ItemChecked;
+        }
+
+        private void btnCalculate_Click(object sender, EventArgs e)
+        {
+            Timer tmrLibrary = new(_ => tmrLibrary_Tick(), null, 0, Timeout.Infinite);
         }
 
         private void tmrLibrary_Tick()
@@ -75,31 +75,26 @@ namespace SteamDlcShopping
 
             SteamProfile.Library.LoadGames(Settings.Default.SteamApiKey, SteamProfile.Id);
             SteamProfile.Library.LoadGamesDlc();
-            ddlLibrarySort.Invoke(new Action(() => ddlSort_SelectedIndexChanged(new(), new())));
+            ddlLibrarySort.Invoke(new Action(() => ddlLibrarySort_SelectedIndexChanged(new(), new())));
 
             timer.Stop();
             lbldebug.Invoke(new Action(() => lbldebug.Text = $"{timer.Elapsed}"));
-
-            lblGameCount.Invoke(new Action(() => lblGameCount.Text = $"Count: {SteamProfile.Library.Size}"));
-            lblGameCount.Invoke(new Action(() => lblLibraryCost.Text = $"Cost: {SteamProfile.Library.TotalPrice}€"));
             lsvLibrary.Invoke(new Action(LoadLibraryToListview));
         }
 
         //////////////////////////////////////// FILTERS ////////////////////////////////////////
 
-        List<string> collectionsFilter;
-        string nameSearch = null;
-        int sort = 0;
+        private List<string> collectionsFilter = new();
+        private string nameSearch = string.Empty;
+        private int sort = -1;
 
         private void lsvCollections_ItemChecked(object sender, EventArgs e)
         {
-            collectionsFilter = null;
+            collectionsFilter = new();
             ListView listview = (frmCollections.Controls["lsvCollections"] as ListView);
 
             if (listview.CheckedItems.Count > 0)
             {
-                collectionsFilter = new();
-
                 foreach (KeyValuePair<string, List<string>> collection in frmCollections.collections)
                 {
                     ListViewItem item = listview.Items[collection.Key];
@@ -140,45 +135,33 @@ namespace SteamDlcShopping
             LoadLibraryToListview();
         }
 
-        private void ddlSort_SelectedIndexChanged(object sender, EventArgs e)
+        private void ddlLibrarySort_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ddlLibrarySort.SelectedIndex == sort)
             {
                 return;
             }
 
+            sort = ddlLibrarySort.SelectedIndex;
+
             switch (ddlLibrarySort.SelectedIndex)
             {
                 case 0:
-                    sort = 0;
-                    SteamProfile.Library.Games = SteamProfile.Library.Games.OrderBy(x => x.AppId).ToList();
-                    break;
-                case 1:
-                    sort = 1;
-                    SteamProfile.Library.Games = SteamProfile.Library.Games.OrderByDescending(x => x.AppId).ToList();
-                    break;
-                case 2:
-                    sort = 2;
                     SteamProfile.Library.Games = SteamProfile.Library.Games.OrderBy(x => x.Name).ToList();
                     break;
-                case 3:
-                    sort = 3;
+                case 1:
                     SteamProfile.Library.Games = SteamProfile.Library.Games.OrderByDescending(x => x.Name).ToList();
                     break;
-                case 4:
-                    sort = 4;
+                case 2:
                     SteamProfile.Library.Games = SteamProfile.Library.Games.OrderBy(x => x.DlcTotalPrice).ToList();
                     break;
-                case 5:
-                    sort = 5;
+                case 3:
                     SteamProfile.Library.Games = SteamProfile.Library.Games.OrderByDescending(x => x.DlcTotalPrice).ToList();
                     break;
-                case 6:
-                    sort = 6;
+                case 4:
                     SteamProfile.Library.Games = SteamProfile.Library.Games.OrderBy(x => x.DlcHighestPercentage).ToList();
                     break;
-                case 7:
-                    sort = 7;
+                case 5:
                     SteamProfile.Library.Games = SteamProfile.Library.Games.OrderByDescending(x => x.DlcHighestPercentage).ToList();
                     break;
             }
@@ -190,6 +173,8 @@ namespace SteamDlcShopping
 
         private void LoadLibraryToListview()
         {
+            decimal sum = 0m;
+
             lsvLibrary.Items.Clear();
 
             lsvLibrary.BeginUpdate();
@@ -203,17 +188,21 @@ namespace SteamDlcShopping
                 }
 
                 //Filter by games on sale
-                if (chkHideGamesNotOnSale.Checked && !game.DlcList.Any(x => x.OnSale))
+                if (chkHideGamesNotOnSale.Checked && !game.DlcList.Any(x => x.IsOwned && x.OnSale))
                 {
                     continue;
                 }
 
                 //Filter by collection
-                if (collectionsFilter != null && !collectionsFilter.Contains(game.AppId.ToString()))
+                if (collectionsFilter.Any() && !collectionsFilter.Contains(game.AppId.ToString()))
                 {
                     continue;
                 }
 
+                //Prices sum
+                sum += game.DlcTotalPrice;
+
+                //Game column
                 ListViewItem item = new()
                 {
                     Text = game.Name
@@ -221,6 +210,7 @@ namespace SteamDlcShopping
 
                 ListViewItem.ListViewSubItem subItem;
 
+                //Cost column
                 subItem = new()
                 {
                     Text = $"{game.DlcTotalPrice}€"
@@ -228,6 +218,7 @@ namespace SteamDlcShopping
 
                 item.SubItems.Add(subItem);
 
+                //Max Discount column
                 subItem = new()
                 {
                     Text = game.DlcHighestPercentage != 0 ? $"{game.DlcHighestPercentage}%" : null
@@ -241,21 +232,16 @@ namespace SteamDlcShopping
             lsvLibrary.EndUpdate();
 
             lblGameCount.Text = $"Count: {lsvLibrary.Items.Count}";
+            lblLibraryCost.Text = $"Cost: {sum}€";
         }
 
         private void lsvLibrary_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lblDlcCount.Text = null;
-            lnkSteamPage.Visible = false;
-
             //Selected game validation
             if (lsvLibrary.SelectedIndices.Count == 0)
             {
-                selectedAppId = 0;
                 return;
             }
-
-            lnkSteamPage.Visible = true;
 
             ListViewItem item = lsvLibrary.SelectedItems[0];
             Game game = SteamProfile.Library.Games.First(x => x.Name == item.Text);

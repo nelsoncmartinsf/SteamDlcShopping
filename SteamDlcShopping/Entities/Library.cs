@@ -16,14 +16,6 @@ namespace SteamDlcShopping.Entities
             }
         }
 
-        public decimal TotalPrice
-        {
-            get
-            {
-                return Games.Sum(x => x.DlcTotalPrice);
-            }
-        }
-
         public List<Game> Games { get; set; }
 
         private List<int> OwnedApps { get; set; }
