@@ -19,14 +19,27 @@ namespace SteamDlcShopping
         {
             if (webLogin.Source.AbsoluteUri == "https://store.steampowered.com/")
             {
-                List<CoreWebView2Cookie> cookiesTask = await webLogin.CoreWebView2.CookieManager.GetCookiesAsync(null);
+                List<CoreWebView2Cookie> cookies = await webLogin.CoreWebView2.CookieManager.GetCookiesAsync(null);
 
-                Settings.Default.SessionId = cookiesTask.FirstOrDefault(x => x.Name == "sessionid").Value;
-                Settings.Default.SteamLoginSecure = cookiesTask.FirstOrDefault(x => x.Name == "steamLoginSecure").Value;
+                Settings.Default.SessionId = GetCookieValue(cookies, "sessionid");
+                Settings.Default.SteamLoginSecure = GetCookieValue(cookies, "steamLoginSecure");
                 Settings.Default.Save();
 
                 Close();
             }
+        }
+
+        private static string GetCookieValue(List<CoreWebView2Cookie> cookies, string name)
+        {
+            foreach (CoreWebView2Cookie cookie in cookies)
+            {
+                if (cookie.Name == name)
+                {
+                    return cookie.Value;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -35,8 +35,6 @@ namespace SteamDlcShopping.Entities
 
             JObject jObject = JObject.Parse(response);
             Games = JsonConvert.DeserializeObject<List<Game>>(jObject["response"]["games"].ToString());
-
-            //Library.Games = Library.Games.Take(1).ToList();
         }
 
         public void LoadGamesDlc()
@@ -92,14 +90,15 @@ namespace SteamDlcShopping.Entities
 
         private void ImproveGamesList()
         {
-            for (int idx = 0; idx < Games.Count;)
-            {
-                Game game = Games[idx];
+            List<int> gamesToRemove = new();
 
-                //Remove games without dlc
+            foreach (Game game in Games)
+            {
+                //Mark to remove games without dlc
                 if (game.DlcList == null || game.DlcAmount == 0)
                 {
-                    Games.RemoveAt(idx);
+                    int index = Games.IndexOf(game);
+                    gamesToRemove.Add(index);
                     continue;
                 }
 
@@ -114,8 +113,8 @@ namespace SteamDlcShopping.Entities
                         continue;
                     }
 
-                    //Special rule to consider not available dlc as owned
-                    //This marks games that are only missing not available dlc as completed
+                    //Special rule to consider N/A dlc as owned
+                    //This marks games that are only missing N/A dlc as completed
                     if (dlc.IsNotAvailable)
                     {
                         continue;
@@ -124,18 +123,49 @@ namespace SteamDlcShopping.Entities
                     allOwned = false;
                 }
 
-                //Remove games with all dlc owned
+                //Mark to remove games with all dlc owned
                 if (allOwned)
                 {
-                    Games.RemoveAt(idx);
+                    int index = Games.IndexOf(game);
+                    gamesToRemove.Add(index);
                     continue;
                 }
 
                 //Calculate dlc metrics
                 game.CalculateDlcMetrics();
-
-                idx++;
             }
+
+            //Remove marked games
+            foreach (int index in gamesToRemove)
+            {
+                Games.RemoveAt(index);
+            }
+        }
+
+        public Game GetGameByAppId(int appId)
+        {
+            foreach (Game game in Games)
+            {
+                if (game.AppId == appId)
+                {
+                    return game;
+                }
+            }
+
+            return null;
+        }
+
+        public Game GetGameByName(string name)
+        {
+            foreach (Game game in Games)
+            {
+                if (game.Name == name)
+                {
+                    return game;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -188,13 +188,13 @@ namespace SteamDlcShopping
                 }
 
                 //Filter by games on sale
-                if (chkHideGamesNotOnSale.Checked && !game.DlcList.Any(x => x.IsOwned && x.OnSale))
+                if (chkHideGamesNotOnSale.Checked && game.DlcHighestPercentage == 0)
                 {
                     continue;
                 }
 
                 //Filter by collection
-                if (collectionsFilter.Any() && !collectionsFilter.Contains(game.AppId.ToString()))
+                if (collectionsFilter.Count > 0 && !collectionsFilter.Contains(game.AppId.ToString()))
                 {
                     continue;
                 }
@@ -244,7 +244,7 @@ namespace SteamDlcShopping
             }
 
             ListViewItem item = lsvLibrary.SelectedItems[0];
-            Game game = SteamProfile.Library.Games.First(x => x.Name == item.Text);
+            Game game = SteamProfile.Library.GetGameByName(item.Text);
             selectedAppId = game.AppId;
             lblDlcCount.Text = $"Count: {game.DlcAmount}";
 
@@ -255,7 +255,7 @@ namespace SteamDlcShopping
 
         private void LoadDlcToListview()
         {
-            Game game = SteamProfile.Library.Games.First(x => x.AppId == selectedAppId);
+            Game game = SteamProfile.Library.GetGameByAppId(selectedAppId);
 
             lsvGame.Items.Clear();
 
