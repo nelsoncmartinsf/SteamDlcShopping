@@ -22,14 +22,18 @@ namespace SteamDlcShopping
             erpSteamApiKey.SetIconAlignment(txtSteamApiKey, ErrorIconAlignment.MiddleRight);
             erpSteamApiKey.SetIconPadding(txtSteamApiKey, 5);
 
-            //Tooltips
-            ToolTip toolTip = new();
-            toolTip.SetToolTip(lblSteamApiKey, "This is the tooltip");
-            toolTip.SetToolTip(lblSteamPath, "This is the tooltip 2");
-
             //Controls
             txtSteamApiKey.Text = Settings.Default.SteamApiKey;
             chkSteamIsInstalled.Checked = Settings.Default.SteamIsInstalled;
+
+            //Help icons
+            pbtSteamApiKey.Image = SystemIcons.Information.ToBitmap();
+            ptbSteamIsInstalled.Image = SystemIcons.Information.ToBitmap();
+
+            //Tooltips
+            ToolTip toolTip = new();
+            toolTip.SetToolTip(pbtSteamApiKey, "This key is required in order to retrieve the owned games information.");
+            toolTip.SetToolTip(ptbSteamIsInstalled, $"This is an optional feature that enables filtering by your Steam client collections.{Environment.NewLine}It requires Steam to be installed and for your account to have been logged in at least once.");
         }
 
         private void FrmSettings_FormClosing(object sender, FormClosingEventArgs e)
