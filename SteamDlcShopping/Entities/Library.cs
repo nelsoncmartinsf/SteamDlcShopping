@@ -98,7 +98,7 @@ namespace SteamDlcShopping.Entities
                 if (game.DlcList == null || game.DlcAmount == 0)
                 {
                     int index = Games.IndexOf(game);
-                    gamesToRemove.Add(index);
+                    gamesToRemove.Insert(0, index);
                     continue;
                 }
 
@@ -127,7 +127,7 @@ namespace SteamDlcShopping.Entities
                 if (allOwned)
                 {
                     int index = Games.IndexOf(game);
-                    gamesToRemove.Add(index);
+                    gamesToRemove.Insert(0, index);
                     continue;
                 }
 
@@ -136,6 +136,7 @@ namespace SteamDlcShopping.Entities
             }
 
             //Remove marked games
+            //gamesToRemove id order is reversed so that deleting indexes doesn't break Games
             foreach (int index in gamesToRemove)
             {
                 Games.RemoveAt(index);

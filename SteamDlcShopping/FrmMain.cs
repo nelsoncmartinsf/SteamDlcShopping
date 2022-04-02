@@ -59,6 +59,12 @@ namespace SteamDlcShopping
 
         private void btnCollectionFilter_Click(object sender, EventArgs e)
         {
+            if (!Settings.Default.SteamIsInstalled)
+            {
+                MessageBox.Show("Please configure your Steam installation in the settings.");
+                return;
+            }
+
             frmCollections = new(SteamProfile.Id3);
             frmCollections.Show(this);
             (frmCollections.Controls["lsvCollections"] as ListView).ItemChecked += lsvCollections_ItemChecked;

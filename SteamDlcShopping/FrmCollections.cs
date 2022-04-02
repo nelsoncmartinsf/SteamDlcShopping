@@ -19,6 +19,12 @@ namespace SteamDlcShopping
         {
             string path = $"{Settings.Default.SteamPath}\\userdata\\{SteamId3}\\7\\remote\\sharedconfig.vdf";
 
+            if (!File.Exists(path))
+            {
+                MessageBox.Show("The user data for this account was not found. Please login once on the Steam client.");
+                Close();
+            }
+
             VdfFileNode dataRoot;
             using (StreamReader reader = new(path, false))
             {
@@ -86,7 +92,7 @@ namespace SteamDlcShopping
             {
                 if (NodeType != ValueType.Array)
                 {
-                    throw new ApplicationException(string.Format("TextVdfFile_CanNotGetKey", key));
+                    throw new ApplicationException("TextVdfFile_CanNotGetKey");
                 }
 
                 Dictionary<string, VdfFileNode> arrayData = (Dictionary<string, VdfFileNode>)NodeData;
@@ -102,7 +108,7 @@ namespace SteamDlcShopping
             {
                 if (NodeType == ValueType.String)
                 {
-                    throw new ApplicationException(string.Format("TextVdfFile_CanNotSetKey", key));
+                    throw new ApplicationException("TextVdfFile_CanNotSetKey");
                 }
 
                 Dictionary<string, VdfFileNode> arrayData = (Dictionary<string, VdfFileNode>)NodeData;
@@ -155,8 +161,10 @@ namespace SteamDlcShopping
                 {
                     if (NodeType == ValueType.String)
                     {
-                        int.TryParse(NodeString, out int res);
-                        return res;
+                        if (int.TryParse(NodeString, out int res))
+                        {
+                            return res;
+                        }
                     }
                 }
 
@@ -227,7 +235,7 @@ namespace SteamDlcShopping
 
             if (NodeType == ValueType.Array)
             {
-                Dictionary<String, VdfFileNode> data = (Dictionary<String, VdfFileNode>)NodeData;
+                Dictionary<string, VdfFileNode> data = (Dictionary<string, VdfFileNode>)NodeData;
 
                 if (ContainsKey(args[index]))
                 {
@@ -346,7 +354,7 @@ namespace SteamDlcShopping
                     case 0xFF:
                         return null;
                     default:
-                        throw new ParseException(string.Format("TextVdfFile_UnexpectedCharacterKey", nextByte.ToString()));
+                        throw new ParseException("TextVdfFile_UnexpectedCharacterKey");
                 }
             }
 
@@ -445,8 +453,8 @@ namespace SteamDlcShopping
         /// Writes a array key to a stream, adding start/end bytes.
         /// </summary>
         /// <param name="writer">Stream to write to</param>
-        /// <param name="arrayKey">String to write</param>
-        private void WriteBin_WriteArrayKey(BinaryWriter writer, string arrayKey)
+        /// <param name="arrayKey">string to write</param>
+        private static void WriteBin_WriteArrayKey(BinaryWriter writer, string arrayKey)
         {
             writer.Write((byte)0);
             writer.Write(arrayKey.ToCharArray());
@@ -458,7 +466,7 @@ namespace SteamDlcShopping
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="pair"></param>
-        private void WriteBin_WriteStringValue(BinaryWriter writer, string key, string val)
+        private static void WriteBin_WriteStringValue(BinaryWriter writer, string key, string val)
         {
             writer.Write((byte)1);
             writer.Write(key.ToCharArray());
@@ -467,7 +475,7 @@ namespace SteamDlcShopping
             writer.Write((byte)0);
         }
 
-        private void WriteBin_WriteIntegerValue(BinaryWriter writer, string key, int val)
+        private static void WriteBin_WriteIntegerValue(BinaryWriter writer, string key, int val)
         {
             writer.Write((byte)2);
             writer.Write(key.ToCharArray());
@@ -479,7 +487,7 @@ namespace SteamDlcShopping
         /// Write an end byte to stream
         /// </summary>
         /// <param name="writer"></param>
-        private void WriteBin_WriteEndByte(BinaryWriter writer)
+        private static void WriteBin_WriteEndByte(BinaryWriter writer)
         {
             writer.Write((byte)8);
         }
@@ -514,7 +522,7 @@ namespace SteamDlcShopping
                     }
                     else
                     {
-                        throw new ParseException(string.Format("TextVdfFile_UnexpectedCharacterKey", nextChar));
+                        throw new ParseException("TextVdfFile_UnexpectedCharacterKey");
                     }
                 }
 
@@ -535,7 +543,7 @@ namespace SteamDlcShopping
                     }
                     else
                     {
-                        throw new ParseException(string.Format("TextVdfFile_UnexpectedCharacterValue", nextChar));
+                        throw new ParseException("TextVdfFile_UnexpectedCharacterValue");
                     }
                 }
 
@@ -671,8 +679,8 @@ namespace SteamDlcShopping
         /// Writes a string to a stream, adding start/end quotes and escaping any quotes within the string.
         /// </summary>
         /// <param name="stream">Stream to write to</param>
-        /// <param name="s">String to write</param>
-        private void WriteText_WriteFormattedString(StreamWriter stream, string s)
+        /// <param name="s">string to write</param>
+        private static void WriteText_WriteFormattedString(StreamWriter stream, string s)
         {
             stream.Write("\"");
             stream.Write(s.Replace("\"", "\\\""));
@@ -684,7 +692,7 @@ namespace SteamDlcShopping
         /// </summary>
         /// <param name="stream">Stream to write to</param>
         /// <param name="indent">Number of tabs</param>
-        private void WriteText_WriteWhitespace(StreamWriter stream, int indent)
+        private static void WriteText_WriteWhitespace(StreamWriter stream, int indent)
         {
             for (int i = 0; i < indent; i++)
             {

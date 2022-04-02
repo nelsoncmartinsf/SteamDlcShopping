@@ -123,7 +123,7 @@ namespace SteamDlcShopping.Entities
                     DlcList.Add(dlc);
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 //TODO
             }
