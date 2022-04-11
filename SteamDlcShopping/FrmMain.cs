@@ -19,6 +19,10 @@ namespace SteamDlcShopping
 
         private void frmCatalog_Load(object sender, EventArgs e)
         {
+            ddlLibrarySort.SelectedIndexChanged -= ddlLibrarySort_SelectedIndexChanged;
+            ddlLibrarySort.SelectedIndex = 0;
+            ddlLibrarySort.SelectedIndexChanged += ddlLibrarySort_SelectedIndexChanged;
+
             if (SteamProfile.IsLoggedIn)
             {
                 ptbAvatar.LoadAsync(SteamProfile.AvatarUrl);
@@ -78,7 +82,6 @@ namespace SteamDlcShopping
         //////////////////////////////////////// FILTERS ////////////////////////////////////////
 
         private string nameSearch = string.Empty;
-        private int sort = -1;
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
@@ -106,20 +109,13 @@ namespace SteamDlcShopping
 
         private void ddlLibrarySort_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ddlLibrarySort.SelectedIndex == sort)
-            {
-                return;
-            }
-
-            sort = ddlLibrarySort.SelectedIndex;
-
             switch (ddlLibrarySort.SelectedIndex)
             {
                 case 0:
-                    SteamProfile.Library.Games = SteamProfile.Library.Games.OrderByDescending(x => x.DlcHighestPercentage).ToList();
+                    SteamProfile.Library.Games = SteamProfile.Library.Games.OrderBy(x => x.DlcTotalPrice).ToList();
                     break;
                 case 1:
-                    SteamProfile.Library.Games = SteamProfile.Library.Games.OrderBy(x => x.DlcTotalPrice).ToList();
+                    SteamProfile.Library.Games = SteamProfile.Library.Games.OrderByDescending(x => x.DlcHighestPercentage).ToList();
                     break;
             }
 

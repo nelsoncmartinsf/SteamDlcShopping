@@ -109,15 +109,12 @@ namespace SteamDlcShopping.Entities
 
         public Library Library { get; }
 
-        public SortedDictionary<string, List<string>> Collections { get; set; }
-
         //Constructor
         public SteamProfile()
         {
             _username = string.Empty;
             _avatarUrl = string.Empty;
             Library = new();
-            Collections = new();
         }
     }
 }

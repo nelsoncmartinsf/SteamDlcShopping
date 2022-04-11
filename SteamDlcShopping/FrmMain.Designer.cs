@@ -213,8 +213,8 @@
             this.ddlLibrarySort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ddlLibrarySort.FormattingEnabled = true;
             this.ddlLibrarySort.Items.AddRange(new object[] {
-            "Highest Discount",
-            "Cheapest Cost"});
+            "Cheapest Cost",
+            "Highest Discount"});
             this.ddlLibrarySort.Location = new System.Drawing.Point(437, 22);
             this.ddlLibrarySort.Name = "ddlLibrarySort";
             this.ddlLibrarySort.Size = new System.Drawing.Size(150, 23);
