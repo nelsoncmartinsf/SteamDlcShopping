@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using SteamDlcShopping.Entities;
 using SteamDlcShopping.Properties;
 using System.Diagnostics;
@@ -153,22 +154,10 @@ namespace SteamDlcShopping
             switch (ddlLibrarySort.SelectedIndex)
             {
                 case 0:
-                    SteamProfile.Library.Games = SteamProfile.Library.Games.OrderBy(x => x.Name).ToList();
+                    SteamProfile.Library.Games = SteamProfile.Library.Games.OrderByDescending(x => x.DlcHighestPercentage).ToList();
                     break;
                 case 1:
-                    SteamProfile.Library.Games = SteamProfile.Library.Games.OrderByDescending(x => x.Name).ToList();
-                    break;
-                case 2:
                     SteamProfile.Library.Games = SteamProfile.Library.Games.OrderBy(x => x.DlcTotalPrice).ToList();
-                    break;
-                case 3:
-                    SteamProfile.Library.Games = SteamProfile.Library.Games.OrderByDescending(x => x.DlcTotalPrice).ToList();
-                    break;
-                case 4:
-                    SteamProfile.Library.Games = SteamProfile.Library.Games.OrderBy(x => x.DlcHighestPercentage).ToList();
-                    break;
-                case 5:
-                    SteamProfile.Library.Games = SteamProfile.Library.Games.OrderByDescending(x => x.DlcHighestPercentage).ToList();
                     break;
             }
 
@@ -211,6 +200,7 @@ namespace SteamDlcShopping
                 //Game column
                 ListViewItem item = new()
                 {
+                    Tag = game.AppId,
                     Text = game.Name
                 };
 
@@ -244,7 +234,7 @@ namespace SteamDlcShopping
         private void lsvLibrary_SelectedIndexChanged(object sender, EventArgs e)
         {
             //Selected game validation
-            if (lsvLibrary.SelectedIndices.Count == 0)
+            if (lsvLibrary.SelectedIndices.Count != 1)
             {
                 return;
             }
@@ -255,6 +245,40 @@ namespace SteamDlcShopping
             lblDlcCount.Text = $"Count: {game.DlcAmount}";
 
             LoadDlcToListview();
+        }
+
+        private void btnBlacklist_Click(object sender, EventArgs e)
+        {
+            if (lsvLibrary.SelectedItems.Count == 0)
+            {
+                return;
+            }
+
+            string content;
+            SortedDictionary<int, string> blacklist = null;
+
+            if (File.Exists("blacklist.txt"))
+            {
+                content = File.ReadAllText("blacklist.txt");
+                blacklist = JsonConvert.DeserializeObject<SortedDictionary<int, string>>(content);
+            }
+
+            if (blacklist == null)
+            {
+                blacklist = new();
+            }
+
+            foreach (ListViewItem item in lsvLibrary.SelectedItems)
+            {
+                if (int.TryParse(item.Tag.ToString(), out int appId))
+                {
+                    blacklist.Add(appId, item.Text);
+                    lsvLibrary.Items.Remove(item);
+                }
+            }
+
+            content = JsonConvert.SerializeObject(blacklist);
+            File.WriteAllText("blacklist.txt", content);
         }
 
         //////////////////////////////////////// DLC ////////////////////////////////////////

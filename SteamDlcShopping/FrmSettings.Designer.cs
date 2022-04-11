@@ -34,13 +34,19 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.lnkSteamPath = new System.Windows.Forms.LinkLabel();
             this.lblSteamPath = new System.Windows.Forms.Label();
-            this.chkSteamIsInstalled = new System.Windows.Forms.CheckBox();
             this.pbtSteamApiKey = new System.Windows.Forms.PictureBox();
             this.ptbSteamIsInstalled = new System.Windows.Forms.PictureBox();
             this.lblGetSteamApiKey = new System.Windows.Forms.Label();
             this.lnkGetSteamApiKey = new System.Windows.Forms.LinkLabel();
+            this.chkAutoBlacklist = new System.Windows.Forms.CheckBox();
+            this.ptbSmartLoading = new System.Windows.Forms.PictureBox();
+            this.chkSteamIsInstalled = new System.Windows.Forms.CheckBox();
+            this.lsbBlacklist = new System.Windows.Forms.ListBox();
+            this.txtBlacklistSearch = new System.Windows.Forms.TextBox();
+            this.btnRemove = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbtSteamApiKey)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbSteamIsInstalled)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbSmartLoading)).BeginInit();
             this.SuspendLayout();
             // 
             // lblSteamApiKey
@@ -62,7 +68,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(233, 126);
+            this.btnSave.Location = new System.Drawing.Point(276, 401);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 5;
@@ -72,7 +78,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(314, 126);
+            this.btnCancel.Location = new System.Drawing.Point(357, 401);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 6;
@@ -101,18 +107,6 @@
             this.lblSteamPath.Size = new System.Drawing.Size(67, 15);
             this.lblSteamPath.TabIndex = 0;
             this.lblSteamPath.Text = "Steam Path";
-            // 
-            // chkSteamIsInstalled
-            // 
-            this.chkSteamIsInstalled.AutoSize = true;
-            this.chkSteamIsInstalled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkSteamIsInstalled.Location = new System.Drawing.Point(28, 65);
-            this.chkSteamIsInstalled.Name = "chkSteamIsInstalled";
-            this.chkSteamIsInstalled.Size = new System.Drawing.Size(205, 19);
-            this.chkSteamIsInstalled.TabIndex = 3;
-            this.chkSteamIsInstalled.Text = "Steam is installed on this machine";
-            this.chkSteamIsInstalled.UseVisualStyleBackColor = true;
-            this.chkSteamIsInstalled.CheckedChanged += new System.EventHandler(this.chkSteamIsInstalled_CheckedChanged);
             // 
             // pbtSteamApiKey
             // 
@@ -151,18 +145,83 @@
             this.lnkGetSteamApiKey.TabStop = true;
             this.lnkGetSteamApiKey.Text = "here";
             // 
+            // chkAutoBlacklist
+            // 
+            this.chkAutoBlacklist.AutoSize = true;
+            this.chkAutoBlacklist.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkAutoBlacklist.Location = new System.Drawing.Point(28, 114);
+            this.chkAutoBlacklist.Name = "chkAutoBlacklist";
+            this.chkAutoBlacklist.Size = new System.Drawing.Size(98, 19);
+            this.chkAutoBlacklist.TabIndex = 3;
+            this.chkAutoBlacklist.Text = "Auto Blacklist";
+            this.chkAutoBlacklist.UseVisualStyleBackColor = true;
+            // 
+            // ptbSmartLoading
+            // 
+            this.ptbSmartLoading.Location = new System.Drawing.Point(12, 115);
+            this.ptbSmartLoading.Name = "ptbSmartLoading";
+            this.ptbSmartLoading.Size = new System.Drawing.Size(16, 16);
+            this.ptbSmartLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.ptbSmartLoading.TabIndex = 6;
+            this.ptbSmartLoading.TabStop = false;
+            // 
+            // chkSteamIsInstalled
+            // 
+            this.chkSteamIsInstalled.AutoSize = true;
+            this.chkSteamIsInstalled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkSteamIsInstalled.Location = new System.Drawing.Point(28, 65);
+            this.chkSteamIsInstalled.Name = "chkSteamIsInstalled";
+            this.chkSteamIsInstalled.Size = new System.Drawing.Size(205, 19);
+            this.chkSteamIsInstalled.TabIndex = 3;
+            this.chkSteamIsInstalled.Text = "Steam is installed on this machine";
+            this.chkSteamIsInstalled.UseVisualStyleBackColor = true;
+            this.chkSteamIsInstalled.CheckedChanged += new System.EventHandler(this.chkSteamIsInstalled_CheckedChanged);
+            // 
+            // lsbBlacklist
+            // 
+            this.lsbBlacklist.FormattingEnabled = true;
+            this.lsbBlacklist.ItemHeight = 15;
+            this.lsbBlacklist.Location = new System.Drawing.Point(12, 177);
+            this.lsbBlacklist.Name = "lsbBlacklist";
+            this.lsbBlacklist.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lsbBlacklist.Size = new System.Drawing.Size(420, 199);
+            this.lsbBlacklist.TabIndex = 7;
+            // 
+            // txtBlacklistSearch
+            // 
+            this.txtBlacklistSearch.Location = new System.Drawing.Point(12, 148);
+            this.txtBlacklistSearch.Name = "txtBlacklistSearch";
+            this.txtBlacklistSearch.Size = new System.Drawing.Size(200, 23);
+            this.txtBlacklistSearch.TabIndex = 8;
+            this.txtBlacklistSearch.TextChanged += new System.EventHandler(this.txtBlacklistSearch_TextChanged);
+            // 
+            // btnRemove
+            // 
+            this.btnRemove.Location = new System.Drawing.Point(357, 148);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Size = new System.Drawing.Size(75, 23);
+            this.btnRemove.TabIndex = 5;
+            this.btnRemove.Text = "Remove";
+            this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(401, 161);
+            this.ClientSize = new System.Drawing.Size(444, 436);
+            this.Controls.Add(this.txtBlacklistSearch);
+            this.Controls.Add(this.lsbBlacklist);
             this.Controls.Add(this.lnkGetSteamApiKey);
             this.Controls.Add(this.lblGetSteamApiKey);
+            this.Controls.Add(this.ptbSmartLoading);
             this.Controls.Add(this.ptbSteamIsInstalled);
             this.Controls.Add(this.pbtSteamApiKey);
+            this.Controls.Add(this.chkAutoBlacklist);
             this.Controls.Add(this.chkSteamIsInstalled);
             this.Controls.Add(this.lnkSteamPath);
             this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.txtSteamApiKey);
             this.Controls.Add(this.lblSteamPath);
@@ -177,6 +236,7 @@
             this.Load += new System.EventHandler(this.FrmSettings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbtSteamApiKey)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbSteamIsInstalled)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptbSmartLoading)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -190,10 +250,15 @@
         private Button btnCancel;
         private LinkLabel lnkSteamPath;
         private Label lblSteamPath;
-        private CheckBox chkSteamIsInstalled;
         private PictureBox pbtSteamApiKey;
         private PictureBox ptbSteamIsInstalled;
         private Label lblGetSteamApiKey;
         private LinkLabel lnkGetSteamApiKey;
+        private CheckBox chkAutoBlacklist;
+        private PictureBox ptbSmartLoading;
+        private CheckBox chkSteamIsInstalled;
+        private ListBox lsbBlacklist;
+        private TextBox txtBlacklistSearch;
+        private Button btnRemove;
     }
 }

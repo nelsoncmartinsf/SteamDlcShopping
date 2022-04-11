@@ -77,7 +77,7 @@ namespace SteamDlcShopping
         //Fields
         public ValueType NodeType;
 
-        public Object NodeData; //Can be an int, string or Dictionary<string,VdfFileNode>
+        public Object NodeData; //Can be an int, string or SortedDictionary<string,VdfFileNode>
 
         //Properties
         /// <summary>
@@ -95,7 +95,7 @@ namespace SteamDlcShopping
                     throw new ApplicationException("TextVdfFile_CanNotGetKey");
                 }
 
-                Dictionary<string, VdfFileNode> arrayData = (Dictionary<string, VdfFileNode>)NodeData;
+                SortedDictionary<string, VdfFileNode> arrayData = (SortedDictionary<string, VdfFileNode>)NodeData;
 
                 if (!arrayData.ContainsKey(key))
                 {
@@ -111,7 +111,7 @@ namespace SteamDlcShopping
                     throw new ApplicationException("TextVdfFile_CanNotSetKey");
                 }
 
-                Dictionary<string, VdfFileNode> arrayData = (Dictionary<string, VdfFileNode>)NodeData;
+                SortedDictionary<string, VdfFileNode> arrayData = (SortedDictionary<string, VdfFileNode>)NodeData;
 
                 if (!arrayData.ContainsKey(key))
                 {
@@ -127,11 +127,11 @@ namespace SteamDlcShopping
         /// <summary>
         /// Quick shortcut for casting data to a a dictionary
         /// </summary>
-        public Dictionary<string, VdfFileNode> NodeArray
+        public SortedDictionary<string, VdfFileNode> NodeArray
         {
             get
             {
-                return (NodeType == ValueType.Array) ? (NodeData as Dictionary<string, VdfFileNode>) : null;
+                return (NodeType == ValueType.Array) ? (NodeData as SortedDictionary<string, VdfFileNode>) : null;
             }
         }
 
@@ -179,7 +179,7 @@ namespace SteamDlcShopping
         public VdfFileNode()
         {
             NodeType = ValueType.Array;
-            NodeData = new Dictionary<string, VdfFileNode>(StringComparer.OrdinalIgnoreCase);
+            NodeData = new SortedDictionary<string, VdfFileNode>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace SteamDlcShopping
 
             if (NodeType == ValueType.Array)
             {
-                Dictionary<string, VdfFileNode> data = (Dictionary<string, VdfFileNode>)NodeData;
+                SortedDictionary<string, VdfFileNode> data = (SortedDictionary<string, VdfFileNode>)NodeData;
 
                 if (ContainsKey(args[index]))
                 {
@@ -267,7 +267,7 @@ namespace SteamDlcShopping
                 return false;
             }
 
-            return ((Dictionary<string, VdfFileNode>)NodeData).ContainsKey(key);
+            return ((SortedDictionary<string, VdfFileNode>)NodeData).ContainsKey(key);
         }
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace SteamDlcShopping
         /// </summary>
         public void CleanTree()
         {
-            Dictionary<string, VdfFileNode> nodes = NodeArray;
+            SortedDictionary<string, VdfFileNode> nodes = NodeArray;
 
             if (nodes != null)
             {
@@ -376,7 +376,7 @@ namespace SteamDlcShopping
                         WriteBin_WriteArrayKey(stream, actualKey);
                     }
 
-                    Dictionary<string, VdfFileNode> data = NodeArray;
+                    SortedDictionary<string, VdfFileNode> data = NodeArray;
 
                     foreach (KeyValuePair<string, VdfFileNode> entry in data)
                     {
@@ -567,7 +567,7 @@ namespace SteamDlcShopping
         {
             if (NodeType == ValueType.Array)
             {
-                Dictionary<string, VdfFileNode> data = NodeArray;
+                SortedDictionary<string, VdfFileNode> data = NodeArray;
 
                 foreach (KeyValuePair<string, VdfFileNode> entry in data)
                 {

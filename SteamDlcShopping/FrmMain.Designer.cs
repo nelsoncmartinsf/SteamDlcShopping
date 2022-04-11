@@ -54,6 +54,7 @@
             this.mnuMenu = new System.Windows.Forms.MenuStrip();
             this.smiSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.btnCollectionFilter = new System.Windows.Forms.Button();
+            this.btnBlacklist = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.grbLibrary.SuspendLayout();
             this.mnuMenu.SuspendLayout();
@@ -106,7 +107,6 @@
             this.lsvLibrary.FullRowSelect = true;
             this.lsvLibrary.GridLines = true;
             this.lsvLibrary.Location = new System.Drawing.Point(6, 51);
-            this.lsvLibrary.MultiSelect = false;
             this.lsvLibrary.Name = "lsvLibrary";
             this.lsvLibrary.Size = new System.Drawing.Size(581, 370);
             this.lsvLibrary.TabIndex = 4;
@@ -214,12 +214,8 @@
             this.ddlLibrarySort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ddlLibrarySort.FormattingEnabled = true;
             this.ddlLibrarySort.Items.AddRange(new object[] {
-            "Game - A to Z",
-            "Game - Z to A",
-            "Cost - Increasing",
-            "Cost - Decreasing",
-            "Discount - Increasing",
-            "Discount - Decreasing"});
+            "Highest Discount",
+            "Cheapest Cost"});
             this.ddlLibrarySort.Location = new System.Drawing.Point(437, 22);
             this.ddlLibrarySort.Name = "ddlLibrarySort";
             this.ddlLibrarySort.Size = new System.Drawing.Size(150, 23);
@@ -300,6 +296,16 @@
             this.btnCollectionFilter.UseVisualStyleBackColor = true;
             this.btnCollectionFilter.Click += new System.EventHandler(this.btnCollectionFilter_Click);
             // 
+            // btnBlacklist
+            // 
+            this.btnBlacklist.Location = new System.Drawing.Point(499, 68);
+            this.btnBlacklist.Name = "btnBlacklist";
+            this.btnBlacklist.Size = new System.Drawing.Size(100, 23);
+            this.btnBlacklist.TabIndex = 3;
+            this.btnBlacklist.Text = "Add to Blacklist";
+            this.btnBlacklist.UseVisualStyleBackColor = true;
+            this.btnBlacklist.Click += new System.EventHandler(this.btnBlacklist_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -308,6 +314,7 @@
             this.Controls.Add(this.lbldebug);
             this.Controls.Add(this.grbLibrary);
             this.Controls.Add(this.btnCollectionFilter);
+            this.Controls.Add(this.btnBlacklist);
             this.Controls.Add(this.btnCalculate);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.btnLogin);
@@ -358,5 +365,6 @@
         private CheckBox chkHideGamesNotOnSale;
         private Button btnCollectionFilter;
         private Label lblLibraryCost;
+        private Button btnBlacklist;
     }
 }

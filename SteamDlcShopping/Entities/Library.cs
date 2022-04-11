@@ -20,6 +20,8 @@ namespace SteamDlcShopping.Entities
 
         private List<int> OwnedApps { get; set; }
 
+        private SortedDictionary<int, string> Blacklist { get; set; }
+
         //Constructor
         public Library()
         {
@@ -39,6 +41,8 @@ namespace SteamDlcShopping.Entities
 
         public void LoadGamesDlc()
         {
+            ApplyBlacklist();
+
             //Load all dlc for all games
             int threads = 10;
             int size = Size / threads;
@@ -69,6 +73,11 @@ namespace SteamDlcShopping.Entities
             countdownEvent.Wait();
 
             ImproveGamesList();
+
+            foreach (Game game in Games)
+            {
+                game.CalculateDlcMetrics();
+            }
         }
 
         private void LoadDynamicStore()
@@ -88,6 +97,22 @@ namespace SteamDlcShopping.Entities
             OwnedApps = JsonConvert.DeserializeObject<List<int>>(jObject["rgOwnedApps"].ToString());
         }
 
+        private void ApplyBlacklist()
+        {
+            string content;
+
+            if (File.Exists("blacklist.txt"))
+            {
+                content = File.ReadAllText("blacklist.txt");
+                Blacklist = JsonConvert.DeserializeObject<SortedDictionary<int, string>>(content);
+
+                if (Blacklist != null)
+                {
+                    Games.RemoveAll(x => Blacklist.ContainsKey(x.AppId));
+                }
+            }
+        }
+
         private void ImproveGamesList()
         {
             List<int> gamesToRemove = new();
@@ -97,6 +122,11 @@ namespace SteamDlcShopping.Entities
                 //Mark to remove games without dlc
                 if (game.DlcList == null || game.DlcAmount == 0)
                 {
+                    if (Settings.Default.AutoBlacklist)
+                    {
+                        Blacklist.Add(game.AppId, game.Name);
+                    }
+
                     int index = Games.IndexOf(game);
                     gamesToRemove.Insert(0, index);
                     continue;
@@ -130,9 +160,6 @@ namespace SteamDlcShopping.Entities
                     gamesToRemove.Insert(0, index);
                     continue;
                 }
-
-                //Calculate dlc metrics
-                game.CalculateDlcMetrics();
             }
 
             //Remove marked games
@@ -140,6 +167,12 @@ namespace SteamDlcShopping.Entities
             foreach (int index in gamesToRemove)
             {
                 Games.RemoveAt(index);
+            }
+
+            if (Settings.Default.AutoBlacklist)
+            {
+                string content = JsonConvert.SerializeObject(Blacklist);
+                File.WriteAllText("blacklist.txt", content);
             }
         }
 

@@ -77,12 +77,12 @@ namespace SteamDlcShopping.Entities
                     HtmlNode priceNode = node.SelectSingleNode("./div[@class='game_area_dlc_price']");
 
                     string appId = node.Attributes["data-ds-appid"].Value;
-                    string name = WebUtility.HtmlDecode(node.SelectSingleNode("./div[@class='game_area_dlc_name']").InnerText.Trim());
+                    string name = WebUtility.HtmlDecode(node.SelectSingleNode("./div[@class='game_area_dlc_name']").InnerText?.Trim());
                     string price = priceNode.InnerText.Trim();
 
-                    string originalPrice = priceNode.SelectSingleNode(".//div[@class='discount_original_price']")?.InnerText.Trim();
-                    string salePrice = priceNode.SelectSingleNode(".//div[@class='discount_final_price']")?.InnerText.Trim();
-                    string salePercentage = priceNode.SelectSingleNode(".//div[@class='discount_pct']")?.InnerText.Trim();
+                    string originalPrice = priceNode.SelectSingleNode(".//div[@class='discount_original_price']")?.InnerText?.Trim();
+                    string salePrice = priceNode.SelectSingleNode(".//div[@class='discount_final_price']")?.InnerText?.Trim();
+                    string salePercentage = priceNode.SelectSingleNode(".//div[@class='discount_pct']")?.InnerText?.Trim();
 
                     bool isFree = false;
                     bool isNotAvailable = false;
