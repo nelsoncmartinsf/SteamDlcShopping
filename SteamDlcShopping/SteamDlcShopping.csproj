@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Gameloop.Vdf" Version="0.6.2" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.42" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1150.38" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

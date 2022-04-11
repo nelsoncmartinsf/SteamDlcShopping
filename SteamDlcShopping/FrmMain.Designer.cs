@@ -53,7 +53,6 @@
             this.lbldebug = new System.Windows.Forms.Label();
             this.mnuMenu = new System.Windows.Forms.MenuStrip();
             this.smiSettings = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnCollectionFilter = new System.Windows.Forms.Button();
             this.btnBlacklist = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.grbLibrary.SuspendLayout();
@@ -286,16 +285,6 @@
             this.smiSettings.Text = "Settings";
             this.smiSettings.Click += new System.EventHandler(this.smiSettings_Click);
             // 
-            // btnCollectionFilter
-            // 
-            this.btnCollectionFilter.Location = new System.Drawing.Point(163, 68);
-            this.btnCollectionFilter.Name = "btnCollectionFilter";
-            this.btnCollectionFilter.Size = new System.Drawing.Size(75, 23);
-            this.btnCollectionFilter.TabIndex = 4;
-            this.btnCollectionFilter.Text = "Collections";
-            this.btnCollectionFilter.UseVisualStyleBackColor = true;
-            this.btnCollectionFilter.Click += new System.EventHandler(this.btnCollectionFilter_Click);
-            // 
             // btnBlacklist
             // 
             this.btnBlacklist.Location = new System.Drawing.Point(499, 68);
@@ -313,7 +302,6 @@
             this.ClientSize = new System.Drawing.Size(1264, 554);
             this.Controls.Add(this.lbldebug);
             this.Controls.Add(this.grbLibrary);
-            this.Controls.Add(this.btnCollectionFilter);
             this.Controls.Add(this.btnBlacklist);
             this.Controls.Add(this.btnCalculate);
             this.Controls.Add(this.btnLogout);
@@ -363,7 +351,6 @@
         private MenuStrip mnuMenu;
         private ToolStripMenuItem smiSettings;
         private CheckBox chkHideGamesNotOnSale;
-        private Button btnCollectionFilter;
         private Label lblLibraryCost;
         private Button btnBlacklist;
     }

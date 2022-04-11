@@ -10,7 +10,6 @@ namespace SteamDlcShopping
     {
         private readonly SteamProfile SteamProfile;
         private int selectedAppId;
-        private FrmCollections frmCollections;
 
         public FrmMain()
         {
@@ -58,19 +57,6 @@ namespace SteamDlcShopping
             lblUsername.Text = "lblUsername";
         }
 
-        private void btnCollectionFilter_Click(object sender, EventArgs e)
-        {
-            if (!Settings.Default.SteamIsInstalled)
-            {
-                MessageBox.Show("Please configure your Steam installation in the settings.");
-                return;
-            }
-
-            frmCollections = new(SteamProfile.Id3);
-            frmCollections.Show(this);
-            (frmCollections.Controls["lsvCollections"] as ListView).ItemChecked += lsvCollections_ItemChecked;
-        }
-
         private void btnCalculate_Click(object sender, EventArgs e)
         {
             Timer tmrLibrary = new(_ => tmrLibrary_Tick(), null, 0, Timeout.Infinite);
@@ -91,32 +77,8 @@ namespace SteamDlcShopping
 
         //////////////////////////////////////// FILTERS ////////////////////////////////////////
 
-        private List<string> collectionsFilter = new();
         private string nameSearch = string.Empty;
         private int sort = -1;
-
-        private void lsvCollections_ItemChecked(object sender, EventArgs e)
-        {
-            collectionsFilter = new();
-            ListView listview = (frmCollections.Controls["lsvCollections"] as ListView);
-
-            if (listview.CheckedItems.Count > 0)
-            {
-                foreach (KeyValuePair<string, List<string>> collection in frmCollections.collections)
-                {
-                    ListViewItem item = listview.Items[collection.Key];
-
-                    if (!item.Checked)
-                    {
-                        continue;
-                    }
-
-                    collectionsFilter.AddRange(frmCollections.collections[collection.Key]);
-                }
-            }
-
-            LoadLibraryToListview();
-        }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
@@ -184,12 +146,6 @@ namespace SteamDlcShopping
 
                 //Filter by games on sale
                 if (chkHideGamesNotOnSale.Checked && game.DlcHighestPercentage == 0)
-                {
-                    continue;
-                }
-
-                //Filter by collection
-                if (collectionsFilter.Count > 0 && !collectionsFilter.Contains(game.AppId.ToString()))
                 {
                     continue;
                 }

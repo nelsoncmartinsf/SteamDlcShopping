@@ -11,12 +11,6 @@
     <Setting Name="SteamApiKey" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SteamPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Program Files (x86)\Steam</Value>
-    </Setting>
-    <Setting Name="SteamIsInstalled" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="AutoBlacklist" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
