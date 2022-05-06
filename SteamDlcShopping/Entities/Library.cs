@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SteamDlcShopping.Enums;
 using SteamDlcShopping.Properties;
 using System.Net;
 
@@ -7,41 +8,66 @@ namespace SteamDlcShopping.Entities
 {
     public class Library
     {
+        //Fields
+        private long _steamId;
+
+        private List<int>? _dynamicStore;
+
+        private List<Game>? _games;
+
         //Properties
-        public int Size
-        {
-            get
-            {
-                return Games.Count;
-            }
-        }
 
-        public List<Game> Games { get; set; }
+        public List<Game> Games => _games;
 
-        private List<int> OwnedApps { get; set; }
+        public SortedDictionary<int, string> Blacklist { get; private set; }
 
-        private SortedDictionary<int, string> Blacklist { get; set; }
+        public int Size => Games.Count;
+
+        public decimal TotalCost => Games.Sum(x => x.DlcTotalPrice);
 
         //Constructor
-        public Library()
+        public Library(long steamId)
         {
-            Games = new();
-            OwnedApps = new();
+            _steamId = steamId;
         }
 
         //Methods
-        public void LoadGames(string apiKey, long steamId)
+        private void LoadDynamicStore()
+        {
+            HttpResponseMessage response;
+            Uri uri = new("https://store.steampowered.com/dynamicstore/userdata/");
+
+            using HttpClientHandler handler = new();
+            handler.CookieContainer = new CookieContainer();
+            handler.CookieContainer.Add(uri, new Cookie("sessionid", Settings.Default.SessionId));
+            handler.CookieContainer.Add(uri, new Cookie("steamLoginSecure", Settings.Default.SteamLoginSecure));
+
+            HttpClient client = new(handler);
+            response = client.GetAsync(uri).Result;
+
+            JObject jObject = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+            _dynamicStore = JsonConvert.DeserializeObject<List<int>>(jObject["rgOwnedApps"].ToString());
+        }
+        
+        private void LoadGames()
         {
             HttpClient httpClient = new();
-            string response = httpClient.GetStringAsync($"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={apiKey}&steamid={steamId}&include_appinfo=true").Result;
+            string response = httpClient.GetStringAsync($"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={Settings.Default.SteamApiKey}&steamid={_steamId}&include_appinfo=true").Result;
 
             JObject jObject = JObject.Parse(response);
-            Games = JsonConvert.DeserializeObject<List<Game>>(jObject["response"]["games"].ToString());
+            _games = JsonConvert.DeserializeObject<List<Game>>(jObject["response"]["games"].ToString());
         }
+
+
 
         public void LoadGamesDlc()
         {
+            LoadDynamicStore();
+            LoadGames();
+            LoadBlacklist();
+
             ApplyBlacklist();
+            SortGamesBy(SortField.AppId);
 
             //Load all dlc for all games
             int threads = 10;
@@ -67,9 +93,6 @@ namespace SteamDlcShopping.Entities
                 }, count);
             }
 
-            //Load owned apps
-            LoadDynamicStore();
-
             countdownEvent.Wait();
 
             ImproveGamesList();
@@ -80,39 +103,6 @@ namespace SteamDlcShopping.Entities
             }
         }
 
-        private void LoadDynamicStore()
-        {
-            HttpResponseMessage response;
-            Uri uri = new("https://store.steampowered.com/dynamicstore/userdata/");
-
-            using HttpClientHandler handler = new();
-            handler.CookieContainer = new CookieContainer();
-            handler.CookieContainer.Add(uri, new Cookie("sessionid", Settings.Default.SessionId));
-            handler.CookieContainer.Add(uri, new Cookie("steamLoginSecure", Settings.Default.SteamLoginSecure));
-
-            HttpClient client = new(handler);
-            response = client.GetAsync(uri).Result;
-
-            JObject jObject = JObject.Parse(response.Content.ReadAsStringAsync().Result);
-            OwnedApps = JsonConvert.DeserializeObject<List<int>>(jObject["rgOwnedApps"].ToString());
-        }
-
-        private void ApplyBlacklist()
-        {
-            string content;
-
-            if (File.Exists("blacklist.txt"))
-            {
-                content = File.ReadAllText("blacklist.txt");
-                Blacklist = JsonConvert.DeserializeObject<SortedDictionary<int, string>>(content);
-
-                if (Blacklist != null)
-                {
-                    Games.RemoveAll(x => Blacklist.ContainsKey(x.AppId));
-                }
-            }
-        }
-
         private void ImproveGamesList()
         {
             List<int> gamesToRemove = new();
@@ -120,11 +110,11 @@ namespace SteamDlcShopping.Entities
             foreach (Game game in Games)
             {
                 //Mark to remove games without dlc
-                if (game.DlcList == null || game.DlcAmount == 0)
+                if (game.DlcList is null || game.DlcAmount == 0)
                 {
                     if (Settings.Default.AutoBlacklist)
                     {
-                        Blacklist.Add(game.AppId, game.Name);
+                        BlacklistGame(game.AppId);
                     }
 
                     int index = Games.IndexOf(game);
@@ -134,10 +124,10 @@ namespace SteamDlcShopping.Entities
 
                 bool allOwned = true;
 
-                //Mark dlc as owned
                 foreach (Dlc dlc in game.DlcList)
                 {
-                    if (OwnedApps.Contains(dlc.AppId))
+                    //Mark dlc as owned
+                    if (_dynamicStore.Contains(dlc.AppId))
                     {
                         dlc.MarkAsOwned();
                         continue;
@@ -171,8 +161,79 @@ namespace SteamDlcShopping.Entities
 
             if (Settings.Default.AutoBlacklist)
             {
-                string content = JsonConvert.SerializeObject(Blacklist);
-                File.WriteAllText("blacklist.txt", content);
+                SaveBlacklist();
+            }
+        }
+
+
+
+        public void BlacklistGame(int appId)
+        {
+            Game game = Games.First(x => x.AppId == appId);
+            Blacklist.Add(game.AppId, game.Name);
+        }
+
+        public void UnBlacklistGame(int appId)
+        {
+            Blacklist.Remove(appId);
+        }
+
+        public void ApplyBlacklist()
+        {
+            Games.RemoveAll(x => Blacklist.ContainsKey(x.AppId));
+        }
+
+        public void LoadBlacklist()
+        {
+            if (!File.Exists("blacklist.txt"))
+            {
+                Blacklist = new();
+                return;
+            }
+
+            string content = File.ReadAllText("blacklist.txt");
+            Blacklist = JsonConvert.DeserializeObject<SortedDictionary<int, string>>(content);
+
+            if (Blacklist is null)
+            {
+                Blacklist = new();
+            }
+        }
+
+        public void SaveBlacklist()
+        {
+            string content = JsonConvert.SerializeObject(Blacklist);
+            File.WriteAllText("blacklist.txt", content);
+        }
+
+
+
+        public void SortGamesBy(SortField sortField, Enums.SortOrder sortOrder = Enums.SortOrder.Ascending)
+        {
+            if (sortOrder == Enums.SortOrder.Ascending)
+            {
+                switch (sortField)
+                {
+                    case SortField.TotalCost:
+                        _games = Games.OrderBy(x => x.DlcTotalPrice).ToList();
+                        break;
+                    case SortField.MaxDiscount:
+                        _games = Games.OrderBy(x => x.DlcHighestPercentage).ToList();
+                        break;
+                }
+            }
+
+            if (sortOrder == Enums.SortOrder.Descending)
+            {
+                switch (sortField)
+                {
+                    case SortField.TotalCost:
+                        _games = Games.OrderByDescending(x => x.DlcTotalPrice).ToList();
+                        break;
+                    case SortField.MaxDiscount:
+                        _games = Games.OrderByDescending(x => x.DlcHighestPercentage).ToList();
+                        break;
+                }
             }
         }
 

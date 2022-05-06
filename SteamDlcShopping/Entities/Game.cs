@@ -57,7 +57,7 @@ namespace SteamDlcShopping.Entities
                 htmlDoc.LoadHtml(response);
 
                 //The html parse failed
-                if (htmlDoc.DocumentNode == null)
+                if (htmlDoc.DocumentNode is null)
                 {
                     return;
                 }
@@ -65,7 +65,7 @@ namespace SteamDlcShopping.Entities
                 HtmlNodeCollection dlcList = htmlDoc.DocumentNode.SelectNodes("//a[contains(@class, 'game_area_dlc_row')]");
 
                 //The node selection found no results
-                if (dlcList == null || dlcList.Count == 0)
+                if (dlcList is null || dlcList.Count == 0)
                 {
                     return;
                 }

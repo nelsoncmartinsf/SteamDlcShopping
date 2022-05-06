@@ -40,6 +40,7 @@
             this.lsbBlacklist = new System.Windows.Forms.ListBox();
             this.txtBlacklistSearch = new System.Windows.Forms.TextBox();
             this.btnRemove = new System.Windows.Forms.Button();
+            this.lblGameCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbtSteamApiKey)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbSmartLoading)).BeginInit();
             this.SuspendLayout();
@@ -157,11 +158,21 @@
             this.btnRemove.UseVisualStyleBackColor = true;
             this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
+            // lblGameCount
+            // 
+            this.lblGameCount.AutoSize = true;
+            this.lblGameCount.Location = new System.Drawing.Point(12, 330);
+            this.lblGameCount.Name = "lblGameCount";
+            this.lblGameCount.Size = new System.Drawing.Size(84, 15);
+            this.lblGameCount.TabIndex = 9;
+            this.lblGameCount.Text = "lblGameCount";
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(444, 387);
+            this.Controls.Add(this.lblGameCount);
             this.Controls.Add(this.txtBlacklistSearch);
             this.Controls.Add(this.lsbBlacklist);
             this.Controls.Add(this.lnkGetSteamApiKey);
@@ -203,5 +214,6 @@
         private ListBox lsbBlacklist;
         private TextBox txtBlacklistSearch;
         private Button btnRemove;
+        private Label lblGameCount;
     }
 }

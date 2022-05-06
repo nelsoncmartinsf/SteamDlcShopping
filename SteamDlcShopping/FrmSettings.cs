@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json;
-using SteamDlcShopping.Properties;
+﻿using SteamDlcShopping.Properties;
 
 namespace SteamDlcShopping
 {
     public partial class FrmSettings : Form
     {
         ErrorProvider erpSteamApiKey;
-        SortedDictionary<int, string> blacklist;
         private string nameSearch = string.Empty;
+        private List<int> _unblacklist;
 
         public FrmSettings()
         {
@@ -38,17 +37,8 @@ namespace SteamDlcShopping
             txtSteamApiKey.Text = Settings.Default.SteamApiKey;
             chkAutoBlacklist.Checked = Settings.Default.AutoBlacklist;
 
-            //Blacklist
-            string content;
-
-            if (File.Exists("blacklist.txt"))
-            {
-                content = File.ReadAllText("blacklist.txt");
-                blacklist = JsonConvert.DeserializeObject<SortedDictionary<int, string>>(content);
-            }
-
-            lsbBlacklist.DisplayMember = "Value";
-            lsbBlacklist.ValueMember = "Key";
+            Program._steamProfile.Library.LoadBlacklist();
+            _unblacklist = new();
 
             LoadBlacklistToListbox();
         }
@@ -68,8 +58,15 @@ namespace SteamDlcShopping
             Settings.Default.AutoBlacklist = chkAutoBlacklist.Checked;
             Settings.Default.Save();
 
-            string content = JsonConvert.SerializeObject(blacklist);
-            File.WriteAllText("blacklist.txt", content);
+            foreach (int appId in _unblacklist)
+            {
+                Program._steamProfile.Library.UnBlacklistGame(appId);
+            }
+
+            if (_unblacklist.Count > 0)
+            {
+                Program._steamProfile.Library.SaveBlacklist();
+            }
 
             Close();
         }
@@ -93,7 +90,7 @@ namespace SteamDlcShopping
                     return;
                 }
 
-                nameSearch = null;
+                nameSearch = string.Empty;
             }
             else
             {
@@ -110,27 +107,28 @@ namespace SteamDlcShopping
                 return;
             }
 
-            if (blacklist == null)
-            {
-                blacklist = new();
-            }
-
             for (int idx = lsbBlacklist.SelectedItems.Count - 1; lsbBlacklist.SelectedItems.Count > 0; idx--)
             {
                 KeyValuePair<int, string> item = (KeyValuePair<int, string>)lsbBlacklist.SelectedItems[idx];
 
-                blacklist.Remove(item.Key);
+                _unblacklist.Add(item.Key);
                 lsbBlacklist.Items.Remove(item);
             }
+
+            //Fill in metric fields
+            lblGameCount.Text = $"Count: {lsbBlacklist.Items.Count}";
         }
 
         private void LoadBlacklistToListbox()
         {
+            lsbBlacklist.DisplayMember = "Value";
+            lsbBlacklist.ValueMember = "Key";
+
             lsbBlacklist.Items.Clear();
 
             lsbBlacklist.BeginUpdate();
 
-            foreach (KeyValuePair<int, string> item in blacklist)
+            foreach (KeyValuePair<int, string> item in Program._steamProfile.Library.Blacklist)
             {
                 //Filter by name search
                 if (txtBlacklistSearch.Text.Length >= 3 && !item.Value.Contains(nameSearch, StringComparison.InvariantCultureIgnoreCase))
@@ -142,6 +140,9 @@ namespace SteamDlcShopping
             }
 
             lsbBlacklist.EndUpdate();
+
+            //Fill in metric fields
+            lblGameCount.Text = $"Count: {lsbBlacklist.Items.Count}";
         }
     }
 }

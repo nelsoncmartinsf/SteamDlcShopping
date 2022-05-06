@@ -9,18 +9,26 @@ namespace SteamDlcShopping.Entities
         //Fields
         private long? _id;
 
-        private long? _id3;
+        private string? _username;
 
-        private string _username;
+        private string? _avatarUrl;
 
-        private string _avatarUrl;
+        private Library? _library;
 
         //Properties
-        public long Id
+        public static bool IsLoggedIn
         {
             get
             {
-                if (_id == null)
+                return !string.IsNullOrWhiteSpace(Settings.Default.SessionId) && !string.IsNullOrWhiteSpace(Settings.Default.SteamLoginSecure);
+            }
+        }
+
+        private long Id
+        {
+            get
+            {
+                if (!_id.HasValue)
                 {
                     string steamId = WebUtility.UrlDecode(Settings.Default.SteamLoginSecure);
                     int index = steamId.IndexOf('|', 0);
@@ -34,20 +42,6 @@ namespace SteamDlcShopping.Entities
                 }
 
                 return _id.Value;
-            }
-        }
-
-        public long Id3
-        {
-            get
-            {
-                if (_id3 == null)
-                {
-                    //Conversion from SteamID64 to the numeric part of SteamID3
-                    _id3 = Id - 0x0110000100000000;
-                }
-
-                return _id3.Value;
             }
         }
 
@@ -91,30 +85,19 @@ namespace SteamDlcShopping.Entities
             }
         }
 
-        public string Url
+        private string Url => $"https://steamcommunity.com/profiles/{Id}";
+
+        public Library Library
         {
             get
             {
-                return $"https://steamcommunity.com/profiles/{Id}";
+                if (_library is null)
+                {
+                    _library = new(Id);
+                }
+
+                return _library;
             }
-        }
-
-        public static bool IsLoggedIn
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Settings.Default.SessionId) && !string.IsNullOrWhiteSpace(Settings.Default.SteamLoginSecure);
-            }
-        }
-
-        public Library Library { get; }
-
-        //Constructor
-        public SteamProfile()
-        {
-            _username = string.Empty;
-            _avatarUrl = string.Empty;
-            Library = new();
         }
     }
 }
