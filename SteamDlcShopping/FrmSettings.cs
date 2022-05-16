@@ -4,9 +4,10 @@ namespace SteamDlcShopping
 {
     public partial class FrmSettings : Form
     {
-        ErrorProvider erpSteamApiKey;
-        private string nameSearch = string.Empty;
+        ErrorProvider _erpSteamApiKey;
+        private string _filterName = string.Empty;
         private List<int> _unblacklist;
+        public SortedDictionary<int, string> _blacklist;
 
         public FrmSettings()
         {
@@ -16,13 +17,13 @@ namespace SteamDlcShopping
         private void FrmSettings_Load(object sender, EventArgs e)
         {
             //Errors
-            erpSteamApiKey = new()
+            _erpSteamApiKey = new()
             {
                 BlinkStyle = ErrorBlinkStyle.NeverBlink
             };
 
-            erpSteamApiKey.SetIconAlignment(txtSteamApiKey, ErrorIconAlignment.MiddleRight);
-            erpSteamApiKey.SetIconPadding(txtSteamApiKey, 5);
+            _erpSteamApiKey.SetIconAlignment(txtSteamApiKey, ErrorIconAlignment.MiddleRight);
+            _erpSteamApiKey.SetIconPadding(txtSteamApiKey, 5);
 
             //Help icons
             pbtSteamApiKey.Image = SystemIcons.Information.ToBitmap();
@@ -37,7 +38,7 @@ namespace SteamDlcShopping
             txtSteamApiKey.Text = Settings.Default.SteamApiKey;
             chkAutoBlacklist.Checked = Settings.Default.AutoBlacklist;
 
-            Program._steamProfile.Library.LoadBlacklist();
+            _blacklist = Middleware.GetBlacklist();
             _unblacklist = new();
 
             LoadBlacklistToListbox();
@@ -47,7 +48,7 @@ namespace SteamDlcShopping
         {
             if (string.IsNullOrWhiteSpace(Settings.Default.SteamApiKey))
             {
-                erpSteamApiKey.SetError(txtSteamApiKey, "Steam API Key is required!");
+                _erpSteamApiKey.SetError(txtSteamApiKey, "Steam API Key is required!");
                 e.Cancel = true;
             }
         }
@@ -58,14 +59,11 @@ namespace SteamDlcShopping
             Settings.Default.AutoBlacklist = chkAutoBlacklist.Checked;
             Settings.Default.Save();
 
-            foreach (int appId in _unblacklist)
-            {
-                Program._steamProfile.Library.UnBlacklistGame(appId);
-            }
+            Middleware.UnblacklistGames(_unblacklist);
 
             if (_unblacklist.Count > 0)
             {
-                Program._steamProfile.Library.SaveBlacklist();
+                Middleware.SaveBlacklist();
             }
 
             Close();
@@ -78,25 +76,12 @@ namespace SteamDlcShopping
 
         private void txtSteamApiKey_TextChanged(object sender, EventArgs e)
         {
-            erpSteamApiKey.Clear();
+            _erpSteamApiKey.Clear();
         }
 
         private void txtBlacklistSearch_TextChanged(object sender, EventArgs e)
         {
-            if (txtBlacklistSearch.Text.Length < 3)
-            {
-                if (string.IsNullOrWhiteSpace(nameSearch))
-                {
-                    return;
-                }
-
-                nameSearch = string.Empty;
-            }
-            else
-            {
-                nameSearch = txtBlacklistSearch.Text;
-            }
-
+            _filterName = txtBlacklistSearch.Text;
             LoadBlacklistToListbox();
         }
 
@@ -128,10 +113,10 @@ namespace SteamDlcShopping
 
             lsbBlacklist.BeginUpdate();
 
-            foreach (KeyValuePair<int, string> item in Program._steamProfile.Library.Blacklist)
+            foreach (KeyValuePair<int, string> item in _blacklist)
             {
                 //Filter by name search
-                if (txtBlacklistSearch.Text.Length >= 3 && !item.Value.Contains(nameSearch, StringComparison.InvariantCultureIgnoreCase))
+                if (txtBlacklistSearch.Text.Length >= 3 && !item.Value.Contains(_filterName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     continue;
                 }

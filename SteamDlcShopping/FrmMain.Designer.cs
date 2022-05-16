@@ -41,8 +41,8 @@
             this.colDlc = new System.Windows.Forms.ColumnHeader();
             this.colPrice = new System.Windows.Forms.ColumnHeader();
             this.colDiscount = new System.Windows.Forms.ColumnHeader();
+            this.lblLibraryCount = new System.Windows.Forms.Label();
             this.lblGameCount = new System.Windows.Forms.Label();
-            this.lblDlcCount = new System.Windows.Forms.Label();
             this.lnkSteamPage = new System.Windows.Forms.LinkLabel();
             this.btnLogout = new System.Windows.Forms.Button();
             this.txtLibrarySearch = new System.Windows.Forms.TextBox();
@@ -112,6 +112,7 @@
             this.lsvLibrary.UseCompatibleStateImageBehavior = false;
             this.lsvLibrary.View = System.Windows.Forms.View.Details;
             this.lsvLibrary.SelectedIndexChanged += new System.EventHandler(this.lsvLibrary_SelectedIndexChanged);
+            this.lsvLibrary.EnabledChanged += new System.EventHandler(this.lsvLibrary_EnabledChanged);
             // 
             // colGame
             // 
@@ -145,6 +146,7 @@
             this.lsvGame.TabIndex = 5;
             this.lsvGame.UseCompatibleStateImageBehavior = false;
             this.lsvGame.View = System.Windows.Forms.View.Details;
+            this.lsvGame.EnabledChanged += new System.EventHandler(this.lsvGame_EnabledChanged);
             // 
             // colDlc
             // 
@@ -161,33 +163,33 @@
             this.colDiscount.Text = "Discount";
             this.colDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
+            // lblLibraryCount
+            // 
+            this.lblLibraryCount.AutoSize = true;
+            this.lblLibraryCount.Location = new System.Drawing.Point(6, 431);
+            this.lblLibraryCount.Name = "lblLibraryCount";
+            this.lblLibraryCount.Size = new System.Drawing.Size(89, 15);
+            this.lblLibraryCount.TabIndex = 0;
+            this.lblLibraryCount.Text = "lblLibraryCount";
+            // 
             // lblGameCount
             // 
             this.lblGameCount.AutoSize = true;
-            this.lblGameCount.Location = new System.Drawing.Point(6, 424);
+            this.lblGameCount.Location = new System.Drawing.Point(593, 431);
             this.lblGameCount.Name = "lblGameCount";
             this.lblGameCount.Size = new System.Drawing.Size(84, 15);
             this.lblGameCount.TabIndex = 0;
             this.lblGameCount.Text = "lblGameCount";
             // 
-            // lblDlcCount
-            // 
-            this.lblDlcCount.AutoSize = true;
-            this.lblDlcCount.Location = new System.Drawing.Point(593, 424);
-            this.lblDlcCount.Name = "lblDlcCount";
-            this.lblDlcCount.Size = new System.Drawing.Size(70, 15);
-            this.lblDlcCount.TabIndex = 0;
-            this.lblDlcCount.Text = "lblDlcCount";
-            // 
             // lnkSteamPage
             // 
             this.lnkSteamPage.AutoSize = true;
-            this.lnkSteamPage.Location = new System.Drawing.Point(1165, 424);
+            this.lnkSteamPage.Location = new System.Drawing.Point(1162, 431);
             this.lnkSteamPage.Name = "lnkSteamPage";
-            this.lnkSteamPage.Size = new System.Drawing.Size(69, 15);
+            this.lnkSteamPage.Size = new System.Drawing.Size(72, 15);
             this.lnkSteamPage.TabIndex = 6;
             this.lnkSteamPage.TabStop = true;
-            this.lnkSteamPage.Text = "Steam Page";
+            this.lnkSteamPage.Text = "Steam Page ";
             this.lnkSteamPage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSteamPage_LinkClicked);
             // 
             // btnLogout
@@ -206,7 +208,7 @@
             this.txtLibrarySearch.Name = "txtLibrarySearch";
             this.txtLibrarySearch.Size = new System.Drawing.Size(200, 23);
             this.txtLibrarySearch.TabIndex = 1;
-            this.txtLibrarySearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            this.txtLibrarySearch.TextChanged += new System.EventHandler(this.txtLibrarySearch_TextChanged);
             // 
             // ddlLibrarySort
             // 
@@ -225,24 +227,26 @@
             // 
             this.grbLibrary.Controls.Add(this.lblLibraryCost);
             this.grbLibrary.Controls.Add(this.chkHideGamesNotOnSale);
+            this.grbLibrary.Controls.Add(this.btnBlacklist);
             this.grbLibrary.Controls.Add(this.txtLibrarySearch);
             this.grbLibrary.Controls.Add(this.ddlLibrarySort);
+            this.grbLibrary.Controls.Add(this.lblLibraryCount);
             this.grbLibrary.Controls.Add(this.lblGameCount);
-            this.grbLibrary.Controls.Add(this.lblDlcCount);
             this.grbLibrary.Controls.Add(this.lnkSteamPage);
             this.grbLibrary.Controls.Add(this.lsvLibrary);
             this.grbLibrary.Controls.Add(this.lsvGame);
             this.grbLibrary.Location = new System.Drawing.Point(12, 97);
             this.grbLibrary.Name = "grbLibrary";
-            this.grbLibrary.Size = new System.Drawing.Size(1240, 445);
+            this.grbLibrary.Size = new System.Drawing.Size(1240, 456);
             this.grbLibrary.TabIndex = 5;
             this.grbLibrary.TabStop = false;
             this.grbLibrary.Text = "Library";
+            this.grbLibrary.EnabledChanged += new System.EventHandler(this.grbLibrary_EnabledChanged);
             // 
             // lblLibraryCost
             // 
             this.lblLibraryCost.AutoSize = true;
-            this.lblLibraryCost.Location = new System.Drawing.Point(212, 424);
+            this.lblLibraryCost.Location = new System.Drawing.Point(212, 431);
             this.lblLibraryCost.Name = "lblLibraryCost";
             this.lblLibraryCost.Size = new System.Drawing.Size(80, 15);
             this.lblLibraryCost.TabIndex = 0;
@@ -287,7 +291,7 @@
             // 
             // btnBlacklist
             // 
-            this.btnBlacklist.Location = new System.Drawing.Point(499, 68);
+            this.btnBlacklist.Location = new System.Drawing.Point(487, 427);
             this.btnBlacklist.Name = "btnBlacklist";
             this.btnBlacklist.Size = new System.Drawing.Size(100, 23);
             this.btnBlacklist.TabIndex = 3;
@@ -299,10 +303,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1264, 554);
+            this.ClientSize = new System.Drawing.Size(1264, 565);
             this.Controls.Add(this.lbldebug);
             this.Controls.Add(this.grbLibrary);
-            this.Controls.Add(this.btnBlacklist);
             this.Controls.Add(this.btnCalculate);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.btnLogin);
@@ -338,8 +341,8 @@
         private ColumnHeader colDlc;
         private ColumnHeader colPrice;
         private ColumnHeader colDiscount;
+        private Label lblLibraryCount;
         private Label lblGameCount;
-        private Label lblDlcCount;
         private LinkLabel lnkSteamPage;
         private Button btnLogout;
         private TextBox txtLibrarySearch;

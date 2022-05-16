@@ -6,98 +6,63 @@ namespace SteamDlcShopping.Entities
 {
     public class SteamProfile
     {
-        //Fields
-        private long? _id;
-
-        private string? _username;
-
-        private string? _avatarUrl;
-
-        private Library? _library;
-
         //Properties
-        public static bool IsLoggedIn
+        private const string _url = "https://steamcommunity.com/profiles";
+
+        public long Id { get; }
+
+        public string Username { get; }
+
+        public string AvatarUrl { get; }
+
+        public Library Library { get; }
+
+        //Constructor
+        public SteamProfile()
         {
-            get
+            if (string.IsNullOrWhiteSpace(Settings.Default.SessionId) || string.IsNullOrWhiteSpace(Settings.Default.SteamLoginSecure))
             {
-                return !string.IsNullOrWhiteSpace(Settings.Default.SessionId) && !string.IsNullOrWhiteSpace(Settings.Default.SteamLoginSecure);
+                return;
             }
-        }
 
-        private long Id
-        {
-            get
+            HttpClient httpClient;
+            string xml;
+            XmlDocument xmlDocument;
+            XmlNode? xmlNode;
+
+            //Id
+            string steamId = WebUtility.UrlDecode(Settings.Default.SteamLoginSecure);
+            int index = steamId.IndexOf('|', 0);
+
+            if (index != -1)
             {
-                if (!_id.HasValue)
-                {
-                    string steamId = WebUtility.UrlDecode(Settings.Default.SteamLoginSecure);
-                    int index = steamId.IndexOf('|', 0);
-
-                    if (index != -1)
-                    {
-                        steamId = steamId.Remove(index);
-                    }
-
-                    _id = Convert.ToInt64(steamId);
-                }
-
-                return _id.Value;
+                steamId = steamId.Remove(index);
             }
-        }
 
-        public string Username
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_username))
-                {
-                    HttpClient httpClient = new();
-                    string xml = httpClient.GetStringAsync($"{Url}/?xml=1").Result;
+            Id = Convert.ToInt64(steamId);
 
-                    XmlDocument xmlDocument = new();
-                    xmlDocument.LoadXml(xml);
+            //Username
+            httpClient = new();
+            xml = httpClient.GetStringAsync($"{_url}/{Id}/?xml=1").Result;
 
-                    XmlNode xmlNode = xmlDocument.SelectSingleNode("//steamID");
-                    _username = WebUtility.HtmlDecode(xmlNode.InnerText);
-                }
+            xmlDocument = new();
+            xmlDocument.LoadXml(xml);
 
-                return _username;
-            }
-        }
+            xmlNode = xmlDocument.SelectSingleNode("//steamID");
+            Username = xmlNode is not null ? WebUtility.HtmlDecode(xmlNode.InnerText) : string.Empty;
 
-        public string AvatarUrl
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_avatarUrl))
-                {
-                    HttpClient httpClient = new();
-                    string xml = httpClient.GetStringAsync($"{Url}/?xml=1").Result;
+            //AvatarUrl
+            httpClient = new();
+            xml = httpClient.GetStringAsync($"{_url}/{Id}/?xml=1").Result;
 
-                    XmlDocument xmlDocument = new();
-                    xmlDocument.LoadXml(xml);
+            xmlDocument = new();
+            xmlDocument.LoadXml(xml);
 
-                    XmlNode xmlNode = xmlDocument.SelectSingleNode("//avatarMedium");
-                    _avatarUrl = xmlNode.InnerText;
-                }
+            xmlNode = xmlDocument.SelectSingleNode("//avatarMedium");
+            AvatarUrl = xmlNode is not null ? WebUtility.HtmlDecode(xmlNode.InnerText) : string.Empty;
 
-                return _avatarUrl;
-            }
-        }
-
-        private string Url => $"https://steamcommunity.com/profiles/{Id}";
-
-        public Library Library
-        {
-            get
-            {
-                if (_library is null)
-                {
-                    _library = new(Id);
-                }
-
-                return _library;
-            }
+            //Library
+            Library = new(Id);
         }
     }
 }

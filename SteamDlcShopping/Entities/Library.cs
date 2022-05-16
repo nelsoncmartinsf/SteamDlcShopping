@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SteamDlcShopping.Enums;
 using SteamDlcShopping.Properties;
 using System.Net;
 
@@ -9,15 +8,13 @@ namespace SteamDlcShopping.Entities
     public class Library
     {
         //Fields
-        private long _steamId;
+        private readonly long _steamId;
 
-        private List<int>? _dynamicStore;
-
-        private List<Game>? _games;
+        private List<int> _dynamicStore;
 
         //Properties
 
-        public List<Game> Games => _games;
+        public List<Game> Games { get; private set; }
 
         public SortedDictionary<int, string> Blacklist { get; private set; }
 
@@ -29,6 +26,10 @@ namespace SteamDlcShopping.Entities
         public Library(long steamId)
         {
             _steamId = steamId;
+
+            LoadDynamicStore();
+            LoadGames();
+            LoadBlacklist();
         }
 
         //Methods
@@ -48,14 +49,14 @@ namespace SteamDlcShopping.Entities
             JObject jObject = JObject.Parse(response.Content.ReadAsStringAsync().Result);
             _dynamicStore = JsonConvert.DeserializeObject<List<int>>(jObject["rgOwnedApps"].ToString());
         }
-        
+
         private void LoadGames()
         {
             HttpClient httpClient = new();
             string response = httpClient.GetStringAsync($"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={Settings.Default.SteamApiKey}&steamid={_steamId}&include_appinfo=true").Result;
 
             JObject jObject = JObject.Parse(response);
-            _games = JsonConvert.DeserializeObject<List<Game>>(jObject["response"]["games"].ToString());
+            Games = JsonConvert.DeserializeObject<List<Game>>(jObject["response"]["games"].ToString());
         }
 
 
@@ -67,7 +68,6 @@ namespace SteamDlcShopping.Entities
             LoadBlacklist();
 
             ApplyBlacklist();
-            SortGamesBy(SortField.AppId);
 
             //Load all dlc for all games
             int threads = 10;
@@ -204,63 +204,6 @@ namespace SteamDlcShopping.Entities
         {
             string content = JsonConvert.SerializeObject(Blacklist);
             File.WriteAllText("blacklist.txt", content);
-        }
-
-
-
-        public void SortGamesBy(SortField sortField, Enums.SortOrder sortOrder = Enums.SortOrder.Ascending)
-        {
-            if (sortOrder == Enums.SortOrder.Ascending)
-            {
-                switch (sortField)
-                {
-                    case SortField.TotalCost:
-                        _games = Games.OrderBy(x => x.DlcTotalPrice).ToList();
-                        break;
-                    case SortField.MaxDiscount:
-                        _games = Games.OrderBy(x => x.DlcHighestPercentage).ToList();
-                        break;
-                }
-            }
-
-            if (sortOrder == Enums.SortOrder.Descending)
-            {
-                switch (sortField)
-                {
-                    case SortField.TotalCost:
-                        _games = Games.OrderByDescending(x => x.DlcTotalPrice).ToList();
-                        break;
-                    case SortField.MaxDiscount:
-                        _games = Games.OrderByDescending(x => x.DlcHighestPercentage).ToList();
-                        break;
-                }
-            }
-        }
-
-        public Game GetGameByAppId(int appId)
-        {
-            foreach (Game game in Games)
-            {
-                if (game.AppId == appId)
-                {
-                    return game;
-                }
-            }
-
-            return null;
-        }
-
-        public Game GetGameByName(string name)
-        {
-            foreach (Game game in Games)
-            {
-                if (game.Name == name)
-                {
-                    return game;
-                }
-            }
-
-            return null;
         }
     }
 }
