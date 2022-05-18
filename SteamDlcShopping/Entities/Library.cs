@@ -10,17 +10,17 @@ namespace SteamDlcShopping.Entities
         //Fields
         private readonly long _steamId;
 
-        private List<int> _dynamicStore;
+        private List<int>? _dynamicStore;
 
         //Properties
 
-        public List<Game> Games { get; private set; }
+        public List<Game>? Games { get; private set; }
 
-        public SortedDictionary<int, string> Blacklist { get; private set; }
+        public SortedDictionary<int, string?>? Blacklist { get; private set; }
 
-        public int Size => Games.Count;
+        public int? Size => Games?.Count;
 
-        public decimal TotalCost => Games.Sum(x => x.DlcTotalPrice);
+        public decimal? TotalCost => Games?.Sum(x => x.DlcTotalPrice);
 
         //Constructor
         public Library(long steamId)
@@ -47,7 +47,7 @@ namespace SteamDlcShopping.Entities
             response = client.GetAsync(uri).Result;
 
             JObject jObject = JObject.Parse(response.Content.ReadAsStringAsync().Result);
-            _dynamicStore = JsonConvert.DeserializeObject<List<int>>(jObject["rgOwnedApps"].ToString());
+            _dynamicStore = JsonConvert.DeserializeObject<List<int>>($"{jObject["rgOwnedApps"]}");
         }
 
         private void LoadGames()
@@ -56,7 +56,8 @@ namespace SteamDlcShopping.Entities
             string response = httpClient.GetStringAsync($"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={Settings.Default.SteamApiKey}&steamid={_steamId}&include_appinfo=true").Result;
 
             JObject jObject = JObject.Parse(response);
-            Games = JsonConvert.DeserializeObject<List<Game>>(jObject["response"]["games"].ToString());
+
+            Games = JsonConvert.DeserializeObject<List<Game>>($"{jObject["response"]?["games"]}");
         }
 
 
@@ -69,18 +70,28 @@ namespace SteamDlcShopping.Entities
 
             ApplyBlacklist();
 
+            if (Games is null)
+            {
+                return;
+            }
+
             //Load all dlc for all games
             int threads = 10;
-            int size = Size / threads;
+            int size = Size ?? 0 / threads;
 
             using CountdownEvent countdownEvent = new(Size % threads == 0 ? threads : threads + 1);
 
             for (int count = 0; (count * size) < Size; count++)
             {
-                ThreadPool.QueueUserWorkItem(delegate (object count)
+                ThreadPool.QueueUserWorkItem(delegate (object? count)
                 {
                     for (int? idx = (count as int?) * size; idx < ((count as int?) + 1) * size; idx++)
                     {
+                        if (idx is null)
+                        {
+                            continue;
+                        }
+
                         if (idx == Size)
                         {
                             break;
@@ -97,6 +108,11 @@ namespace SteamDlcShopping.Entities
 
             ImproveGamesList();
 
+            if (Games is null)
+            {
+                return;
+            }
+
             foreach (Game game in Games)
             {
                 game.CalculateDlcMetrics();
@@ -106,6 +122,11 @@ namespace SteamDlcShopping.Entities
         private void ImproveGamesList()
         {
             List<int> gamesToRemove = new();
+
+            if (Games is null)
+            {
+                return;
+            }
 
             foreach (Game game in Games)
             {
@@ -127,7 +148,7 @@ namespace SteamDlcShopping.Entities
                 foreach (Dlc dlc in game.DlcList)
                 {
                     //Mark dlc as owned
-                    if (_dynamicStore.Contains(dlc.AppId))
+                    if (_dynamicStore is not null && _dynamicStore.Contains(dlc.AppId))
                     {
                         dlc.MarkAsOwned();
                         continue;
@@ -169,18 +190,29 @@ namespace SteamDlcShopping.Entities
 
         public void BlacklistGame(int appId)
         {
-            Game game = Games.First(x => x.AppId == appId);
-            Blacklist.Add(game.AppId, game.Name);
+            Game? game = Games?.First(x => x.AppId == appId);
+
+            if (game is null)
+            {
+                return;
+            }
+
+            Blacklist?.Add(game.AppId, game.Name);
         }
 
         public void UnBlacklistGame(int appId)
         {
-            Blacklist.Remove(appId);
+            Blacklist?.Remove(appId);
         }
 
         public void ApplyBlacklist()
         {
-            Games.RemoveAll(x => Blacklist.ContainsKey(x.AppId));
+            if (Blacklist is null)
+            {
+                return;
+            }
+
+            Games?.RemoveAll(x => Blacklist.ContainsKey(x.AppId));
         }
 
         public void LoadBlacklist()
@@ -192,7 +224,7 @@ namespace SteamDlcShopping.Entities
             }
 
             string content = File.ReadAllText("blacklist.txt");
-            Blacklist = JsonConvert.DeserializeObject<SortedDictionary<int, string>>(content);
+            Blacklist = JsonConvert.DeserializeObject<SortedDictionary<int, string?>>(content);
 
             if (Blacklist is null)
             {

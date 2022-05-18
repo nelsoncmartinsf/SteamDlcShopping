@@ -9,9 +9,9 @@ namespace SteamDlcShopping.Entities
         //Properties
         public int AppId { get; }
 
-        public string Name { get; }
+        public string? Name { get; }
 
-        public decimal DlcTotalPrice { get; private set; }
+        public decimal? DlcTotalPrice { get; private set; }
 
         public int DlcHighestPercentage { get; private set; }
 
@@ -26,7 +26,7 @@ namespace SteamDlcShopping.Entities
         public List<Dlc> DlcList { get; private set; }
 
         //Constructor
-        public Game(int appId = default, string name = default)
+        public Game(int appId = default, string? name = default)
         {
             AppId = appId;
             Name = name;
@@ -77,16 +77,16 @@ namespace SteamDlcShopping.Entities
                     HtmlNode priceNode = node.SelectSingleNode("./div[@class='game_area_dlc_price']");
 
                     string appId = node.Attributes["data-ds-appid"].Value;
-                    string name = WebUtility.HtmlDecode(node.SelectSingleNode("./div[@class='game_area_dlc_name']").InnerText?.Trim());
-                    string price = priceNode.InnerText.Trim();
+                    string? name = WebUtility.HtmlDecode(node.SelectSingleNode("./div[@class='game_area_dlc_name']").InnerText?.Trim());
+                    string? price = priceNode.InnerText.Trim();
 
-                    string originalPrice = priceNode.SelectSingleNode(".//div[@class='discount_original_price']")?.InnerText?.Trim();
-                    string salePrice = priceNode.SelectSingleNode(".//div[@class='discount_final_price']")?.InnerText?.Trim();
-                    string salePercentage = priceNode.SelectSingleNode(".//div[@class='discount_pct']")?.InnerText?.Trim();
+                    string? originalPrice = priceNode.SelectSingleNode(".//div[@class='discount_original_price']")?.InnerText?.Trim();
+                    string? salePrice = priceNode.SelectSingleNode(".//div[@class='discount_final_price']")?.InnerText?.Trim();
+                    string? salePercentage = priceNode.SelectSingleNode(".//div[@class='discount_pct']")?.InnerText?.Trim();
 
                     bool isFree = false;
                     bool isNotAvailable = false;
-                    Sale sale = null;
+                    Sale? sale = null;
 
                     decimal dPrice = 0;
 
@@ -100,7 +100,7 @@ namespace SteamDlcShopping.Entities
                             break;
                         default:
                             //Dlc is currently on sale
-                            if (!string.IsNullOrWhiteSpace(salePrice))
+                            if (!string.IsNullOrWhiteSpace(salePrice) && !string.IsNullOrWhiteSpace(salePercentage))
                             {
                                 price = originalPrice;
                                 int iSalePercentage = Convert.ToInt32(salePercentage[1..^1]);
@@ -113,7 +113,7 @@ namespace SteamDlcShopping.Entities
                             }
 
                             //Formatting of rounded values with -- on the decimal part
-                            price = price.Replace('-', '0');
+                            price = (price ?? "").Replace('-', '0');
                             dPrice = decimal.Parse(price, NumberStyles.Currency, new CultureInfo("pt-PT"));
 
                             break;
@@ -147,9 +147,9 @@ namespace SteamDlcShopping.Entities
                     continue;
                 }
 
-                DlcTotalPrice += dlc.Sale.Price;
+                DlcTotalPrice += dlc.Sale?.Price;
 
-                if (dlc.Sale.Percentage > DlcHighestPercentage)
+                if (dlc.Sale?.Percentage > DlcHighestPercentage)
                 {
                     DlcHighestPercentage = dlc.Sale.Percentage;
                 }

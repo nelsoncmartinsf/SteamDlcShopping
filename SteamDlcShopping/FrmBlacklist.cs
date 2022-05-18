@@ -3,8 +3,8 @@
     public partial class FrmBlacklist : Form
     {
         private string _filterName = string.Empty;
-        public SortedDictionary<int, string> _blacklist;
-        private List<int> _unblacklist;
+        public SortedDictionary<int, string?>? _blacklist;
+        private List<int>? _unblacklist;
 
         public FrmBlacklist()
         {
@@ -47,12 +47,20 @@
             {
                 KeyValuePair<int, string> item = (KeyValuePair<int, string>)lsbBlacklist.SelectedItems[idx];
 
+                if (_unblacklist is null)
+                {
+                    _unblacklist = new();
+                }
+
                 _unblacklist.Add(item.Key);
                 lsbBlacklist.Items.Remove(item);
             }
 
-            Middleware.UnblacklistGames(_unblacklist);
-            _unblacklist = new();
+            if (_unblacklist is not null)
+            {
+                Middleware.UnblacklistGames(_unblacklist);
+                _unblacklist = null;
+            }
 
             //Fill in metric fields
             lblGameCount.Text = $"Count: {lsbBlacklist.Items.Count}";
@@ -62,12 +70,17 @@
         {
             lsbBlacklist.Items.Clear();
 
+            if (_blacklist is null)
+            {
+                return;
+            }
+
             lsbBlacklist.BeginUpdate();
 
-            foreach (KeyValuePair<int, string> item in _blacklist)
+            foreach (KeyValuePair<int, string?> item in _blacklist)
             {
                 //Filter by name search
-                if (!item.Value.Contains(_filterName, StringComparison.InvariantCultureIgnoreCase))
+                if (!string.IsNullOrWhiteSpace(item.Value) && !item.Value.Contains(_filterName, StringComparison.InvariantCultureIgnoreCase))
                 {
                     continue;
                 }

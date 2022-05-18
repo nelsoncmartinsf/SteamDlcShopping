@@ -29,7 +29,7 @@ namespace SteamDlcShopping
             }
         }
 
-        private static string GetCookieValue(List<CoreWebView2Cookie> cookies, string name)
+        private static string? GetCookieValue(List<CoreWebView2Cookie> cookies, string name)
         {
             foreach (CoreWebView2Cookie cookie in cookies)
             {

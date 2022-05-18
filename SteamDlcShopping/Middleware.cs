@@ -8,7 +8,7 @@ namespace SteamDlcShopping
 {
     public static class Middleware
     {
-        private static SteamProfile _steamProfile;
+        private static SteamProfile? _steamProfile;
 
         public static bool IsSessionActive()
         {
@@ -42,14 +42,14 @@ namespace SteamDlcShopping
         {
             SteamProfileDto result = new()
             {
-                Username = _steamProfile.Username,
-                AvatarUrl = _steamProfile.AvatarUrl
+                Username = _steamProfile?.Username,
+                AvatarUrl = _steamProfile?.AvatarUrl
             };
 
             return result;
         }
 
-        public static LibraryDto GetLibrary(string filterName = null, bool filterOnSale = false,
+        public static LibraryDto GetLibrary(string? filterName = null, bool filterOnSale = false,
             SortField sortField = SortField.AppId, SortOrder sortOrder = SortOrder.Ascending)
         {
             LibraryDto result = new();
@@ -57,12 +57,17 @@ namespace SteamDlcShopping
 
             decimal totalCost = 0m;
 
-            List<Game> library = SortLibrary(sortField, sortOrder);
+            List<Game>? library = SortLibrary(sortField, sortOrder);
+
+            if (library is null)
+            {
+                return new();
+            }
 
             foreach (Game game in library)
             {
                 //Filter by name search
-                if (!game.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                if (!string.IsNullOrWhiteSpace(game.Name) && !game.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
                 {
                     continue;
                 }
@@ -81,7 +86,7 @@ namespace SteamDlcShopping
                     DlcHighestPercentage = game.DlcHighestPercentage > 0 ? $"{game.DlcHighestPercentage}%" : null
                 };
 
-                totalCost += game.DlcTotalPrice;
+                totalCost += game.DlcTotalPrice ?? 0m;
 
                 result.Games.Add(gameDto);
             }
@@ -96,7 +101,7 @@ namespace SteamDlcShopping
         {
             List<DlcDto> result = new();
 
-            Game game = _steamProfile.Library.Games.FirstOrDefault(x => x.AppId == appId);
+            Game? game = _steamProfile?.Library?.Games?.FirstOrDefault(x => x.AppId == appId);
 
             if (game is null)
             {
@@ -119,7 +124,7 @@ namespace SteamDlcShopping
                     }
                     else
                     {
-                        price = $"{(dlc.OnSale ? dlc.Sale.Price : dlc.Price)}€";
+                        price = $"{(dlc.OnSale ? dlc.Sale?.Price : dlc.Price)}€";
                     }
                 }
 
@@ -127,7 +132,7 @@ namespace SteamDlcShopping
                 {
                     Name = dlc.Name,
                     Price = price,
-                    Discount = dlc.OnSale ? $"{dlc.Sale.Percentage}%" : null,
+                    Discount = dlc.OnSale ? $"{dlc.Sale?.Percentage}%" : null,
                     IsOwned = dlc.IsOwned
                 };
 
@@ -141,22 +146,22 @@ namespace SteamDlcShopping
 
         public static void LoadGamesDlc()
         {
-            _steamProfile.Library.LoadGamesDlc();
+            _steamProfile?.Library?.LoadGamesDlc();
         }
 
-        private static List<Game> SortLibrary(SortField sortField = SortField.AppId, SortOrder sortOrder = SortOrder.Ascending)
+        private static List<Game>? SortLibrary(SortField sortField = SortField.AppId, SortOrder sortOrder = SortOrder.Ascending)
         {
-            List<Game> result = _steamProfile.Library.Games;
+            List<Game>? result = _steamProfile?.Library?.Games;
 
             if (sortOrder == SortOrder.Ascending)
             {
                 switch (sortField)
                 {
                     case SortField.TotalCost:
-                        result = _steamProfile.Library.Games.OrderBy(x => x.DlcTotalPrice).ToList();
+                        result = _steamProfile?.Library?.Games?.OrderBy(x => x.DlcTotalPrice).ToList();
                         break;
                     case SortField.MaxDiscount:
-                        result = _steamProfile.Library.Games.OrderBy(x => x.DlcHighestPercentage).ToList();
+                        result = _steamProfile?.Library?.Games?.OrderBy(x => x.DlcHighestPercentage).ToList();
                         break;
                 }
             }
@@ -166,10 +171,10 @@ namespace SteamDlcShopping
                 switch (sortField)
                 {
                     case SortField.TotalCost:
-                        result = _steamProfile.Library.Games.OrderByDescending(x => x.DlcTotalPrice).ToList();
+                        result = _steamProfile?.Library?.Games?.OrderByDescending(x => x.DlcTotalPrice).ToList();
                         break;
                     case SortField.MaxDiscount:
-                        result = _steamProfile.Library.Games.OrderByDescending(x => x.DlcHighestPercentage).ToList();
+                        result = _steamProfile?.Library?.Games?.OrderByDescending(x => x.DlcHighestPercentage).ToList();
                         break;
                 }
             }
@@ -179,31 +184,36 @@ namespace SteamDlcShopping
 
 
 
-        public static SortedDictionary<int, string> GetBlacklist()
+        public static SortedDictionary<int, string?>? GetBlacklist()
         {
-            return _steamProfile.Library.Blacklist;
+            return _steamProfile?.Library?.Blacklist;
         }
 
         public static void BlacklistGames(List<int> appIds)
         {
-            appIds.ForEach(x => _steamProfile.Library.BlacklistGame(x));
+            appIds.ForEach(x => _steamProfile?.Library?.BlacklistGame(x));
 
-            _steamProfile.Library.ApplyBlacklist();
-            _steamProfile.Library.SaveBlacklist();
+            _steamProfile?.Library?.ApplyBlacklist();
+            _steamProfile?.Library?.SaveBlacklist();
         }
 
         public static void UnblacklistGames(List<int> appIds)
         {
-            appIds.ForEach(x => _steamProfile.Library.UnBlacklistGame(x));
+            appIds.ForEach(x => _steamProfile?.Library?.UnBlacklistGame(x));
 
-            _steamProfile.Library.SaveBlacklist();
+            _steamProfile?.Library?.SaveBlacklist();
         }
 
         public static Dictionary<int, string> GetFreeDlc()
         {
             Dictionary<int, string> result = new();
 
-            List<Game> games = _steamProfile.Library.Games.Where(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree)).ToList();
+            List<Game>? games = _steamProfile?.Library?.Games?.Where(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree)).ToList();
+
+            if (games is null)
+            {
+                return result;
+            }
 
             foreach (Game game in games)
             {

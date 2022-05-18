@@ -11,11 +11,11 @@ namespace SteamDlcShopping.Entities
 
         public long Id { get; }
 
-        public string Username { get; }
+        public string? Username { get; }
 
-        public string AvatarUrl { get; }
+        public string? AvatarUrl { get; }
 
-        public Library Library { get; }
+        public Library? Library { get; }
 
         //Constructor
         public SteamProfile()
@@ -49,7 +49,7 @@ namespace SteamDlcShopping.Entities
             xmlDocument.LoadXml(xml);
 
             xmlNode = xmlDocument.SelectSingleNode("//steamID");
-            Username = xmlNode is not null ? WebUtility.HtmlDecode(xmlNode.InnerText) : string.Empty;
+            Username = xmlNode is not null ? WebUtility.HtmlDecode(xmlNode.InnerText) : null;
 
             //AvatarUrl
             httpClient = new();
@@ -59,7 +59,7 @@ namespace SteamDlcShopping.Entities
             xmlDocument.LoadXml(xml);
 
             xmlNode = xmlDocument.SelectSingleNode("//avatarMedium");
-            AvatarUrl = xmlNode is not null ? WebUtility.HtmlDecode(xmlNode.InnerText) : string.Empty;
+            AvatarUrl = xmlNode is not null ? WebUtility.HtmlDecode(xmlNode.InnerText) : null;
 
             //Library
             Library = new(Id);

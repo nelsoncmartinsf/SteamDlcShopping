@@ -5,10 +5,10 @@
         //Properties
         public int AppId { get; set; }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public string DlcTotalPrice { get; set; }
+        public string? DlcTotalPrice { get; set; }
 
-        public string DlcHighestPercentage { get; set; }
+        public string? DlcHighestPercentage { get; set; }
     }
 }

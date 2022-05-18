@@ -77,7 +77,7 @@ namespace SteamDlcShopping
 
         //////////////////////////////////////// FILTERS ////////////////////////////////////////
 
-        private string _filterName;
+        private string? _filterName;
         private bool _filterOnSale;
         private SortField _sortField;
         private SortOrder _sortOrder;
@@ -167,7 +167,11 @@ namespace SteamDlcShopping
                 return;
             }
 
-            int.TryParse(lsvLibrary.SelectedItems[0].Tag.ToString(), out _selectedGame);
+            if (!int.TryParse(lsvLibrary.SelectedItems[0].Tag.ToString(), out _selectedGame))
+            {
+                _selectedGame = 0;
+            }
+
             lsvGame.Enabled = false;
             lsvGame.Enabled = true;
         }
@@ -178,7 +182,11 @@ namespace SteamDlcShopping
 
             foreach (ListViewItem item in lsvLibrary.SelectedItems)
             {
-                int.TryParse(item.Tag.ToString(), out int appId);
+                if (!int.TryParse(item.Tag.ToString(), out int appId))
+                {
+                    continue;
+                }
+
                 appIds.Add(appId);
 
                 lsvLibrary.Items.Remove(item);
@@ -275,6 +283,12 @@ namespace SteamDlcShopping
             if (lsvLibrary.Enabled)
             {
                 library = Middleware.GetLibrary(_filterName, _filterOnSale, _sortField, _sortOrder);
+
+                if (library.Games is null)
+                {
+                    return;
+                }
+
                 LoadLibraryToListview(library.Games);
             }
             else

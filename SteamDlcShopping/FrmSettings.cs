@@ -4,7 +4,7 @@ namespace SteamDlcShopping
 {
     public partial class FrmSettings : Form
     {
-        ErrorProvider _erpSteamApiKey;
+        ErrorProvider? _erpSteamApiKey;
 
         public FrmSettings()
         {
@@ -42,7 +42,7 @@ namespace SteamDlcShopping
         {
             if (string.IsNullOrWhiteSpace(Settings.Default.SteamApiKey))
             {
-                _erpSteamApiKey.SetError(txtSteamApiKey, "Steam API Key is required!");
+                _erpSteamApiKey?.SetError(txtSteamApiKey, "Steam API Key is required!");
                 e.Cancel = true;
             }
         }
@@ -63,7 +63,7 @@ namespace SteamDlcShopping
 
         private void txtSteamApiKey_TextChanged(object sender, EventArgs e)
         {
-            _erpSteamApiKey.Clear();
+            _erpSteamApiKey?.Clear();
         }
     }
 }
