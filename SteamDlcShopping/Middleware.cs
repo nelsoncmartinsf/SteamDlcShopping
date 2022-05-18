@@ -16,7 +16,7 @@ namespace SteamDlcShopping
 
             if (active && _steamProfile is null)
             {
-                _steamProfile = new();
+                Login();
             }
 
             return active;
@@ -47,11 +47,6 @@ namespace SteamDlcShopping
             };
 
             return result;
-        }
-
-        public static void LoadGamesDlc()
-        {
-            _steamProfile.Library.LoadGamesDlc();
         }
 
         public static LibraryDto GetLibrary(string filterName = null, bool filterOnSale = false,
@@ -101,46 +96,52 @@ namespace SteamDlcShopping
         {
             List<DlcDto> result = new();
 
-            foreach (Game game in _steamProfile.Library.Games)
+            Game game = _steamProfile.Library.Games.FirstOrDefault(x => x.AppId == appId);
+
+            if (game is null)
             {
-                if (game.AppId != appId)
+                return result;
+            }
+
+            foreach (Dlc dlc in game.DlcList)
+            {
+                string price;
+
+                if (dlc.IsFree)
                 {
-                    continue;
+                    price = "Free";
                 }
-
-                foreach (Dlc dlc in game.DlcList)
+                else
                 {
-                    string price;
-
-                    if (dlc.IsFree)
+                    if (dlc.IsNotAvailable)
                     {
-                        price = "Free";
+                        price = "N/A";
                     }
                     else
                     {
-                        if (dlc.IsNotAvailable)
-                        {
-                            price = "N/A";
-                        }
-                        else
-                        {
-                            price = $"{(dlc.OnSale ? dlc.Sale.Price : dlc.Price)}€";
-                        }
+                        price = $"{(dlc.OnSale ? dlc.Sale.Price : dlc.Price)}€";
                     }
-
-                    DlcDto dlcDto = new()
-                    {
-                        Name = dlc.Name,
-                        Price = price,
-                        Discount = dlc.OnSale ? $"{dlc.Sale.Percentage}%" : null,
-                        IsOwned = dlc.IsOwned
-                    };
-
-                    result.Add(dlcDto);
                 }
+
+                DlcDto dlcDto = new()
+                {
+                    Name = dlc.Name,
+                    Price = price,
+                    Discount = dlc.OnSale ? $"{dlc.Sale.Percentage}%" : null,
+                    IsOwned = dlc.IsOwned
+                };
+
+                result.Add(dlcDto);
             }
 
             return result;
+        }
+
+
+
+        public static void LoadGamesDlc()
+        {
+            _steamProfile.Library.LoadGamesDlc();
         }
 
         private static List<Game> SortLibrary(SortField sortField = SortField.AppId, SortOrder sortOrder = SortOrder.Ascending)
@@ -185,10 +186,7 @@ namespace SteamDlcShopping
 
         public static void BlacklistGames(List<int> appIds)
         {
-            foreach (int appId in appIds)
-            {
-                _steamProfile.Library.BlacklistGame(appId);
-            }
+            appIds.ForEach(x => _steamProfile.Library.BlacklistGame(x));
 
             _steamProfile.Library.ApplyBlacklist();
             _steamProfile.Library.SaveBlacklist();
@@ -196,15 +194,25 @@ namespace SteamDlcShopping
 
         public static void UnblacklistGames(List<int> appIds)
         {
-            foreach (int appId in appIds)
-            {
-                _steamProfile.Library.UnBlacklistGame(appId);
-            }
+            appIds.ForEach(x => _steamProfile.Library.UnBlacklistGame(x));
+
+            _steamProfile.Library.SaveBlacklist();
         }
 
-        public static void SaveBlacklist()
+        public static Dictionary<int, string> GetFreeDlc()
         {
-            _steamProfile.Library.SaveBlacklist();
+            Dictionary<int, string> result = new();
+
+            List<Game> games = _steamProfile.Library.Games.Where(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree)).ToList();
+
+            foreach (Game game in games)
+            {
+                List<Dlc> dlcList = game.DlcList.Where(x => !x.IsOwned && x.IsFree).ToList();
+
+                dlcList.ForEach(x => result.Add(x.AppId, $"{game.Name} - {x.Name}"));
+            }
+
+            return result;
         }
     }
 }

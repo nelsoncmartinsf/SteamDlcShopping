@@ -50,10 +50,12 @@
             this.grbLibrary = new System.Windows.Forms.GroupBox();
             this.lblLibraryCost = new System.Windows.Forms.Label();
             this.chkHideGamesNotOnSale = new System.Windows.Forms.CheckBox();
+            this.btnBlacklist = new System.Windows.Forms.Button();
             this.lbldebug = new System.Windows.Forms.Label();
             this.mnuMenu = new System.Windows.Forms.MenuStrip();
             this.smiSettings = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnBlacklist = new System.Windows.Forms.Button();
+            this.smiBlacklist = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiFreeDlc = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.grbLibrary.SuspendLayout();
             this.mnuMenu.SuspendLayout();
@@ -143,7 +145,7 @@
             this.lsvGame.MultiSelect = false;
             this.lsvGame.Name = "lsvGame";
             this.lsvGame.Size = new System.Drawing.Size(641, 370);
-            this.lsvGame.TabIndex = 5;
+            this.lsvGame.TabIndex = 6;
             this.lsvGame.UseCompatibleStateImageBehavior = false;
             this.lsvGame.View = System.Windows.Forms.View.Details;
             this.lsvGame.EnabledChanged += new System.EventHandler(this.lsvGame_EnabledChanged);
@@ -187,7 +189,7 @@
             this.lnkSteamPage.Location = new System.Drawing.Point(1162, 431);
             this.lnkSteamPage.Name = "lnkSteamPage";
             this.lnkSteamPage.Size = new System.Drawing.Size(72, 15);
-            this.lnkSteamPage.TabIndex = 6;
+            this.lnkSteamPage.TabIndex = 7;
             this.lnkSteamPage.TabStop = true;
             this.lnkSteamPage.Text = "Steam Page ";
             this.lnkSteamPage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSteamPage_LinkClicked);
@@ -238,7 +240,7 @@
             this.grbLibrary.Location = new System.Drawing.Point(12, 97);
             this.grbLibrary.Name = "grbLibrary";
             this.grbLibrary.Size = new System.Drawing.Size(1240, 456);
-            this.grbLibrary.TabIndex = 5;
+            this.grbLibrary.TabIndex = 4;
             this.grbLibrary.TabStop = false;
             this.grbLibrary.Text = "Library";
             this.grbLibrary.EnabledChanged += new System.EventHandler(this.grbLibrary_EnabledChanged);
@@ -263,6 +265,16 @@
             this.chkHideGamesNotOnSale.UseVisualStyleBackColor = true;
             this.chkHideGamesNotOnSale.CheckedChanged += new System.EventHandler(this.chkHideGamesNotOnSale_CheckedChanged);
             // 
+            // btnBlacklist
+            // 
+            this.btnBlacklist.Location = new System.Drawing.Point(487, 427);
+            this.btnBlacklist.Name = "btnBlacklist";
+            this.btnBlacklist.Size = new System.Drawing.Size(100, 23);
+            this.btnBlacklist.TabIndex = 5;
+            this.btnBlacklist.Text = "Add to Blacklist";
+            this.btnBlacklist.UseVisualStyleBackColor = true;
+            this.btnBlacklist.Click += new System.EventHandler(this.btnBlacklist_Click);
+            // 
             // lbldebug
             // 
             this.lbldebug.AutoSize = true;
@@ -275,7 +287,9 @@
             // mnuMenu
             // 
             this.mnuMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.smiSettings});
+            this.smiSettings,
+            this.smiBlacklist,
+            this.smiFreeDlc});
             this.mnuMenu.Location = new System.Drawing.Point(0, 0);
             this.mnuMenu.Name = "mnuMenu";
             this.mnuMenu.Size = new System.Drawing.Size(1264, 24);
@@ -289,15 +303,19 @@
             this.smiSettings.Text = "Settings";
             this.smiSettings.Click += new System.EventHandler(this.smiSettings_Click);
             // 
-            // btnBlacklist
+            // smiBlacklist
             // 
-            this.btnBlacklist.Location = new System.Drawing.Point(487, 427);
-            this.btnBlacklist.Name = "btnBlacklist";
-            this.btnBlacklist.Size = new System.Drawing.Size(100, 23);
-            this.btnBlacklist.TabIndex = 3;
-            this.btnBlacklist.Text = "Add to Blacklist";
-            this.btnBlacklist.UseVisualStyleBackColor = true;
-            this.btnBlacklist.Click += new System.EventHandler(this.btnBlacklist_Click);
+            this.smiBlacklist.Name = "smiBlacklist";
+            this.smiBlacklist.Size = new System.Drawing.Size(62, 20);
+            this.smiBlacklist.Text = "Blacklist";
+            this.smiBlacklist.Click += new System.EventHandler(this.smiBlacklist_Click);
+            // 
+            // smiFreeDlc
+            // 
+            this.smiFreeDlc.Name = "smiFreeDlc";
+            this.smiFreeDlc.Size = new System.Drawing.Size(66, 20);
+            this.smiFreeDlc.Text = "Free DLC";
+            this.smiFreeDlc.Click += new System.EventHandler(this.smiFreeDlc_Click);
             // 
             // FrmMain
             // 
@@ -356,5 +374,7 @@
         private CheckBox chkHideGamesNotOnSale;
         private Label lblLibraryCost;
         private Button btnBlacklist;
+        private ToolStripMenuItem smiBlacklist;
+        private ToolStripMenuItem smiFreeDlc;
     }
 }

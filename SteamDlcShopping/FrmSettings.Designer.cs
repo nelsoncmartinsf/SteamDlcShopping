@@ -37,10 +37,6 @@
             this.lnkGetSteamApiKey = new System.Windows.Forms.LinkLabel();
             this.chkAutoBlacklist = new System.Windows.Forms.CheckBox();
             this.ptbSmartLoading = new System.Windows.Forms.PictureBox();
-            this.lsbBlacklist = new System.Windows.Forms.ListBox();
-            this.txtBlacklistSearch = new System.Windows.Forms.TextBox();
-            this.btnRemove = new System.Windows.Forms.Button();
-            this.lblGameCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbtSteamApiKey)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbSmartLoading)).BeginInit();
             this.SuspendLayout();
@@ -64,20 +60,20 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(276, 352);
+            this.btnSave.Location = new System.Drawing.Point(211, 90);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 5;
+            this.btnSave.TabIndex = 4;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(357, 352);
+            this.btnCancel.Location = new System.Drawing.Point(292, 90);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 6;
+            this.btnCancel.TabIndex = 5;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -116,9 +112,9 @@
             this.chkAutoBlacklist.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkAutoBlacklist.Location = new System.Drawing.Point(28, 65);
             this.chkAutoBlacklist.Name = "chkAutoBlacklist";
-            this.chkAutoBlacklist.Size = new System.Drawing.Size(98, 19);
+            this.chkAutoBlacklist.Size = new System.Drawing.Size(190, 19);
             this.chkAutoBlacklist.TabIndex = 3;
-            this.chkAutoBlacklist.Text = "Auto Blacklist";
+            this.chkAutoBlacklist.Text = "Auto Blacklist (Recommended)";
             this.chkAutoBlacklist.UseVisualStyleBackColor = true;
             // 
             // ptbSmartLoading
@@ -130,64 +126,25 @@
             this.ptbSmartLoading.TabIndex = 6;
             this.ptbSmartLoading.TabStop = false;
             // 
-            // lsbBlacklist
-            // 
-            this.lsbBlacklist.FormattingEnabled = true;
-            this.lsbBlacklist.ItemHeight = 15;
-            this.lsbBlacklist.Location = new System.Drawing.Point(12, 128);
-            this.lsbBlacklist.Name = "lsbBlacklist";
-            this.lsbBlacklist.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lsbBlacklist.Size = new System.Drawing.Size(420, 199);
-            this.lsbBlacklist.TabIndex = 7;
-            // 
-            // txtBlacklistSearch
-            // 
-            this.txtBlacklistSearch.Location = new System.Drawing.Point(12, 99);
-            this.txtBlacklistSearch.Name = "txtBlacklistSearch";
-            this.txtBlacklistSearch.Size = new System.Drawing.Size(200, 23);
-            this.txtBlacklistSearch.TabIndex = 8;
-            this.txtBlacklistSearch.TextChanged += new System.EventHandler(this.txtBlacklistSearch_TextChanged);
-            // 
-            // btnRemove
-            // 
-            this.btnRemove.Location = new System.Drawing.Point(357, 99);
-            this.btnRemove.Name = "btnRemove";
-            this.btnRemove.Size = new System.Drawing.Size(75, 23);
-            this.btnRemove.TabIndex = 5;
-            this.btnRemove.Text = "Remove";
-            this.btnRemove.UseVisualStyleBackColor = true;
-            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
-            // 
-            // lblGameCount
-            // 
-            this.lblGameCount.AutoSize = true;
-            this.lblGameCount.Location = new System.Drawing.Point(12, 330);
-            this.lblGameCount.Name = "lblGameCount";
-            this.lblGameCount.Size = new System.Drawing.Size(84, 15);
-            this.lblGameCount.TabIndex = 9;
-            this.lblGameCount.Text = "lblGameCount";
-            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(444, 387);
-            this.Controls.Add(this.lblGameCount);
-            this.Controls.Add(this.txtBlacklistSearch);
-            this.Controls.Add(this.lsbBlacklist);
+            this.ClientSize = new System.Drawing.Size(379, 125);
             this.Controls.Add(this.lnkGetSteamApiKey);
             this.Controls.Add(this.lblGetSteamApiKey);
             this.Controls.Add(this.ptbSmartLoading);
             this.Controls.Add(this.pbtSteamApiKey);
             this.Controls.Add(this.chkAutoBlacklist);
             this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.txtSteamApiKey);
             this.Controls.Add(this.lblSteamApiKey);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmSettings";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
@@ -211,9 +168,5 @@
         private LinkLabel lnkGetSteamApiKey;
         private CheckBox chkAutoBlacklist;
         private PictureBox ptbSmartLoading;
-        private ListBox lsbBlacklist;
-        private TextBox txtBlacklistSearch;
-        private Button btnRemove;
-        private Label lblGameCount;
     }
 }

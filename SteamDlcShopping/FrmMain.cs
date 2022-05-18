@@ -25,6 +25,16 @@ namespace SteamDlcShopping
             new FrmSettings().ShowDialog();
         }
 
+        private void smiBlacklist_Click(object sender, EventArgs e)
+        {
+            new FrmBlacklist().ShowDialog();
+        }
+
+        private void smiFreeDlc_Click(object sender, EventArgs e)
+        {
+            new FrmFreeDlc().ShowDialog();
+        }
+
         private void btnLogin_Click(object sender, EventArgs e)
         {
             new FrmLogin().ShowDialog();
@@ -141,7 +151,7 @@ namespace SteamDlcShopping
         private void lsvLibrary_SelectedIndexChanged(object sender, EventArgs e)
         {
             //No selected game
-            if (lsvLibrary.SelectedIndices.Count < 1)
+            if (lsvLibrary.SelectedIndices.Count == 0)
             {
                 btnBlacklist.Enabled = false;
                 lsvGame.Enabled = false;
@@ -243,15 +253,16 @@ namespace SteamDlcShopping
                 lblUsername.Text = null;
             }
 
+            smiFreeDlc.Enabled = false;
             btnLogin.Enabled = !Middleware.IsSessionActive();
             btnLogout.Enabled = Middleware.IsSessionActive();
             btnCalculate.Enabled = Middleware.IsSessionActive();
             grbLibrary.Enabled = false;
-            lsvGame.Enabled = false;
         }
 
         private void grbLibrary_EnabledChanged(object sender, EventArgs e)
         {
+            smiFreeDlc.Enabled = grbLibrary.Enabled;
             txtLibrarySearch.Text = null;
             chkHideGamesNotOnSale.Checked = false;
             ddlLibrarySort.SelectedIndex = -1;

@@ -34,6 +34,7 @@
             // 
             // webLogin
             // 
+            this.webLogin.AllowExternalDrop = true;
             this.webLogin.CreationProperties = null;
             this.webLogin.DefaultBackgroundColor = System.Drawing.Color.White;
             this.webLogin.Location = new System.Drawing.Point(0, 0);
@@ -53,7 +54,9 @@
             this.Controls.Add(this.webLogin);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmLogin";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login to Steam";
