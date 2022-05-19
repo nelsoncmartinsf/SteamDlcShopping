@@ -1,8 +1,6 @@
 ﻿using SteamDlcShopping.Dtos;
 using SteamDlcShopping.Entities;
-using SteamDlcShopping.Enums;
 using SteamDlcShopping.Properties;
-using SortOrder = SteamDlcShopping.Enums.SortOrder;
 
 namespace SteamDlcShopping
 {
@@ -49,15 +47,14 @@ namespace SteamDlcShopping
             return result;
         }
 
-        public static LibraryDto GetLibrary(string? filterName = null, bool filterOnSale = false,
-            SortField sortField = SortField.AppId, SortOrder sortOrder = SortOrder.Ascending)
+        public static LibraryDto GetGames(string? filterName = null, bool filterOnSale = false)
         {
             LibraryDto result = new();
             result.Games = new();
 
             decimal totalCost = 0m;
 
-            List<Game>? library = SortLibrary(sortField, sortOrder);
+            List<Game>? library = _steamProfile?.Library?.Games;
 
             if (library is null)
             {
@@ -97,7 +94,7 @@ namespace SteamDlcShopping
             return result;
         }
 
-        public static List<DlcDto> GetGame(int appId)
+        public static List<DlcDto> GetDlc(int appId)
         {
             List<DlcDto> result = new();
 
@@ -130,6 +127,7 @@ namespace SteamDlcShopping
 
                 DlcDto dlcDto = new()
                 {
+                    AppId = dlc.AppId,
                     Name = dlc.Name,
                     Price = price,
                     Discount = dlc.OnSale ? $"{dlc.Sale?.Percentage}%" : null,
@@ -142,44 +140,9 @@ namespace SteamDlcShopping
             return result;
         }
 
-
-
         public static void LoadGamesDlc()
         {
             _steamProfile?.Library?.LoadGamesDlc();
-        }
-
-        private static List<Game>? SortLibrary(SortField sortField = SortField.AppId, SortOrder sortOrder = SortOrder.Ascending)
-        {
-            List<Game>? result = _steamProfile?.Library?.Games;
-
-            if (sortOrder == SortOrder.Ascending)
-            {
-                switch (sortField)
-                {
-                    case SortField.TotalCost:
-                        result = _steamProfile?.Library?.Games?.OrderBy(x => x.DlcTotalPrice).ToList();
-                        break;
-                    case SortField.MaxDiscount:
-                        result = _steamProfile?.Library?.Games?.OrderBy(x => x.DlcHighestPercentage).ToList();
-                        break;
-                }
-            }
-
-            if (sortOrder == SortOrder.Descending)
-            {
-                switch (sortField)
-                {
-                    case SortField.TotalCost:
-                        result = _steamProfile?.Library?.Games?.OrderByDescending(x => x.DlcTotalPrice).ToList();
-                        break;
-                    case SortField.MaxDiscount:
-                        result = _steamProfile?.Library?.Games?.OrderByDescending(x => x.DlcHighestPercentage).ToList();
-                        break;
-                }
-            }
-
-            return result;
         }
 
 

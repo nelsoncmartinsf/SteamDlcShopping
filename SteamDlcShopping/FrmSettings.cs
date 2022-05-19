@@ -1,4 +1,5 @@
 ﻿using SteamDlcShopping.Properties;
+using System.Diagnostics;
 
 namespace SteamDlcShopping
 {
@@ -64,6 +65,22 @@ namespace SteamDlcShopping
         private void txtSteamApiKey_TextChanged(object sender, EventArgs e)
         {
             _erpSteamApiKey?.Clear();
+        }
+
+        private void lnkGetSteamApiKey_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process process = new()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    FileName = "cmd.exe",
+                    Arguments = "/c start https://steamcommunity.com/dev/apikey"
+                }
+            };
+
+            process.Start();
         }
     }
 }

@@ -28,38 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lsbFreeDlc = new System.Windows.Forms.ListBox();
-            this.lnkStorePage = new System.Windows.Forms.LinkLabel();
+            this.lsbDlc = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
-            // lsbFreeDlc
+            // lsbDlc
             // 
-            this.lsbFreeDlc.FormattingEnabled = true;
-            this.lsbFreeDlc.ItemHeight = 15;
-            this.lsbFreeDlc.Location = new System.Drawing.Point(12, 12);
-            this.lsbFreeDlc.Name = "lsbFreeDlc";
-            this.lsbFreeDlc.Size = new System.Drawing.Size(660, 199);
-            this.lsbFreeDlc.TabIndex = 1;
-            this.lsbFreeDlc.SelectedIndexChanged += new System.EventHandler(this.lsbFreeDlc_SelectedIndexChanged);
-            // 
-            // lnkStorePage
-            // 
-            this.lnkStorePage.AutoSize = true;
-            this.lnkStorePage.Location = new System.Drawing.Point(606, 214);
-            this.lnkStorePage.Name = "lnkStorePage";
-            this.lnkStorePage.Size = new System.Drawing.Size(66, 15);
-            this.lnkStorePage.TabIndex = 2;
-            this.lnkStorePage.TabStop = true;
-            this.lnkStorePage.Text = "Store Page ";
-            this.lnkStorePage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkStorePage_LinkClicked);
+            this.lsbDlc.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lsbDlc.FormattingEnabled = true;
+            this.lsbDlc.ItemHeight = 15;
+            this.lsbDlc.Location = new System.Drawing.Point(12, 12);
+            this.lsbDlc.Name = "lsbDlc";
+            this.lsbDlc.Size = new System.Drawing.Size(660, 199);
+            this.lsbDlc.TabIndex = 1;
+            this.lsbDlc.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsbDlc_MouseDoubleClick);
             // 
             // FrmFreeDlc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(684, 238);
-            this.Controls.Add(this.lnkStorePage);
-            this.Controls.Add(this.lsbFreeDlc);
+            this.ClientSize = new System.Drawing.Size(684, 223);
+            this.Controls.Add(this.lsbDlc);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -70,13 +58,11 @@
             this.Text = "Free DLC";
             this.Load += new System.EventHandler(this.FrmFreeDlc_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private ListBox lsbFreeDlc;
-        private LinkLabel lnkStorePage;
+        private ListBox lsbDlc;
     }
 }

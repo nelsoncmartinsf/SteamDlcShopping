@@ -53,6 +53,7 @@
             // 
             // lsbBlacklist
             // 
+            this.lsbBlacklist.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lsbBlacklist.FormattingEnabled = true;
             this.lsbBlacklist.ItemHeight = 15;
             this.lsbBlacklist.Location = new System.Drawing.Point(12, 41);

@@ -105,6 +105,7 @@
             this.lnkGetSteamApiKey.TabIndex = 2;
             this.lnkGetSteamApiKey.TabStop = true;
             this.lnkGetSteamApiKey.Text = "here";
+            this.lnkGetSteamApiKey.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkGetSteamApiKey_LinkClicked);
             // 
             // chkAutoBlacklist
             // 

@@ -1,18 +1,21 @@
 using SteamDlcShopping.Dtos;
-using SteamDlcShopping.Enums;
 using System.Diagnostics;
-using SortOrder = SteamDlcShopping.Enums.SortOrder;
 using Timer = System.Threading.Timer;
 
 namespace SteamDlcShopping
 {
     public partial class FrmMain : Form
     {
+        private readonly ListViewColumnSorter _columnSorter;
         private int _selectedGame;
 
         public FrmMain()
         {
             InitializeComponent();
+
+            _columnSorter = new();
+            lsvGame.ListViewItemSorter = _columnSorter;
+            lsvDlc.ListViewItemSorter = _columnSorter;
         }
 
         private void FrmMain_Load(object sender, EventArgs e)
@@ -22,22 +25,30 @@ namespace SteamDlcShopping
 
         private void smiSettings_Click(object sender, EventArgs e)
         {
-            new FrmSettings().ShowDialog();
+            FrmSettings form = new();
+            form.ShowDialog();
+            form.Dispose();
         }
 
         private void smiBlacklist_Click(object sender, EventArgs e)
         {
-            new FrmBlacklist().ShowDialog();
+            FrmBlacklist form = new();
+            form.ShowDialog();
+            form.Dispose();
         }
 
         private void smiFreeDlc_Click(object sender, EventArgs e)
         {
-            new FrmFreeDlc().ShowDialog();
+            FrmFreeDlc form = new();
+            form.ShowDialog();
+            form.Dispose();
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            new FrmLogin().ShowDialog();
+            FrmLogin form = new();
+            form.ShowDialog();
+            form.Dispose();
 
             Middleware.Login();
             VerifySession();
@@ -55,12 +66,38 @@ namespace SteamDlcShopping
             Timer tmrLibrary = new(_ => tmrLibrary_Tick(), null, 0, Timeout.Infinite);
         }
 
+        private void btnBlacklist_Click(object sender, EventArgs e)
+        {
+            List<int> appIds = new();
+
+            foreach (ListViewItem item in lsvGame.SelectedItems)
+            {
+                if (!int.TryParse(item.Tag.ToString(), out int appId))
+                {
+                    continue;
+                }
+
+                appIds.Add(appId);
+
+                lsvGame.Items.Remove(item);
+            }
+
+            Middleware.BlacklistGames(appIds);
+
+            lsvGame_EnabledChanged(new(), new());
+        }
+
         private void tmrLibrary_Tick()
         {
-            btnLogout.Invoke(new Action(() => btnLogout.Enabled = false));
-            btnCalculate.Invoke(new Action(() => btnCalculate.Enabled = false));
-            grbLibrary.Invoke(new Action(() => grbLibrary.Enabled = false));
-            lsvGame.Invoke(new Action(() => lsvGame.Enabled = false));
+            Invoke(new Action(() =>
+            {
+                smiSettings.Enabled = false;
+                smiBlacklist.Enabled = false;
+                btnLogout.Enabled = false;
+                btnCalculate.Enabled = false;
+                grbLibrary.Enabled = false;
+                lsvDlc.Enabled = false;
+            }));
 
             Stopwatch timer = Stopwatch.StartNew();//DEBUG
 
@@ -69,62 +106,43 @@ namespace SteamDlcShopping
             timer.Stop();//DEBUG
             lbldebug.Invoke(new Action(() => lbldebug.Text = $"{timer.Elapsed}"));//DEBUG
 
-            btnLogout.Invoke(new Action(() => btnLogout.Enabled = true));
-            btnCalculate.Invoke(new Action(() => btnCalculate.Enabled = true));
-            grbLibrary.Invoke(new Action(() => grbLibrary.Enabled = true));
-            lsvGame.Invoke(new Action(() => lsvGame.Enabled = true));
+            Invoke(new Action(() =>
+            {
+                smiSettings.Enabled = true;
+                smiBlacklist.Enabled = true;
+                btnLogout.Enabled = true;
+                btnCalculate.Enabled = true;
+                grbLibrary.Enabled = true;
+                lsvDlc.Enabled = true;
+            }));
         }
 
-        //////////////////////////////////////// FILTERS ////////////////////////////////////////
+        //////////////////////////////////////// GAME FILTERS ////////////////////////////////////////
 
         private string? _filterName;
         private bool _filterOnSale;
-        private SortField _sortField;
-        private SortOrder _sortOrder;
 
         private void txtLibrarySearch_TextChanged(object sender, EventArgs e)
         {
             _filterName = txtLibrarySearch.Text;
-            lsvLibrary_EnabledChanged(new(), new());
-            lsvGame.Enabled = false;
+            lsvGame_EnabledChanged(new(), new());
+            lsvDlc.Enabled = false;
         }
 
         private void chkHideGamesNotOnSale_CheckedChanged(object sender, EventArgs e)
         {
             _filterOnSale = chkHideGamesNotOnSale.Checked;
-            lsvLibrary_EnabledChanged(new(), new());
-            lsvGame.Enabled = false;
+            lsvGame_EnabledChanged(new(), new());
+            lsvDlc.Enabled = false;
         }
 
-        private void ddlLibrarySort_SelectedIndexChanged(object sender, EventArgs e)
+        //////////////////////////////////////// GAME ////////////////////////////////////////
+
+        private void LoadGameToListview(List<GameDto> games)
         {
-            switch (ddlLibrarySort.SelectedIndex)
-            {
-                case 0:
-                    _sortField = SortField.TotalCost;
-                    _sortOrder = SortOrder.Ascending;
-                    break;
-                case 1:
-                    _sortField = SortField.MaxDiscount;
-                    _sortOrder = SortOrder.Descending;
-                    break;
-                default:
-                    _sortField = SortField.AppId;
-                    _sortOrder = SortOrder.Ascending;
-                    break;
-            }
+            lsvGame.Items.Clear();
 
-            lsvLibrary_EnabledChanged(new(), new());
-            lsvGame.Enabled = false;
-        }
-
-        //////////////////////////////////////// LIBRARY ////////////////////////////////////////
-
-        private void LoadLibraryToListview(List<GameDto> games)
-        {
-            lsvLibrary.Items.Clear();
-
-            lsvLibrary.BeginUpdate();
+            lsvGame.BeginUpdate();
 
             foreach (GameDto game in games)
             {
@@ -142,68 +160,82 @@ namespace SteamDlcShopping
                 subItem = new() { Text = game.DlcHighestPercentage };
                 item.SubItems.Add(subItem);
 
-                lsvLibrary.Items.Add(item);
+                lsvGame.Items.Add(item);
             }
 
-            lsvLibrary.EndUpdate();
+            lsvGame.EndUpdate();
         }
 
-        private void lsvLibrary_SelectedIndexChanged(object sender, EventArgs e)
+        private void lsvGame_SelectedIndexChanged(object sender, EventArgs e)
         {
             //No selected game
-            if (lsvLibrary.SelectedIndices.Count == 0)
+            if (lsvGame.SelectedIndices.Count == 0)
             {
                 btnBlacklist.Enabled = false;
-                lsvGame.Enabled = false;
+                lsvDlc.Enabled = false;
                 return;
             }
 
             btnBlacklist.Enabled = true;
 
             //Multiple games selected
-            if (lsvLibrary.SelectedIndices.Count > 1)
+            if (lsvGame.SelectedIndices.Count > 1)
             {
-                lsvGame.Enabled = false;
+                lsvDlc.Enabled = false;
                 return;
             }
 
-            if (!int.TryParse(lsvLibrary.SelectedItems[0].Tag.ToString(), out _selectedGame))
+            if (!int.TryParse(lsvGame.SelectedItems[0].Tag.ToString(), out _selectedGame))
             {
                 _selectedGame = 0;
             }
 
-            lsvGame.Enabled = false;
-            lsvGame.Enabled = true;
+            lsvDlc.Enabled = false;
+            lsvDlc.Enabled = true;
         }
 
-        private void btnBlacklist_Click(object sender, EventArgs e)
+        private void lsvGame_DoubleClick(object sender, EventArgs e)
         {
-            List<int> appIds = new();
-
-            foreach (ListViewItem item in lsvLibrary.SelectedItems)
+            Process process = new()
             {
-                if (!int.TryParse(item.Tag.ToString(), out int appId))
+                StartInfo = new ProcessStartInfo()
                 {
-                    continue;
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    FileName = "cmd.exe",
+                    Arguments = $"/c start https://store.steampowered.com/app/{lsvGame.SelectedItems[0].Tag}"
                 }
+            };
 
-                appIds.Add(appId);
+            process.Start();
+        }
 
-                lsvLibrary.Items.Remove(item);
+        private void lsvGame_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            if (e.Column == _columnSorter.Column)
+            {
+                _columnSorter.Order = _columnSorter.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            }
+            else
+            {
+                _columnSorter.Column = e.Column;
+                _columnSorter.Order = SortOrder.Ascending;
             }
 
-            Middleware.BlacklistGames(appIds);
-
-            lsvLibrary_EnabledChanged(new(), new());
+            lsvGame.Sort();
         }
 
-        //////////////////////////////////////// GAME ////////////////////////////////////////
+        //////////////////////////////////////// DLC FILTERS ////////////////////////////////////////
+        
+
+
+        //////////////////////////////////////// DLC ////////////////////////////////////////
 
         private void LoadDlcToListview(List<DlcDto> dlcs)
         {
-            lsvGame.Items.Clear();
+            lsvDlc.Items.Clear();
 
-            lsvGame.BeginUpdate();
+            lsvDlc.BeginUpdate();
 
             foreach (DlcDto dlc in dlcs)
             {
@@ -211,7 +243,7 @@ namespace SteamDlcShopping
                 ListViewItem.ListViewSubItem subItem;
 
                 //DLC
-                item = new() { Text = dlc.Name };
+                item = new() { Tag = dlc.AppId, Text = dlc.Name };
 
                 //Price
                 subItem = new() { Text = dlc.Price };
@@ -222,13 +254,13 @@ namespace SteamDlcShopping
                 item.SubItems.Add(subItem);
 
                 item.BackColor = dlc.IsOwned ? Color.LightGreen : item.BackColor;
-                lsvGame.Items.Add(item);
+                lsvDlc.Items.Add(item);
             }
 
-            lsvGame.EndUpdate();
+            lsvDlc.EndUpdate();
         }
 
-        private void lnkSteamPage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void lsvDlc_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             Process process = new()
             {
@@ -237,14 +269,29 @@ namespace SteamDlcShopping
                     CreateNoWindow = true,
                     UseShellExecute = false,
                     FileName = "cmd.exe",
-                    Arguments = $"/c start https://store.steampowered.com/app/{_selectedGame}"
+                    Arguments = $"/c start https://store.steampowered.com/app/{lsvDlc.SelectedItems[0].Tag}"
                 }
             };
 
             process.Start();
         }
 
-        //////////////////////////////////////// EVENTS ////////////////////////////////////////
+        private void lsvDlc_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            if (e.Column == _columnSorter.Column)
+            {
+                _columnSorter.Order = _columnSorter.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            }
+            else
+            {
+                _columnSorter.Column = e.Column;
+                _columnSorter.Order = SortOrder.Ascending;
+            }
+
+            lsvDlc.Sort();
+        }
+
+        //////////////////////////////////////// METHODS ////////////////////////////////////////
 
         private void VerifySession()
         {
@@ -273,48 +320,46 @@ namespace SteamDlcShopping
             smiFreeDlc.Enabled = grbLibrary.Enabled;
             txtLibrarySearch.Text = null;
             chkHideGamesNotOnSale.Checked = false;
-            ddlLibrarySort.SelectedIndex = -1;
         }
 
-        private void lsvLibrary_EnabledChanged(object sender, EventArgs e)
+        private void lsvGame_EnabledChanged(object sender, EventArgs e)
         {
             LibraryDto library = new();
 
-            if (lsvLibrary.Enabled)
+            if (lsvGame.Enabled)
             {
-                library = Middleware.GetLibrary(_filterName, _filterOnSale, _sortField, _sortOrder);
+                library = Middleware.GetGames(_filterName, _filterOnSale);
 
                 if (library.Games is null)
                 {
                     return;
                 }
 
-                LoadLibraryToListview(library.Games);
-            }
-            else
-            {
-                lsvLibrary.Items.Clear();
-            }
-
-            lblLibraryCount.Text = lsvLibrary.Enabled ? $"Count: {library.Size}" : null;
-            lblLibraryCost.Text = lsvLibrary.Enabled ? $"Cost: {library.TotalCost}€" : null;
-            btnBlacklist.Enabled = false;
-        }
-
-        private void lsvGame_EnabledChanged(object sender, EventArgs e)
-        {
-            if (lsvGame.Enabled)
-            {
-                List<DlcDto> dlcList = Middleware.GetGame(_selectedGame);
-                LoadDlcToListview(dlcList);
+                LoadGameToListview(library.Games);
             }
             else
             {
                 lsvGame.Items.Clear();
             }
 
-            lblGameCount.Text = lsvGame.Enabled ? $"Count: {lsvGame.Items.Count}" : null;
-            lnkSteamPage.Enabled = lsvGame.Enabled;
+            lblGameCount.Text = lsvGame.Enabled ? $"Count: {library.Size}" : null;
+            lblLibraryCost.Text = lsvGame.Enabled ? $"Cost: {library.TotalCost}€" : null;
+            btnBlacklist.Enabled = false;
+        }
+
+        private void lsvDlc_EnabledChanged(object sender, EventArgs e)
+        {
+            if (lsvDlc.Enabled)
+            {
+                List<DlcDto> dlcList = Middleware.GetDlc(_selectedGame);
+                LoadDlcToListview(dlcList);
+            }
+            else
+            {
+                lsvDlc.Items.Clear();
+            }
+
+            lblDlcCount.Text = lsvDlc.Enabled ? $"Count: {lsvDlc.Items.Count}" : null;
         }
     }
 }

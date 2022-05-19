@@ -41,5 +41,11 @@ namespace SteamDlcShopping
 
             return null;
         }
+
+        private void FrmLogin_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            webLogin.Stop();
+            webLogin.Dispose();
+        }
     }
 }

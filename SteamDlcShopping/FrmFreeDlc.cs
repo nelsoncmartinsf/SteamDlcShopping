@@ -11,29 +11,24 @@ namespace SteamDlcShopping
 
         private void FrmFreeDlc_Load(object sender, EventArgs e)
         {
-            lnkStorePage.Enabled = false;
+            lsbDlc.DisplayMember = "Value";
+            lsbDlc.ValueMember = "Key";
 
-            lsbFreeDlc.DisplayMember = "Value";
-            lsbFreeDlc.ValueMember = "Key";
+            Dictionary<int, string> dlcList = Middleware.GetFreeDlc();
 
-            LoadDlcToListbox();
-        }
+            lsbDlc.BeginUpdate();
 
-        private void lsbFreeDlc_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //No selected game
-            if (lsbFreeDlc.SelectedIndices.Count == 0)
+            foreach (KeyValuePair<int, string> item in dlcList)
             {
-                lnkStorePage.Enabled = false;
-                return;
+                lsbDlc.Items.Add(item);
             }
 
-            lnkStorePage.Enabled = true;
+            lsbDlc.EndUpdate();
         }
 
-        private void lnkStorePage_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void lsbDlc_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            KeyValuePair<int, string> item = (KeyValuePair<int, string>)lsbFreeDlc.SelectedItems[0];
+            KeyValuePair<int, string> item = (KeyValuePair<int, string>)lsbDlc.SelectedItems[0];
 
             Process process = new()
             {
@@ -47,22 +42,6 @@ namespace SteamDlcShopping
             };
 
             process.Start();
-        }
-
-        private void LoadDlcToListbox()
-        {
-            lsbFreeDlc.Items.Clear();
-
-            Dictionary<int, string> dlcList = Middleware.GetFreeDlc();
-
-            lsbFreeDlc.BeginUpdate();
-
-            foreach (KeyValuePair<int, string> item in dlcList)
-            {
-                lsbFreeDlc.Items.Add(item);
-            }
-
-            lsbFreeDlc.EndUpdate();
         }
     }
 }

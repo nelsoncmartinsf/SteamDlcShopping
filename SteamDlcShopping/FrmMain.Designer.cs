@@ -33,20 +33,18 @@
             this.ptbAvatar = new System.Windows.Forms.PictureBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.btnCalculate = new System.Windows.Forms.Button();
-            this.lsvLibrary = new System.Windows.Forms.ListView();
+            this.lsvGame = new System.Windows.Forms.ListView();
             this.colGame = new System.Windows.Forms.ColumnHeader();
             this.ColCost = new System.Windows.Forms.ColumnHeader();
             this.colMaxDiscount = new System.Windows.Forms.ColumnHeader();
-            this.lsvGame = new System.Windows.Forms.ListView();
+            this.lsvDlc = new System.Windows.Forms.ListView();
             this.colDlc = new System.Windows.Forms.ColumnHeader();
             this.colPrice = new System.Windows.Forms.ColumnHeader();
             this.colDiscount = new System.Windows.Forms.ColumnHeader();
-            this.lblLibraryCount = new System.Windows.Forms.Label();
             this.lblGameCount = new System.Windows.Forms.Label();
-            this.lnkSteamPage = new System.Windows.Forms.LinkLabel();
+            this.lblDlcCount = new System.Windows.Forms.Label();
             this.btnLogout = new System.Windows.Forms.Button();
             this.txtLibrarySearch = new System.Windows.Forms.TextBox();
-            this.ddlLibrarySort = new System.Windows.Forms.ComboBox();
             this.grbLibrary = new System.Windows.Forms.GroupBox();
             this.lblLibraryCost = new System.Windows.Forms.Label();
             this.chkHideGamesNotOnSale = new System.Windows.Forms.CheckBox();
@@ -99,22 +97,25 @@
             this.btnCalculate.UseVisualStyleBackColor = true;
             this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
             // 
-            // lsvLibrary
+            // lsvGame
             // 
-            this.lsvLibrary.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.lsvGame.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colGame,
             this.ColCost,
             this.colMaxDiscount});
-            this.lsvLibrary.FullRowSelect = true;
-            this.lsvLibrary.GridLines = true;
-            this.lsvLibrary.Location = new System.Drawing.Point(6, 51);
-            this.lsvLibrary.Name = "lsvLibrary";
-            this.lsvLibrary.Size = new System.Drawing.Size(581, 370);
-            this.lsvLibrary.TabIndex = 4;
-            this.lsvLibrary.UseCompatibleStateImageBehavior = false;
-            this.lsvLibrary.View = System.Windows.Forms.View.Details;
-            this.lsvLibrary.SelectedIndexChanged += new System.EventHandler(this.lsvLibrary_SelectedIndexChanged);
-            this.lsvLibrary.EnabledChanged += new System.EventHandler(this.lsvLibrary_EnabledChanged);
+            this.lsvGame.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lsvGame.FullRowSelect = true;
+            this.lsvGame.GridLines = true;
+            this.lsvGame.Location = new System.Drawing.Point(6, 51);
+            this.lsvGame.Name = "lsvGame";
+            this.lsvGame.Size = new System.Drawing.Size(581, 370);
+            this.lsvGame.TabIndex = 4;
+            this.lsvGame.UseCompatibleStateImageBehavior = false;
+            this.lsvGame.View = System.Windows.Forms.View.Details;
+            this.lsvGame.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvGame_ColumnClick);
+            this.lsvGame.SelectedIndexChanged += new System.EventHandler(this.lsvGame_SelectedIndexChanged);
+            this.lsvGame.EnabledChanged += new System.EventHandler(this.lsvGame_EnabledChanged);
+            this.lsvGame.DoubleClick += new System.EventHandler(this.lsvGame_DoubleClick);
             // 
             // colGame
             // 
@@ -133,22 +134,25 @@
             this.colMaxDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.colMaxDiscount.Width = 85;
             // 
-            // lsvGame
+            // lsvDlc
             // 
-            this.lsvGame.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.lsvDlc.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colDlc,
             this.colPrice,
             this.colDiscount});
-            this.lsvGame.FullRowSelect = true;
-            this.lsvGame.GridLines = true;
-            this.lsvGame.Location = new System.Drawing.Point(593, 51);
-            this.lsvGame.MultiSelect = false;
-            this.lsvGame.Name = "lsvGame";
-            this.lsvGame.Size = new System.Drawing.Size(641, 370);
-            this.lsvGame.TabIndex = 6;
-            this.lsvGame.UseCompatibleStateImageBehavior = false;
-            this.lsvGame.View = System.Windows.Forms.View.Details;
-            this.lsvGame.EnabledChanged += new System.EventHandler(this.lsvGame_EnabledChanged);
+            this.lsvDlc.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lsvDlc.FullRowSelect = true;
+            this.lsvDlc.GridLines = true;
+            this.lsvDlc.Location = new System.Drawing.Point(593, 51);
+            this.lsvDlc.MultiSelect = false;
+            this.lsvDlc.Name = "lsvDlc";
+            this.lsvDlc.Size = new System.Drawing.Size(641, 370);
+            this.lsvDlc.TabIndex = 6;
+            this.lsvDlc.UseCompatibleStateImageBehavior = false;
+            this.lsvDlc.View = System.Windows.Forms.View.Details;
+            this.lsvDlc.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvDlc_ColumnClick);
+            this.lsvDlc.EnabledChanged += new System.EventHandler(this.lsvDlc_EnabledChanged);
+            this.lsvDlc.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvDlc_MouseDoubleClick);
             // 
             // colDlc
             // 
@@ -165,34 +169,23 @@
             this.colDiscount.Text = "Discount";
             this.colDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
-            // lblLibraryCount
-            // 
-            this.lblLibraryCount.AutoSize = true;
-            this.lblLibraryCount.Location = new System.Drawing.Point(6, 431);
-            this.lblLibraryCount.Name = "lblLibraryCount";
-            this.lblLibraryCount.Size = new System.Drawing.Size(89, 15);
-            this.lblLibraryCount.TabIndex = 0;
-            this.lblLibraryCount.Text = "lblLibraryCount";
-            // 
             // lblGameCount
             // 
             this.lblGameCount.AutoSize = true;
-            this.lblGameCount.Location = new System.Drawing.Point(593, 431);
+            this.lblGameCount.Location = new System.Drawing.Point(6, 431);
             this.lblGameCount.Name = "lblGameCount";
             this.lblGameCount.Size = new System.Drawing.Size(84, 15);
             this.lblGameCount.TabIndex = 0;
             this.lblGameCount.Text = "lblGameCount";
             // 
-            // lnkSteamPage
+            // lblDlcCount
             // 
-            this.lnkSteamPage.AutoSize = true;
-            this.lnkSteamPage.Location = new System.Drawing.Point(1162, 431);
-            this.lnkSteamPage.Name = "lnkSteamPage";
-            this.lnkSteamPage.Size = new System.Drawing.Size(72, 15);
-            this.lnkSteamPage.TabIndex = 7;
-            this.lnkSteamPage.TabStop = true;
-            this.lnkSteamPage.Text = "Steam Page ";
-            this.lnkSteamPage.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSteamPage_LinkClicked);
+            this.lblDlcCount.AutoSize = true;
+            this.lblDlcCount.Location = new System.Drawing.Point(593, 431);
+            this.lblDlcCount.Name = "lblDlcCount";
+            this.lblDlcCount.Size = new System.Drawing.Size(70, 15);
+            this.lblDlcCount.TabIndex = 0;
+            this.lblDlcCount.Text = "lblDlcCount";
             // 
             // btnLogout
             // 
@@ -212,31 +205,16 @@
             this.txtLibrarySearch.TabIndex = 1;
             this.txtLibrarySearch.TextChanged += new System.EventHandler(this.txtLibrarySearch_TextChanged);
             // 
-            // ddlLibrarySort
-            // 
-            this.ddlLibrarySort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ddlLibrarySort.FormattingEnabled = true;
-            this.ddlLibrarySort.Items.AddRange(new object[] {
-            "Cheapest Cost",
-            "Highest Discount"});
-            this.ddlLibrarySort.Location = new System.Drawing.Point(437, 22);
-            this.ddlLibrarySort.Name = "ddlLibrarySort";
-            this.ddlLibrarySort.Size = new System.Drawing.Size(150, 23);
-            this.ddlLibrarySort.TabIndex = 3;
-            this.ddlLibrarySort.SelectedIndexChanged += new System.EventHandler(this.ddlLibrarySort_SelectedIndexChanged);
-            // 
             // grbLibrary
             // 
             this.grbLibrary.Controls.Add(this.lblLibraryCost);
             this.grbLibrary.Controls.Add(this.chkHideGamesNotOnSale);
             this.grbLibrary.Controls.Add(this.btnBlacklist);
             this.grbLibrary.Controls.Add(this.txtLibrarySearch);
-            this.grbLibrary.Controls.Add(this.ddlLibrarySort);
-            this.grbLibrary.Controls.Add(this.lblLibraryCount);
             this.grbLibrary.Controls.Add(this.lblGameCount);
-            this.grbLibrary.Controls.Add(this.lnkSteamPage);
-            this.grbLibrary.Controls.Add(this.lsvLibrary);
+            this.grbLibrary.Controls.Add(this.lblDlcCount);
             this.grbLibrary.Controls.Add(this.lsvGame);
+            this.grbLibrary.Controls.Add(this.lsvDlc);
             this.grbLibrary.Location = new System.Drawing.Point(12, 97);
             this.grbLibrary.Name = "grbLibrary";
             this.grbLibrary.Size = new System.Drawing.Size(1240, 456);
@@ -353,18 +331,16 @@
         private PictureBox ptbAvatar;
         private Button btnLogin;
         private Button btnCalculate;
-        private ListView lsvLibrary;
-        private ColumnHeader colGame;
         private ListView lsvGame;
+        private ColumnHeader colGame;
+        private ListView lsvDlc;
         private ColumnHeader colDlc;
         private ColumnHeader colPrice;
         private ColumnHeader colDiscount;
-        private Label lblLibraryCount;
         private Label lblGameCount;
-        private LinkLabel lnkSteamPage;
+        private Label lblDlcCount;
         private Button btnLogout;
         private TextBox txtLibrarySearch;
-        private ComboBox ddlLibrarySort;
         private ColumnHeader ColCost;
         private ColumnHeader colMaxDiscount;
         private GroupBox grbLibrary;

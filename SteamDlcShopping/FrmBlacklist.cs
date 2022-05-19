@@ -15,6 +15,8 @@
         {
             _blacklist = Middleware.GetBlacklist();
             _unblacklist = new();
+
+            lblGameCount.Text = null;
             btnRemove.Enabled = false;
 
             lsbBlacklist.DisplayMember = "Value";

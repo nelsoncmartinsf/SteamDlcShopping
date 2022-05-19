@@ -77,7 +77,7 @@ namespace SteamDlcShopping.Entities
 
             //Load all dlc for all games
             int threads = 10;
-            int size = Size ?? 0 / threads;
+            int size = (Size ?? 0) / threads;
 
             using CountdownEvent countdownEvent = new(Size % threads == 0 ? threads : threads + 1);
 
