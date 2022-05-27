@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System.Globalization;
 using System.Net;
+using System.Web;
 
 namespace SteamDlcShopping.Entities
 {
@@ -36,7 +37,13 @@ namespace SteamDlcShopping.Entities
         {
             try
             {
-                HttpClient httpClient = new();
+                Uri uri = new("https://store.steampowered.com");
+
+                using HttpClientHandler handler = new();
+                handler.CookieContainer = new CookieContainer();
+                handler.CookieContainer.Add(uri, new Cookie("birthtime", HttpUtility.UrlEncode("birthtime=0; path=/; max-age=315360000")));
+
+                HttpClient httpClient = new(handler);
                 string response;
 
                 using (HttpResponseMessage httpResponseMessage = httpClient.GetAsync($"https://store.steampowered.com/app/{AppId}").Result)

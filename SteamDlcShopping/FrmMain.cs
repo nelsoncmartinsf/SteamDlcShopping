@@ -179,11 +179,19 @@ namespace SteamDlcShopping
                 return;
             }
 
-            if (!int.TryParse(lsvGame.SelectedItems[0].Tag.ToString(), out _selectedGame))
+            //Parse the item tag
+            if (!int.TryParse(lsvGame.SelectedItems[0].Tag.ToString(), out int newGame))
             {
-                _selectedGame = 0;
+                return;
             }
 
+            //Check if it's a different game from the one already selected
+            if (newGame == _selectedGame)
+            {
+                return;
+            }
+
+            _selectedGame = newGame;
             lsvDlc.Enabled = false;
             lsvDlc.Enabled = true;
         }
