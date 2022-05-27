@@ -11,14 +11,6 @@
 
         public Sale? Sale { get; }
 
-        public bool OnSale
-        {
-            get
-            {
-                return Sale != null;
-            }
-        }
-
         public bool IsFree { get; }
 
         public bool IsNotAvailable { get; }

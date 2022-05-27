@@ -10,9 +10,8 @@ namespace SteamDlcShopping.Entities
         //Fields
         private readonly long _steamId;
 
-        private List<int>? _dynamicStore;
-
         //Properties
+        public List<int>? DynamicStore { get; private set; }
 
         public List<Game>? Games { get; private set; }
 
@@ -28,7 +27,6 @@ namespace SteamDlcShopping.Entities
             _steamId = steamId;
 
             LoadDynamicStore();
-            LoadGames();
             LoadBlacklist();
         }
 
@@ -47,7 +45,7 @@ namespace SteamDlcShopping.Entities
             response = client.GetAsync(uri).Result;
 
             JObject jObject = JObject.Parse(response.Content.ReadAsStringAsync().Result);
-            _dynamicStore = JsonConvert.DeserializeObject<List<int>>($"{jObject["rgOwnedApps"]}");
+            DynamicStore = JsonConvert.DeserializeObject<List<int>>($"{jObject["rgOwnedApps"]}");
         }
 
         private void LoadGames()
@@ -131,7 +129,7 @@ namespace SteamDlcShopping.Entities
             foreach (Game game in Games)
             {
                 //Mark to remove games without dlc
-                if (game.DlcList is null || game.DlcAmount == 0)
+                if (game.DlcList is null || game.DlcList.Count == 0)
                 {
                     if (Settings.Default.AutoBlacklist)
                     {
@@ -148,7 +146,7 @@ namespace SteamDlcShopping.Entities
                 foreach (Dlc dlc in game.DlcList)
                 {
                     //Mark dlc as owned
-                    if (_dynamicStore is not null && _dynamicStore.Contains(dlc.AppId))
+                    if (DynamicStore is not null && DynamicStore.Contains(dlc.AppId))
                     {
                         dlc.MarkAsOwned();
                         continue;

@@ -36,6 +36,8 @@
             this.lsvGame = new System.Windows.Forms.ListView();
             this.colGame = new System.Windows.Forms.ColumnHeader();
             this.ColCost = new System.Windows.Forms.ColumnHeader();
+            this.colDlcLeft = new System.Windows.Forms.ColumnHeader();
+            this.colMinDiscount = new System.Windows.Forms.ColumnHeader();
             this.colMaxDiscount = new System.Windows.Forms.ColumnHeader();
             this.lsvDlc = new System.Windows.Forms.ListView();
             this.colDlc = new System.Windows.Forms.ColumnHeader();
@@ -44,11 +46,15 @@
             this.lblGameCount = new System.Windows.Forms.Label();
             this.lblDlcCount = new System.Windows.Forms.Label();
             this.btnLogout = new System.Windows.Forms.Button();
-            this.txtLibrarySearch = new System.Windows.Forms.TextBox();
+            this.txtGameSearch = new System.Windows.Forms.TextBox();
             this.grbLibrary = new System.Windows.Forms.GroupBox();
+            this.lnkTooManyDlc = new System.Windows.Forms.LinkLabel();
+            this.lblTooManyDlc = new System.Windows.Forms.Label();
             this.lblLibraryCost = new System.Windows.Forms.Label();
+            this.chkHideOwnedDlc = new System.Windows.Forms.CheckBox();
             this.chkHideGamesNotOnSale = new System.Windows.Forms.CheckBox();
             this.btnBlacklist = new System.Windows.Forms.Button();
+            this.txtDlcSearch = new System.Windows.Forms.TextBox();
             this.lbldebug = new System.Windows.Forms.Label();
             this.mnuMenu = new System.Windows.Forms.MenuStrip();
             this.smiSettings = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,13 +108,15 @@
             this.lsvGame.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colGame,
             this.ColCost,
+            this.colDlcLeft,
+            this.colMinDiscount,
             this.colMaxDiscount});
             this.lsvGame.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lsvGame.FullRowSelect = true;
             this.lsvGame.GridLines = true;
             this.lsvGame.Location = new System.Drawing.Point(6, 51);
             this.lsvGame.Name = "lsvGame";
-            this.lsvGame.Size = new System.Drawing.Size(581, 370);
+            this.lsvGame.Size = new System.Drawing.Size(755, 237);
             this.lsvGame.TabIndex = 4;
             this.lsvGame.UseCompatibleStateImageBehavior = false;
             this.lsvGame.View = System.Windows.Forms.View.Details;
@@ -124,15 +132,27 @@
             // 
             // ColCost
             // 
-            this.ColCost.Text = "Cost";
+            this.ColCost.Text = "Total Cost";
             this.ColCost.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.ColCost.Width = 55;
+            this.ColCost.Width = 90;
+            // 
+            // colDlcLeft
+            // 
+            this.colDlcLeft.Text = "DLC Left";
+            this.colDlcLeft.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.colDlcLeft.Width = 70;
+            // 
+            // colMinDiscount
+            // 
+            this.colMinDiscount.Text = "Lowest %";
+            this.colMinDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.colMinDiscount.Width = 75;
             // 
             // colMaxDiscount
             // 
-            this.colMaxDiscount.Text = "Max Discount";
+            this.colMaxDiscount.Text = "Highest %";
             this.colMaxDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.colMaxDiscount.Width = 85;
+            this.colMaxDiscount.Width = 79;
             // 
             // lsvDlc
             // 
@@ -143,10 +163,10 @@
             this.lsvDlc.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lsvDlc.FullRowSelect = true;
             this.lsvDlc.GridLines = true;
-            this.lsvDlc.Location = new System.Drawing.Point(593, 51);
+            this.lsvDlc.Location = new System.Drawing.Point(6, 399);
             this.lsvDlc.MultiSelect = false;
             this.lsvDlc.Name = "lsvDlc";
-            this.lsvDlc.Size = new System.Drawing.Size(641, 370);
+            this.lsvDlc.Size = new System.Drawing.Size(683, 237);
             this.lsvDlc.TabIndex = 6;
             this.lsvDlc.UseCompatibleStateImageBehavior = false;
             this.lsvDlc.View = System.Windows.Forms.View.Details;
@@ -163,16 +183,18 @@
             // 
             this.colPrice.Text = "Price";
             this.colPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.colPrice.Width = 90;
             // 
             // colDiscount
             // 
             this.colDiscount.Text = "Discount";
             this.colDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.colDiscount.Width = 72;
             // 
             // lblGameCount
             // 
             this.lblGameCount.AutoSize = true;
-            this.lblGameCount.Location = new System.Drawing.Point(6, 431);
+            this.lblGameCount.Location = new System.Drawing.Point(6, 298);
             this.lblGameCount.Name = "lblGameCount";
             this.lblGameCount.Size = new System.Drawing.Size(84, 15);
             this.lblGameCount.TabIndex = 0;
@@ -181,7 +203,7 @@
             // lblDlcCount
             // 
             this.lblDlcCount.AutoSize = true;
-            this.lblDlcCount.Location = new System.Drawing.Point(593, 431);
+            this.lblDlcCount.Location = new System.Drawing.Point(6, 646);
             this.lblDlcCount.Name = "lblDlcCount";
             this.lblDlcCount.Size = new System.Drawing.Size(70, 15);
             this.lblDlcCount.TabIndex = 0;
@@ -197,40 +219,75 @@
             this.btnLogout.UseVisualStyleBackColor = true;
             this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
-            // txtLibrarySearch
+            // txtGameSearch
             // 
-            this.txtLibrarySearch.Location = new System.Drawing.Point(6, 22);
-            this.txtLibrarySearch.Name = "txtLibrarySearch";
-            this.txtLibrarySearch.Size = new System.Drawing.Size(200, 23);
-            this.txtLibrarySearch.TabIndex = 1;
-            this.txtLibrarySearch.TextChanged += new System.EventHandler(this.txtLibrarySearch_TextChanged);
+            this.txtGameSearch.Location = new System.Drawing.Point(6, 22);
+            this.txtGameSearch.Name = "txtGameSearch";
+            this.txtGameSearch.Size = new System.Drawing.Size(200, 23);
+            this.txtGameSearch.TabIndex = 1;
+            this.txtGameSearch.TextChanged += new System.EventHandler(this.txtLibrarySearch_TextChanged);
             // 
             // grbLibrary
             // 
+            this.grbLibrary.Controls.Add(this.lnkTooManyDlc);
+            this.grbLibrary.Controls.Add(this.lblTooManyDlc);
             this.grbLibrary.Controls.Add(this.lblLibraryCost);
+            this.grbLibrary.Controls.Add(this.chkHideOwnedDlc);
             this.grbLibrary.Controls.Add(this.chkHideGamesNotOnSale);
             this.grbLibrary.Controls.Add(this.btnBlacklist);
-            this.grbLibrary.Controls.Add(this.txtLibrarySearch);
+            this.grbLibrary.Controls.Add(this.txtDlcSearch);
+            this.grbLibrary.Controls.Add(this.txtGameSearch);
             this.grbLibrary.Controls.Add(this.lblGameCount);
             this.grbLibrary.Controls.Add(this.lblDlcCount);
             this.grbLibrary.Controls.Add(this.lsvGame);
             this.grbLibrary.Controls.Add(this.lsvDlc);
             this.grbLibrary.Location = new System.Drawing.Point(12, 97);
             this.grbLibrary.Name = "grbLibrary";
-            this.grbLibrary.Size = new System.Drawing.Size(1240, 456);
+            this.grbLibrary.Size = new System.Drawing.Size(767, 667);
             this.grbLibrary.TabIndex = 4;
             this.grbLibrary.TabStop = false;
             this.grbLibrary.Text = "Library";
             this.grbLibrary.EnabledChanged += new System.EventHandler(this.grbLibrary_EnabledChanged);
             // 
+            // lnkTooManyDlc
+            // 
+            this.lnkTooManyDlc.AutoSize = true;
+            this.lnkTooManyDlc.Location = new System.Drawing.Point(641, 646);
+            this.lnkTooManyDlc.Name = "lnkTooManyDlc";
+            this.lnkTooManyDlc.Size = new System.Drawing.Size(30, 15);
+            this.lnkTooManyDlc.TabIndex = 5;
+            this.lnkTooManyDlc.TabStop = true;
+            this.lnkTooManyDlc.Text = "here";
+            this.lnkTooManyDlc.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkTooManyDlc_LinkClicked);
+            // 
+            // lblTooManyDlc
+            // 
+            this.lblTooManyDlc.AutoSize = true;
+            this.lblTooManyDlc.Location = new System.Drawing.Point(391, 646);
+            this.lblTooManyDlc.Name = "lblTooManyDlc";
+            this.lblTooManyDlc.Size = new System.Drawing.Size(280, 15);
+            this.lblTooManyDlc.TabIndex = 5;
+            this.lblTooManyDlc.Text = "This game has over 200 DLC.  Check the full list here";
+            // 
             // lblLibraryCost
             // 
             this.lblLibraryCost.AutoSize = true;
-            this.lblLibraryCost.Location = new System.Drawing.Point(212, 431);
+            this.lblLibraryCost.Location = new System.Drawing.Point(212, 298);
             this.lblLibraryCost.Name = "lblLibraryCost";
             this.lblLibraryCost.Size = new System.Drawing.Size(80, 15);
             this.lblLibraryCost.TabIndex = 0;
             this.lblLibraryCost.Text = "lblLibraryCost";
+            // 
+            // chkHideOwnedDlc
+            // 
+            this.chkHideOwnedDlc.AutoSize = true;
+            this.chkHideOwnedDlc.Location = new System.Drawing.Point(212, 372);
+            this.chkHideOwnedDlc.Name = "chkHideOwnedDlc";
+            this.chkHideOwnedDlc.Size = new System.Drawing.Size(115, 19);
+            this.chkHideOwnedDlc.TabIndex = 2;
+            this.chkHideOwnedDlc.Text = "Hide owned DLC";
+            this.chkHideOwnedDlc.UseVisualStyleBackColor = true;
+            this.chkHideOwnedDlc.CheckedChanged += new System.EventHandler(this.chkHideOwnedDlc_CheckedChanged);
             // 
             // chkHideGamesNotOnSale
             // 
@@ -245,13 +302,21 @@
             // 
             // btnBlacklist
             // 
-            this.btnBlacklist.Location = new System.Drawing.Point(487, 427);
+            this.btnBlacklist.Location = new System.Drawing.Point(661, 294);
             this.btnBlacklist.Name = "btnBlacklist";
             this.btnBlacklist.Size = new System.Drawing.Size(100, 23);
             this.btnBlacklist.TabIndex = 5;
             this.btnBlacklist.Text = "Add to Blacklist";
             this.btnBlacklist.UseVisualStyleBackColor = true;
             this.btnBlacklist.Click += new System.EventHandler(this.btnBlacklist_Click);
+            // 
+            // txtDlcSearch
+            // 
+            this.txtDlcSearch.Location = new System.Drawing.Point(6, 370);
+            this.txtDlcSearch.Name = "txtDlcSearch";
+            this.txtDlcSearch.Size = new System.Drawing.Size(200, 23);
+            this.txtDlcSearch.TabIndex = 1;
+            this.txtDlcSearch.TextChanged += new System.EventHandler(this.txtDlcSearch_TextChanged);
             // 
             // lbldebug
             // 
@@ -270,7 +335,7 @@
             this.smiFreeDlc});
             this.mnuMenu.Location = new System.Drawing.Point(0, 0);
             this.mnuMenu.Name = "mnuMenu";
-            this.mnuMenu.Size = new System.Drawing.Size(1264, 24);
+            this.mnuMenu.Size = new System.Drawing.Size(791, 24);
             this.mnuMenu.TabIndex = 0;
             this.mnuMenu.Text = "menuStrip1";
             // 
@@ -299,7 +364,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1264, 565);
+            this.ClientSize = new System.Drawing.Size(791, 776);
             this.Controls.Add(this.lbldebug);
             this.Controls.Add(this.grbLibrary);
             this.Controls.Add(this.btnCalculate);
@@ -340,7 +405,7 @@
         private Label lblGameCount;
         private Label lblDlcCount;
         private Button btnLogout;
-        private TextBox txtLibrarySearch;
+        private TextBox txtGameSearch;
         private ColumnHeader ColCost;
         private ColumnHeader colMaxDiscount;
         private GroupBox grbLibrary;
@@ -352,5 +417,11 @@
         private Button btnBlacklist;
         private ToolStripMenuItem smiBlacklist;
         private ToolStripMenuItem smiFreeDlc;
+        private CheckBox chkHideOwnedDlc;
+        private TextBox txtDlcSearch;
+        private ColumnHeader colMinDiscount;
+        private ColumnHeader colDlcLeft;
+        private Label lblTooManyDlc;
+        private LinkLabel lnkTooManyDlc;
     }
 }

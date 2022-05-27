@@ -13,15 +13,13 @@ namespace SteamDlcShopping.Entities
 
         public decimal? DlcTotalPrice { get; private set; }
 
+        public int DlcLeft { get; private set; }
+
+        public int DlcLowestPercentage { get; private set; }
+
         public int DlcHighestPercentage { get; private set; }
 
-        public int DlcAmount
-        {
-            get
-            {
-                return DlcList.Count;
-            }
-        }
+        public bool TooManyDlc { get; set; }
 
         public List<Dlc> DlcList { get; private set; }
 
@@ -51,6 +49,11 @@ namespace SteamDlcShopping.Entities
                 if (!response.Contains("gameAreaDLCSection"))
                 {
                     return;
+                }
+
+                if (response.Contains("game_area_dlc_excluded_by_preferences"))
+                {
+                    TooManyDlc = true;
                 }
 
                 HtmlAgilityPack.HtmlDocument htmlDoc = new();
@@ -132,6 +135,8 @@ namespace SteamDlcShopping.Entities
         public void CalculateDlcMetrics()
         {
             DlcTotalPrice = 0;
+            DlcLeft = 0;
+            DlcLowestPercentage = 0;
             DlcHighestPercentage = 0;
 
             foreach (Dlc dlc in DlcList)
@@ -141,13 +146,20 @@ namespace SteamDlcShopping.Entities
                     continue;
                 }
 
-                if (!dlc.OnSale)
+                DlcLeft++;
+
+                if (dlc.Sale is null)
                 {
                     DlcTotalPrice += dlc.Price;
                     continue;
                 }
 
-                DlcTotalPrice += dlc.Sale?.Price;
+                DlcTotalPrice += dlc.Sale.Price;
+
+                if (dlc.Sale.Percentage < DlcLowestPercentage || DlcLowestPercentage == 0)
+                {
+                    DlcLowestPercentage = dlc.Sale.Percentage;
+                }
 
                 if (dlc.Sale?.Percentage > DlcHighestPercentage)
                 {

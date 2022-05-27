@@ -10,14 +10,17 @@ namespace SteamDlcShopping
 
         public static bool IsSessionActive()
         {
-            bool active = !string.IsNullOrWhiteSpace(Settings.Default.SessionId) && !string.IsNullOrWhiteSpace(Settings.Default.SteamLoginSecure);
+            if (string.IsNullOrWhiteSpace(Settings.Default.SessionId) || string.IsNullOrWhiteSpace(Settings.Default.SteamLoginSecure))
+            {
+                return false;
+            }
 
-            if (active && _steamProfile is null)
+            if (_steamProfile is null)
             {
                 Login();
             }
 
-            return active;
+            return _steamProfile?.Library?.DynamicStore?.Count > 0;
         }
 
         public static void Login()
@@ -80,6 +83,8 @@ namespace SteamDlcShopping
                     AppId = game.AppId,
                     Name = game.Name,
                     DlcTotalPrice = $"{game.DlcTotalPrice}€",
+                    DlcLeft = game.DlcLeft,
+                    DlcLowestPercentage = game.DlcLowestPercentage > 0 ? $"{game.DlcLowestPercentage}%" : null,
                     DlcHighestPercentage = game.DlcHighestPercentage > 0 ? $"{game.DlcHighestPercentage}%" : null
                 };
 
@@ -94,7 +99,7 @@ namespace SteamDlcShopping
             return result;
         }
 
-        public static List<DlcDto> GetDlc(int appId)
+        public static List<DlcDto> GetDlc(int appId, string? filterName = null, bool filterOwned = false)
         {
             List<DlcDto> result = new();
 
@@ -107,6 +112,18 @@ namespace SteamDlcShopping
 
             foreach (Dlc dlc in game.DlcList)
             {
+                //Filter by name search
+                if (!string.IsNullOrWhiteSpace(dlc.Name) && !dlc.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
+
+                //Filter by owned dlc
+                if (filterOwned && dlc.IsOwned)
+                {
+                    continue;
+                }
+
                 string price;
 
                 if (dlc.IsFree)
@@ -121,7 +138,7 @@ namespace SteamDlcShopping
                     }
                     else
                     {
-                        price = $"{(dlc.OnSale ? dlc.Sale?.Price : dlc.Price)}€";
+                        price = $"{(dlc.Sale is not null ? dlc.Sale?.Price : dlc.Price)}€";
                     }
                 }
 
@@ -130,7 +147,7 @@ namespace SteamDlcShopping
                     AppId = dlc.AppId,
                     Name = dlc.Name,
                     Price = price,
-                    Discount = dlc.OnSale ? $"{dlc.Sale?.Percentage}%" : null,
+                    Discount = dlc.Sale is not null ? $"{dlc.Sale?.Percentage}%" : null,
                     IsOwned = dlc.IsOwned
                 };
 
@@ -138,6 +155,12 @@ namespace SteamDlcShopping
             }
 
             return result;
+        }
+
+        public static bool GameHasTooManyDlc(int appId)
+        {
+            Game? game = _steamProfile?.Library?.Games?.FirstOrDefault(x => x.AppId == appId);
+            return game is not null && game.TooManyDlc;
         }
 
         public static void LoadGamesDlc()
