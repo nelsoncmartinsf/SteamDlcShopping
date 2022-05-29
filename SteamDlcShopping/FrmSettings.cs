@@ -12,6 +12,8 @@ namespace SteamDlcShopping
             InitializeComponent();
         }
 
+        //////////////////////////////////////// FORM ////////////////////////////////////////
+
         private void FrmSettings_Load(object sender, EventArgs e)
         {
             //Errors
@@ -48,19 +50,7 @@ namespace SteamDlcShopping
             }
         }
 
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            Settings.Default.SteamApiKey = txtSteamApiKey.Text;
-            Settings.Default.AutoBlacklist = chkAutoBlacklist.Checked;
-            Settings.Default.Save();
-
-            Close();
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        //////////////////////////////////////// STEAM API KEY ////////////////////////////////////////
 
         private void txtSteamApiKey_TextChanged(object sender, EventArgs e)
         {
@@ -81,6 +71,22 @@ namespace SteamDlcShopping
             };
 
             process.Start();
+        }
+
+        //////////////////////////////////////// BUTTONS ////////////////////////////////////////
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            Settings.Default.SteamApiKey = txtSteamApiKey.Text;
+            Settings.Default.AutoBlacklist = chkAutoBlacklist.Checked;
+            Settings.Default.Save();
+
+            Close();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

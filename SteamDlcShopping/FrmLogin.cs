@@ -10,6 +10,16 @@ namespace SteamDlcShopping
             InitializeComponent();
         }
 
+        //////////////////////////////////////// FORM ////////////////////////////////////////
+
+        private void FrmLogin_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            webLogin.Stop();
+            webLogin.Dispose();
+        }
+
+        //////////////////////////////////////// WEBVIEW2 ////////////////////////////////////////
+
         private void webLogin_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
             webLogin.CoreWebView2.CookieManager.DeleteAllCookies();
@@ -29,6 +39,8 @@ namespace SteamDlcShopping
             }
         }
 
+        //////////////////////////////////////// METHODS ////////////////////////////////////////
+
         private static string? GetCookieValue(List<CoreWebView2Cookie> cookies, string name)
         {
             foreach (CoreWebView2Cookie cookie in cookies)
@@ -40,12 +52,6 @@ namespace SteamDlcShopping
             }
 
             return null;
-        }
-
-        private void FrmLogin_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            webLogin.Stop();
-            webLogin.Dispose();
         }
     }
 }

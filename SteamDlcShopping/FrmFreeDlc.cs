@@ -9,6 +9,8 @@ namespace SteamDlcShopping
             InitializeComponent();
         }
 
+        //////////////////////////////////////// FORM ////////////////////////////////////////
+
         private void FrmFreeDlc_Load(object sender, EventArgs e)
         {
             lsbDlc.DisplayMember = "Value";
@@ -25,6 +27,8 @@ namespace SteamDlcShopping
 
             lsbDlc.EndUpdate();
         }
+
+        //////////////////////////////////////// LISTBOX ////////////////////////////////////////
 
         private void lsbDlc_MouseDoubleClick(object sender, MouseEventArgs e)
         {

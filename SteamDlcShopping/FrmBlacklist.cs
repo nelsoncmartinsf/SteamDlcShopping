@@ -1,28 +1,58 @@
-﻿namespace SteamDlcShopping
+﻿using SteamDlcShopping.Dtos;
+
+namespace SteamDlcShopping
 {
     public partial class FrmBlacklist : Form
     {
-        private string _filterName = string.Empty;
-        public SortedDictionary<int, string?>? _blacklist;
-        private List<int>? _unblacklist;
-
         public FrmBlacklist()
         {
             InitializeComponent();
+
+            _filterName = string.Empty;
+            _blacklist = new();
         }
+
+        //////////////////////////////////////// FORM ////////////////////////////////////////
 
         private void FrmBlacklist_Load(object sender, EventArgs e)
         {
             _blacklist = Middleware.GetBlacklist();
-            _unblacklist = new();
 
             lblGameCount.Text = null;
             btnRemove.Enabled = false;
 
-            lsbBlacklist.DisplayMember = "Value";
-            lsbBlacklist.ValueMember = "Key";
+            lsbBlacklist.DisplayMember = "Name";
 
             LoadBlacklistToListbox();
+        }
+
+        //////////////////////////////////////// LISTBOX ////////////////////////////////////////
+
+        public List<GameBlacklistDto> _blacklist;
+
+        private void LoadBlacklistToListbox()
+        {
+            lsbBlacklist.Items.Clear();
+
+            lsbBlacklist.BeginUpdate();
+
+            foreach (GameBlacklistDto game in _blacklist)
+            {
+                //Filter by name search
+                if (string.IsNullOrWhiteSpace(game.Name) || !game.Name.Contains(_filterName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
+
+                lsbBlacklist.Items.Add(game);
+            }
+
+            lsbBlacklist.EndUpdate();
+
+            //Fill in metric fields
+            lblGameCount.Text = $"Count: {lsbBlacklist.Items.Count}";
+
+            btnClearAutoBlacklisted.Enabled = _blacklist.Any(x => x.AutoBlacklisted);
         }
 
         private void lsbBlacklist_SelectedIndexChanged(object sender, EventArgs e)
@@ -37,63 +67,61 @@
             btnRemove.Enabled = true;
         }
 
+        //////////////////////////////////////// FILTERS ////////////////////////////////////////
+
+        private string _filterName;
+
         private void txtBlacklistSearch_TextChanged(object sender, EventArgs e)
         {
             _filterName = txtBlacklistSearch.Text;
+            btnRemove.Enabled = false;
+
             LoadBlacklistToListbox();
         }
 
+        //////////////////////////////////////// BUTTONS ////////////////////////////////////////
+
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            for (int idx = lsbBlacklist.SelectedItems.Count - 1; lsbBlacklist.SelectedItems.Count > 0; idx--)
+            List<int> _unblacklist = new();
+
+            for (int index = lsbBlacklist.SelectedItems.Count - 1; index >= 0; index--)
             {
-                KeyValuePair<int, string> item = (KeyValuePair<int, string>)lsbBlacklist.SelectedItems[idx];
+                GameBlacklistDto game = (GameBlacklistDto)lsbBlacklist.SelectedItems[index];
 
-                if (_unblacklist is null)
-                {
-                    _unblacklist = new();
-                }
-
-                _unblacklist.Add(item.Key);
-                lsbBlacklist.Items.Remove(item);
+                _unblacklist.Add(game.AppId);
+                _blacklist.Remove(game);
             }
 
-            if (_unblacklist is not null)
+            if (_unblacklist.Any())
             {
                 Middleware.UnblacklistGames(_unblacklist);
-                _unblacklist = null;
+                LoadBlacklistToListbox();
             }
-
-            //Fill in metric fields
-            lblGameCount.Text = $"Count: {lsbBlacklist.Items.Count}";
         }
 
-        private void LoadBlacklistToListbox()
+        private void btnClearAutoBlacklisted_Click(object sender, EventArgs e)
         {
-            lsbBlacklist.Items.Clear();
+            List<int> _unblacklist = new();
 
-            if (_blacklist is null)
+            for (int index = _blacklist.Count - 1; index >= 0; index--)
             {
-                return;
-            }
+                GameBlacklistDto game = _blacklist[index];
 
-            lsbBlacklist.BeginUpdate();
-
-            foreach (KeyValuePair<int, string?> item in _blacklist)
-            {
-                //Filter by name search
-                if (!string.IsNullOrWhiteSpace(item.Value) && !item.Value.Contains(_filterName, StringComparison.InvariantCultureIgnoreCase))
+                if (!game.AutoBlacklisted)
                 {
                     continue;
                 }
 
-                lsbBlacklist.Items.Add(item);
+                _unblacklist.Add(game.AppId);
+                _blacklist.Remove(game);
             }
 
-            lsbBlacklist.EndUpdate();
-
-            //Fill in metric fields
-            lblGameCount.Text = $"Count: {lsbBlacklist.Items.Count}";
+            if (_unblacklist.Any())
+            {
+                Middleware.UnblacklistGames(_unblacklist);
+                LoadBlacklistToListbox();
+            }
         }
     }
 }

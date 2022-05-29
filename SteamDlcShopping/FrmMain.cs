@@ -6,14 +6,12 @@ namespace SteamDlcShopping
 {
     public partial class FrmMain : Form
     {
-        private ColumnSorter? _gameColumnSorter;
-        private ColumnSorter? _dlcColumnSorter;
-        private int _selectedGame;
-
         public FrmMain()
         {
             InitializeComponent();
         }
+
+        //////////////////////////////////////// FORM ////////////////////////////////////////
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
@@ -26,7 +24,7 @@ namespace SteamDlcShopping
             {
                 smiSettings.Enabled = false;
                 smiBlacklist.Enabled = false;
-                btnLogout.Enabled = false;
+                btnLogout.Visible = false;
                 btnCalculate.Enabled = false;
                 lsvDlc.Enabled = false;
                 grbLibrary.Enabled = false;
@@ -43,7 +41,7 @@ namespace SteamDlcShopping
             {
                 smiSettings.Enabled = true;
                 smiBlacklist.Enabled = true;
-                btnLogout.Enabled = true;
+                btnLogout.Visible = true;
                 btnCalculate.Enabled = true;
                 grbLibrary.Enabled = true;
             }));
@@ -118,6 +116,9 @@ namespace SteamDlcShopping
         }
 
         //////////////////////////////////////// GAME LIST ////////////////////////////////////////
+
+        private ColumnSorter? _gameColumnSorter;
+        private int _selectedGame;
 
         private void LoadGameToListview(List<GameDto> games)
         {
@@ -212,6 +213,8 @@ namespace SteamDlcShopping
         }
 
         //////////////////////////////////////// DLC LIST ////////////////////////////////////////
+
+        private ColumnSorter? _dlcColumnSorter;
 
         private void LoadDlcToListview(List<DlcDto> dlcs)
         {
@@ -320,8 +323,8 @@ namespace SteamDlcShopping
             }
 
             smiFreeDlc.Enabled = default;
-            btnLogin.Enabled = !Middleware.IsSessionActive();
-            btnLogout.Enabled = Middleware.IsSessionActive();
+            btnLogin.Visible = !Middleware.IsSessionActive();
+            btnLogout.Visible = Middleware.IsSessionActive();
             btnCalculate.Enabled = Middleware.IsSessionActive();
             grbLibrary.Enabled = default;
         }

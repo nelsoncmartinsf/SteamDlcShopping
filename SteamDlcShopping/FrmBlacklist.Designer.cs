@@ -32,6 +32,7 @@
             this.txtBlacklistSearch = new System.Windows.Forms.TextBox();
             this.lsbBlacklist = new System.Windows.Forms.ListBox();
             this.btnRemove = new System.Windows.Forms.Button();
+            this.btnClearAutoBlacklisted = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblGameCount
@@ -65,13 +66,23 @@
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(357, 246);
+            this.btnRemove.Location = new System.Drawing.Point(221, 246);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(75, 23);
             this.btnRemove.TabIndex = 3;
             this.btnRemove.Text = "Remove";
             this.btnRemove.UseVisualStyleBackColor = true;
             this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            // 
+            // btnClearAutoBlacklisted
+            // 
+            this.btnClearAutoBlacklisted.Location = new System.Drawing.Point(302, 246);
+            this.btnClearAutoBlacklisted.Name = "btnClearAutoBlacklisted";
+            this.btnClearAutoBlacklisted.Size = new System.Drawing.Size(130, 23);
+            this.btnClearAutoBlacklisted.TabIndex = 3;
+            this.btnClearAutoBlacklisted.Text = "Clear Auto Blacklisted";
+            this.btnClearAutoBlacklisted.UseVisualStyleBackColor = true;
+            this.btnClearAutoBlacklisted.Click += new System.EventHandler(this.btnClearAutoBlacklisted_Click);
             // 
             // FrmBlacklist
             // 
@@ -81,6 +92,7 @@
             this.Controls.Add(this.lblGameCount);
             this.Controls.Add(this.txtBlacklistSearch);
             this.Controls.Add(this.lsbBlacklist);
+            this.Controls.Add(this.btnClearAutoBlacklisted);
             this.Controls.Add(this.btnRemove);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -102,5 +114,6 @@
         private TextBox txtBlacklistSearch;
         private ListBox lsbBlacklist;
         private Button btnRemove;
+        private Button btnClearAutoBlacklisted;
     }
 }

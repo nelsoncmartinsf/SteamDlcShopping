@@ -5,24 +5,24 @@ using System.Web;
 
 namespace SteamDlcShopping.Entities
 {
-    public class Game
+    internal class Game
     {
         //Properties
-        public int AppId { get; }
+        internal int AppId { get; }
 
-        public string? Name { get; }
+        internal string? Name { get; }
 
-        public decimal? DlcTotalPrice { get; private set; }
+        internal decimal? DlcTotalPrice { get; private set; }
 
-        public int DlcLeft { get; private set; }
+        internal int DlcLeft { get; private set; }
 
-        public int DlcLowestPercentage { get; private set; }
+        internal int DlcLowestPercentage { get; private set; }
 
-        public int DlcHighestPercentage { get; private set; }
+        internal int DlcHighestPercentage { get; private set; }
 
-        public bool TooManyDlc { get; set; }
+        internal bool TooManyDlc { get; set; }
 
-        public List<Dlc> DlcList { get; private set; }
+        internal List<Dlc> DlcList { get; private set; }
 
         //Constructor
         public Game(int appId = default, string? name = default)
@@ -33,7 +33,7 @@ namespace SteamDlcShopping.Entities
         }
 
         //Methods
-        public void LoadDlc()
+        internal void LoadDlc()
         {
             try
             {
@@ -139,7 +139,7 @@ namespace SteamDlcShopping.Entities
             }
         }
 
-        public void CalculateDlcMetrics()
+        internal void CalculateDlcMetrics()
         {
             DlcTotalPrice = 0;
             DlcLeft = 0;

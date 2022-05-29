@@ -3,22 +3,22 @@
     public class Dlc
     {
         //Properties
-        public int AppId { get; }
+        internal int AppId { get; }
 
-        public string? Name { get; }
+        internal string? Name { get; }
 
-        public decimal Price { get; }
+        internal decimal Price { get; }
 
-        public Sale? Sale { get; }
+        internal Sale? Sale { get; }
 
-        public bool IsFree { get; }
+        internal bool IsFree { get; }
 
-        public bool IsNotAvailable { get; }
+        internal bool IsNotAvailable { get; }
 
-        public bool IsOwned { get; private set; }
+        internal bool IsOwned { get; private set; }
 
         //Constructor
-        public Dlc(int appId = default, string? name = default, decimal price = default, Sale? sale = default, bool isFree = default, bool isNotAvailable = default)
+        internal Dlc(int appId = default, string? name = default, decimal price = default, Sale? sale = default, bool isFree = default, bool isNotAvailable = default)
         {
             AppId = appId;
             Name = name;
@@ -29,7 +29,7 @@
         }
 
         //Methods
-        public void MarkAsOwned()
+        internal void MarkAsOwned()
         {
             IsOwned = true;
         }

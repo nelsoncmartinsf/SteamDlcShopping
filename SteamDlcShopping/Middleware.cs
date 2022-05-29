@@ -165,19 +165,56 @@ namespace SteamDlcShopping
 
         public static void LoadGamesDlc()
         {
+            _steamProfile?.Library?.LoadDynamicStore();
+            _steamProfile?.Library?.LoadGames();
+            _steamProfile?.Library?.LoadBlacklist();
+
+            _steamProfile?.Library?.ApplyBlacklist();
+
             _steamProfile?.Library?.LoadGamesDlc();
+
+            _steamProfile?.Library?.ImproveGamesList();
+
+            if (_steamProfile?.Library?.Games is null)
+            {
+                return;
+            }
+
+            foreach (Game game in _steamProfile.Library.Games)
+            {
+                game.CalculateDlcMetrics();
+            }
         }
 
 
 
-        public static SortedDictionary<int, string?>? GetBlacklist()
+        public static List<GameBlacklistDto> GetBlacklist()
         {
-            return _steamProfile?.Library?.Blacklist;
+            List<GameBlacklistDto> result = new();
+
+            if (_steamProfile?.Library?.Blacklist is null)
+            {
+                return result;
+            };
+
+            foreach (GameBlacklist game in _steamProfile.Library.Blacklist)
+            {
+                GameBlacklistDto gameBlacklist = new()
+                {
+                    AppId = game.AppId,
+                    Name = game.AutoBlacklisted ? $"{game.Name} (Auto Blacklist)" : game.Name,
+                    AutoBlacklisted = game.AutoBlacklisted
+                };
+
+                result.Add(gameBlacklist);
+            }
+
+            return result;
         }
 
         public static void BlacklistGames(List<int> appIds)
         {
-            appIds.ForEach(x => _steamProfile?.Library?.BlacklistGame(x));
+            appIds.ForEach(x => _steamProfile?.Library?.BlacklistGame(x, false));
 
             _steamProfile?.Library?.ApplyBlacklist();
             _steamProfile?.Library?.SaveBlacklist();

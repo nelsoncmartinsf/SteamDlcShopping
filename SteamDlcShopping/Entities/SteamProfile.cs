@@ -4,21 +4,21 @@ using System.Xml;
 
 namespace SteamDlcShopping.Entities
 {
-    public class SteamProfile
+    internal class SteamProfile
     {
         //Properties
         private const string _url = "https://steamcommunity.com/profiles";
 
-        public long Id { get; }
+        internal long Id { get; }
 
-        public string? Username { get; }
+        internal string? Username { get; }
 
-        public string? AvatarUrl { get; }
+        internal string? AvatarUrl { get; }
 
-        public Library? Library { get; }
+        internal Library? Library { get; }
 
         //Constructor
-        public SteamProfile()
+        internal SteamProfile()
         {
             if (string.IsNullOrWhiteSpace(Settings.Default.SessionId) || string.IsNullOrWhiteSpace(Settings.Default.SteamLoginSecure))
             {

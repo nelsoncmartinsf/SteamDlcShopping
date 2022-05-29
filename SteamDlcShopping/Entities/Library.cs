@@ -11,18 +11,18 @@ namespace SteamDlcShopping.Entities
         private readonly long _steamId;
 
         //Properties
-        public List<int>? DynamicStore { get; private set; }
+        internal List<int>? DynamicStore { get; private set; }
 
-        public List<Game>? Games { get; private set; }
+        internal List<Game>? Games { get; private set; }
 
-        public SortedDictionary<int, string?>? Blacklist { get; private set; }
+        internal List<GameBlacklist>? Blacklist { get; private set; }
 
-        public int? Size => Games?.Count;
+        internal int? Size => Games?.Count;
 
-        public decimal? TotalCost => Games?.Sum(x => x.DlcTotalPrice);
+        internal decimal? TotalCost => Games?.Sum(x => x.DlcTotalPrice);
 
         //Constructor
-        public Library(long steamId)
+        internal Library(long steamId)
         {
             _steamId = steamId;
 
@@ -31,7 +31,7 @@ namespace SteamDlcShopping.Entities
         }
 
         //Methods
-        private void LoadDynamicStore()
+        internal void LoadDynamicStore()
         {
             HttpResponseMessage response;
             Uri uri = new("https://store.steampowered.com/dynamicstore/userdata/");
@@ -48,7 +48,7 @@ namespace SteamDlcShopping.Entities
             DynamicStore = JsonConvert.DeserializeObject<List<int>>($"{jObject["rgOwnedApps"]}");
         }
 
-        private void LoadGames()
+        internal void LoadGames()
         {
             HttpClient httpClient = new();
             string response = httpClient.GetStringAsync($"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={Settings.Default.SteamApiKey}&steamid={_steamId}&include_appinfo=true").Result;
@@ -60,14 +60,8 @@ namespace SteamDlcShopping.Entities
 
 
 
-        public void LoadGamesDlc()
+        internal void LoadGamesDlc()
         {
-            LoadDynamicStore();
-            LoadGames();
-            LoadBlacklist();
-
-            ApplyBlacklist();
-
             if (Games is null)
             {
                 return;
@@ -83,19 +77,19 @@ namespace SteamDlcShopping.Entities
             {
                 ThreadPool.QueueUserWorkItem(delegate (object? count)
                 {
-                    for (int? idx = (count as int?) * size; idx < ((count as int?) + 1) * size; idx++)
+                    for (int? index = (count as int?) * size; index < ((count as int?) + 1) * size; index++)
                     {
-                        if (idx is null)
+                        if (index is null)
                         {
                             continue;
                         }
 
-                        if (idx == Size)
+                        if (index == Size)
                         {
                             break;
                         }
 
-                        Games[idx.Value].LoadDlc();
+                        Games[index.Value].LoadDlc();
                     }
 
                     countdownEvent.Signal();
@@ -103,21 +97,9 @@ namespace SteamDlcShopping.Entities
             }
 
             countdownEvent.Wait();
-
-            ImproveGamesList();
-
-            if (Games is null)
-            {
-                return;
-            }
-
-            foreach (Game game in Games)
-            {
-                game.CalculateDlcMetrics();
-            }
         }
 
-        private void ImproveGamesList()
+        internal void ImproveGamesList()
         {
             List<int> gamesToRemove = new();
 
@@ -186,7 +168,7 @@ namespace SteamDlcShopping.Entities
 
 
 
-        public void BlacklistGame(int appId)
+        internal void BlacklistGame(int appId, bool autoBlacklisted = true)
         {
             Game? game = Games?.First(x => x.AppId == appId);
 
@@ -195,25 +177,43 @@ namespace SteamDlcShopping.Entities
                 return;
             }
 
-            Blacklist?.Add(game.AppId, game.Name);
+            GameBlacklist gameBlacklist = new()
+            {
+                AppId = game.AppId,
+                Name = game.Name,
+                AutoBlacklisted = autoBlacklisted
+            };
+
+            Blacklist?.Add(gameBlacklist);
         }
 
-        public void UnBlacklistGame(int appId)
-        {
-            Blacklist?.Remove(appId);
-        }
-
-        public void ApplyBlacklist()
+        internal void UnBlacklistGame(int appId)
         {
             if (Blacklist is null)
             {
                 return;
             }
 
-            Games?.RemoveAll(x => Blacklist.ContainsKey(x.AppId));
+            if (!Blacklist.Any(x => x.AppId == appId))
+            {
+                return;
+            }
+
+            int index = Blacklist.FindIndex(x => x.AppId == appId);
+            Blacklist?.RemoveAt(index);
         }
 
-        public void LoadBlacklist()
+        internal void ApplyBlacklist()
+        {
+            if (Blacklist is null)
+            {
+                return;
+            }
+
+            Games?.RemoveAll(x => Blacklist.Any(y => x.AppId == y.AppId));
+        }
+
+        internal void LoadBlacklist()
         {
             if (!File.Exists("blacklist.txt"))
             {
@@ -222,7 +222,7 @@ namespace SteamDlcShopping.Entities
             }
 
             string content = File.ReadAllText("blacklist.txt");
-            Blacklist = JsonConvert.DeserializeObject<SortedDictionary<int, string?>>(content);
+            Blacklist = JsonConvert.DeserializeObject<List<GameBlacklist>>(content);
 
             if (Blacklist is null)
             {
@@ -230,7 +230,7 @@ namespace SteamDlcShopping.Entities
             }
         }
 
-        public void SaveBlacklist()
+        internal void SaveBlacklist()
         {
             string content = JsonConvert.SerializeObject(Blacklist);
             File.WriteAllText("blacklist.txt", content);

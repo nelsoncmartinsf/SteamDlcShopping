@@ -56,10 +56,10 @@
             this.btnBlacklist = new System.Windows.Forms.Button();
             this.txtDlcSearch = new System.Windows.Forms.TextBox();
             this.lbldebug = new System.Windows.Forms.Label();
-            this.mnuMenu = new System.Windows.Forms.MenuStrip();
             this.smiSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.smiBlacklist = new System.Windows.Forms.ToolStripMenuItem();
             this.smiFreeDlc = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMenu = new System.Windows.Forms.MenuStrip();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.grbLibrary.SuspendLayout();
             this.mnuMenu.SuspendLayout();
@@ -95,10 +95,10 @@
             // 
             // btnCalculate
             // 
-            this.btnCalculate.Location = new System.Drawing.Point(163, 42);
+            this.btnCalculate.Location = new System.Drawing.Point(82, 68);
             this.btnCalculate.Name = "btnCalculate";
             this.btnCalculate.Size = new System.Drawing.Size(75, 23);
-            this.btnCalculate.TabIndex = 3;
+            this.btnCalculate.TabIndex = 2;
             this.btnCalculate.Text = "Calculate";
             this.btnCalculate.UseVisualStyleBackColor = true;
             this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
@@ -163,7 +163,7 @@
             this.lsvDlc.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lsvDlc.FullRowSelect = true;
             this.lsvDlc.GridLines = true;
-            this.lsvDlc.Location = new System.Drawing.Point(6, 399);
+            this.lsvDlc.Location = new System.Drawing.Point(6, 374);
             this.lsvDlc.MultiSelect = false;
             this.lsvDlc.Name = "lsvDlc";
             this.lsvDlc.Size = new System.Drawing.Size(683, 237);
@@ -203,7 +203,7 @@
             // lblDlcCount
             // 
             this.lblDlcCount.AutoSize = true;
-            this.lblDlcCount.Location = new System.Drawing.Point(6, 646);
+            this.lblDlcCount.Location = new System.Drawing.Point(6, 621);
             this.lblDlcCount.Name = "lblDlcCount";
             this.lblDlcCount.Size = new System.Drawing.Size(70, 15);
             this.lblDlcCount.TabIndex = 0;
@@ -211,10 +211,10 @@
             // 
             // btnLogout
             // 
-            this.btnLogout.Location = new System.Drawing.Point(82, 68);
+            this.btnLogout.Location = new System.Drawing.Point(82, 42);
             this.btnLogout.Name = "btnLogout";
             this.btnLogout.Size = new System.Drawing.Size(75, 23);
-            this.btnLogout.TabIndex = 2;
+            this.btnLogout.TabIndex = 3;
             this.btnLogout.Text = "Logout";
             this.btnLogout.UseVisualStyleBackColor = true;
             this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
@@ -243,7 +243,7 @@
             this.grbLibrary.Controls.Add(this.lsvDlc);
             this.grbLibrary.Location = new System.Drawing.Point(12, 97);
             this.grbLibrary.Name = "grbLibrary";
-            this.grbLibrary.Size = new System.Drawing.Size(767, 667);
+            this.grbLibrary.Size = new System.Drawing.Size(767, 642);
             this.grbLibrary.TabIndex = 4;
             this.grbLibrary.TabStop = false;
             this.grbLibrary.Text = "Library";
@@ -252,7 +252,7 @@
             // lnkTooManyDlc
             // 
             this.lnkTooManyDlc.AutoSize = true;
-            this.lnkTooManyDlc.Location = new System.Drawing.Point(641, 646);
+            this.lnkTooManyDlc.Location = new System.Drawing.Point(641, 621);
             this.lnkTooManyDlc.Name = "lnkTooManyDlc";
             this.lnkTooManyDlc.Size = new System.Drawing.Size(30, 15);
             this.lnkTooManyDlc.TabIndex = 5;
@@ -263,7 +263,7 @@
             // lblTooManyDlc
             // 
             this.lblTooManyDlc.AutoSize = true;
-            this.lblTooManyDlc.Location = new System.Drawing.Point(391, 646);
+            this.lblTooManyDlc.Location = new System.Drawing.Point(391, 621);
             this.lblTooManyDlc.Name = "lblTooManyDlc";
             this.lblTooManyDlc.Size = new System.Drawing.Size(280, 15);
             this.lblTooManyDlc.TabIndex = 5;
@@ -281,7 +281,7 @@
             // chkHideOwnedDlc
             // 
             this.chkHideOwnedDlc.AutoSize = true;
-            this.chkHideOwnedDlc.Location = new System.Drawing.Point(212, 372);
+            this.chkHideOwnedDlc.Location = new System.Drawing.Point(212, 347);
             this.chkHideOwnedDlc.Name = "chkHideOwnedDlc";
             this.chkHideOwnedDlc.Size = new System.Drawing.Size(115, 19);
             this.chkHideOwnedDlc.TabIndex = 2;
@@ -312,7 +312,7 @@
             // 
             // txtDlcSearch
             // 
-            this.txtDlcSearch.Location = new System.Drawing.Point(6, 370);
+            this.txtDlcSearch.Location = new System.Drawing.Point(6, 345);
             this.txtDlcSearch.Name = "txtDlcSearch";
             this.txtDlcSearch.Size = new System.Drawing.Size(200, 23);
             this.txtDlcSearch.TabIndex = 1;
@@ -326,18 +326,6 @@
             this.lbldebug.Size = new System.Drawing.Size(38, 15);
             this.lbldebug.TabIndex = 0;
             this.lbldebug.Text = "label1";
-            // 
-            // mnuMenu
-            // 
-            this.mnuMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.smiSettings,
-            this.smiBlacklist,
-            this.smiFreeDlc});
-            this.mnuMenu.Location = new System.Drawing.Point(0, 0);
-            this.mnuMenu.Name = "mnuMenu";
-            this.mnuMenu.Size = new System.Drawing.Size(791, 24);
-            this.mnuMenu.TabIndex = 0;
-            this.mnuMenu.Text = "menuStrip1";
             // 
             // smiSettings
             // 
@@ -360,19 +348,31 @@
             this.smiFreeDlc.Text = "Free DLC";
             this.smiFreeDlc.Click += new System.EventHandler(this.smiFreeDlc_Click);
             // 
+            // mnuMenu
+            // 
+            this.mnuMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.smiSettings,
+            this.smiBlacklist,
+            this.smiFreeDlc});
+            this.mnuMenu.Location = new System.Drawing.Point(0, 0);
+            this.mnuMenu.Name = "mnuMenu";
+            this.mnuMenu.Size = new System.Drawing.Size(791, 24);
+            this.mnuMenu.TabIndex = 0;
+            this.mnuMenu.Text = "menuStrip1";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(791, 776);
+            this.ClientSize = new System.Drawing.Size(791, 751);
             this.Controls.Add(this.lbldebug);
             this.Controls.Add(this.grbLibrary);
             this.Controls.Add(this.btnCalculate);
-            this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.ptbAvatar);
             this.Controls.Add(this.lblUsername);
             this.Controls.Add(this.mnuMenu);
+            this.Controls.Add(this.btnLogout);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.mnuMenu;
             this.MaximizeBox = false;
@@ -410,18 +410,18 @@
         private ColumnHeader colMaxDiscount;
         private GroupBox grbLibrary;
         private Label lbldebug;
-        private MenuStrip mnuMenu;
-        private ToolStripMenuItem smiSettings;
         private CheckBox chkHideGamesNotOnSale;
         private Label lblLibraryCost;
         private Button btnBlacklist;
-        private ToolStripMenuItem smiBlacklist;
-        private ToolStripMenuItem smiFreeDlc;
         private CheckBox chkHideOwnedDlc;
         private TextBox txtDlcSearch;
         private ColumnHeader colMinDiscount;
         private ColumnHeader colDlcLeft;
         private Label lblTooManyDlc;
         private LinkLabel lnkTooManyDlc;
+        private ToolStripMenuItem smiSettings;
+        private ToolStripMenuItem smiBlacklist;
+        private ToolStripMenuItem smiFreeDlc;
+        private MenuStrip mnuMenu;
     }
 }

@@ -1,14 +1,14 @@
 ﻿namespace SteamDlcShopping.Entities
 {
-    public class Sale
+    internal class Sale
     {
         //Properties
-        public int Percentage { get; }
+        internal int Percentage { get; }
 
-        public decimal Price { get; }
+        internal decimal Price { get; }
 
         //Constructor
-        public Sale(int percentage = default, decimal price = default)
+        internal Sale(int percentage = default, decimal price = default)
         {
             Percentage = percentage;
             Price = price;
