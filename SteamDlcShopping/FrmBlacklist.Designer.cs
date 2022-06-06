@@ -33,6 +33,7 @@
             this.lsbBlacklist = new System.Windows.Forms.ListBox();
             this.btnRemove = new System.Windows.Forms.Button();
             this.btnClearAutoBlacklisted = new System.Windows.Forms.Button();
+            this.chkHideAutoBlacklistedGames = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblGameCount
@@ -60,13 +61,13 @@
             this.lsbBlacklist.Location = new System.Drawing.Point(12, 41);
             this.lsbBlacklist.Name = "lsbBlacklist";
             this.lsbBlacklist.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lsbBlacklist.Size = new System.Drawing.Size(420, 199);
+            this.lsbBlacklist.Size = new System.Drawing.Size(610, 199);
             this.lsbBlacklist.TabIndex = 2;
             this.lsbBlacklist.SelectedIndexChanged += new System.EventHandler(this.lsbBlacklist_SelectedIndexChanged);
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(221, 246);
+            this.btnRemove.Location = new System.Drawing.Point(411, 246);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(75, 23);
             this.btnRemove.TabIndex = 3;
@@ -76,7 +77,7 @@
             // 
             // btnClearAutoBlacklisted
             // 
-            this.btnClearAutoBlacklisted.Location = new System.Drawing.Point(302, 246);
+            this.btnClearAutoBlacklisted.Location = new System.Drawing.Point(492, 246);
             this.btnClearAutoBlacklisted.Name = "btnClearAutoBlacklisted";
             this.btnClearAutoBlacklisted.Size = new System.Drawing.Size(130, 23);
             this.btnClearAutoBlacklisted.TabIndex = 3;
@@ -84,11 +85,23 @@
             this.btnClearAutoBlacklisted.UseVisualStyleBackColor = true;
             this.btnClearAutoBlacklisted.Click += new System.EventHandler(this.btnClearAutoBlacklisted_Click);
             // 
+            // chkHideAutoBlacklistedGames
+            // 
+            this.chkHideAutoBlacklistedGames.AutoSize = true;
+            this.chkHideAutoBlacklistedGames.Location = new System.Drawing.Point(218, 16);
+            this.chkHideAutoBlacklistedGames.Name = "chkHideAutoBlacklistedGames";
+            this.chkHideAutoBlacklistedGames.Size = new System.Drawing.Size(178, 19);
+            this.chkHideAutoBlacklistedGames.TabIndex = 4;
+            this.chkHideAutoBlacklistedGames.Text = "Hide Auto Blacklisted Games";
+            this.chkHideAutoBlacklistedGames.UseVisualStyleBackColor = true;
+            this.chkHideAutoBlacklistedGames.CheckedChanged += new System.EventHandler(this.chkHideAutoBlacklistedGames_CheckedChanged);
+            // 
             // FrmBlacklist
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(444, 281);
+            this.ClientSize = new System.Drawing.Size(634, 281);
+            this.Controls.Add(this.chkHideAutoBlacklistedGames);
             this.Controls.Add(this.lblGameCount);
             this.Controls.Add(this.txtBlacklistSearch);
             this.Controls.Add(this.lsbBlacklist);
@@ -115,5 +128,6 @@
         private ListBox lsbBlacklist;
         private Button btnRemove;
         private Button btnClearAutoBlacklisted;
+        private CheckBox chkHideAutoBlacklistedGames;
     }
 }

@@ -37,6 +37,8 @@
             this.lnkGetSteamApiKey = new System.Windows.Forms.LinkLabel();
             this.chkAutoBlacklist = new System.Windows.Forms.CheckBox();
             this.ptbSmartLoading = new System.Windows.Forms.PictureBox();
+            this.lblReminder = new System.Windows.Forms.Label();
+            this.ddlReminder = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbtSteamApiKey)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbSmartLoading)).BeginInit();
             this.SuspendLayout();
@@ -60,20 +62,20 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(211, 90);
+            this.btnSave.Location = new System.Drawing.Point(232, 148);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 4;
+            this.btnSave.TabIndex = 5;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(292, 90);
+            this.btnCancel.Location = new System.Drawing.Point(313, 148);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 5;
+            this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -117,6 +119,7 @@
             this.chkAutoBlacklist.TabIndex = 3;
             this.chkAutoBlacklist.Text = "Auto Blacklist (Recommended)";
             this.chkAutoBlacklist.UseVisualStyleBackColor = true;
+            this.chkAutoBlacklist.CheckedChanged += new System.EventHandler(this.chkAutoBlacklist_CheckedChanged);
             // 
             // ptbSmartLoading
             // 
@@ -127,11 +130,36 @@
             this.ptbSmartLoading.TabIndex = 6;
             this.ptbSmartLoading.TabStop = false;
             // 
+            // lblReminder
+            // 
+            this.lblReminder.AutoSize = true;
+            this.lblReminder.Location = new System.Drawing.Point(130, 93);
+            this.lblReminder.Name = "lblReminder";
+            this.lblReminder.Size = new System.Drawing.Size(156, 15);
+            this.lblReminder.TabIndex = 0;
+            this.lblReminder.Text = "Reminder to clear every new";
+            // 
+            // ddlReminder
+            // 
+            this.ddlReminder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ddlReminder.FormattingEnabled = true;
+            this.ddlReminder.Items.AddRange(new object[] {
+            "Week",
+            "Month",
+            "Year",
+            "Big Bang"});
+            this.ddlReminder.Location = new System.Drawing.Point(292, 90);
+            this.ddlReminder.Name = "ddlReminder";
+            this.ddlReminder.Size = new System.Drawing.Size(75, 23);
+            this.ddlReminder.TabIndex = 4;
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(379, 125);
+            this.ClientSize = new System.Drawing.Size(400, 183);
+            this.Controls.Add(this.ddlReminder);
+            this.Controls.Add(this.lblReminder);
             this.Controls.Add(this.lnkGetSteamApiKey);
             this.Controls.Add(this.lblGetSteamApiKey);
             this.Controls.Add(this.ptbSmartLoading);
@@ -169,5 +197,7 @@
         private LinkLabel lnkGetSteamApiKey;
         private CheckBox chkAutoBlacklist;
         private PictureBox ptbSmartLoading;
+        private Label lblReminder;
+        private ComboBox ddlReminder;
     }
 }

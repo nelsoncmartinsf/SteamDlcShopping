@@ -9,18 +9,12 @@ namespace SteamDlcShopping
             InitializeComponent();
 
             _filterName = string.Empty;
-            _blacklist = new();
         }
 
         //////////////////////////////////////// FORM ////////////////////////////////////////
 
         private void FrmBlacklist_Load(object sender, EventArgs e)
         {
-            _blacklist = Middleware.GetBlacklist();
-
-            lblGameCount.Text = null;
-            btnRemove.Enabled = false;
-
             lsbBlacklist.DisplayMember = "Name";
 
             LoadBlacklistToListbox();
@@ -28,30 +22,27 @@ namespace SteamDlcShopping
 
         //////////////////////////////////////// LISTBOX ////////////////////////////////////////
 
-        public List<GameBlacklistDto> _blacklist;
+        public List<GameBlacklistDto>? _blacklist;
 
         private void LoadBlacklistToListbox()
         {
+            _blacklist = Middleware.GetBlacklist(_filterName, _filterAutoBlacklisted);
+
             lsbBlacklist.Items.Clear();
 
             lsbBlacklist.BeginUpdate();
 
             foreach (GameBlacklistDto game in _blacklist)
             {
-                //Filter by name search
-                if (string.IsNullOrWhiteSpace(game.Name) || !game.Name.Contains(_filterName, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    continue;
-                }
-
                 lsbBlacklist.Items.Add(game);
             }
 
             lsbBlacklist.EndUpdate();
 
             //Fill in metric fields
-            lblGameCount.Text = $"Count: {lsbBlacklist.Items.Count}";
+            lblGameCount.Text = lsbBlacklist.Items.Count > 0 ? $"Count: {lsbBlacklist.Items.Count}" : null;
 
+            btnRemove.Enabled = false;
             btnClearAutoBlacklisted.Enabled = _blacklist.Any(x => x.AutoBlacklisted);
         }
 
@@ -70,11 +61,18 @@ namespace SteamDlcShopping
         //////////////////////////////////////// FILTERS ////////////////////////////////////////
 
         private string _filterName;
+        private bool _filterAutoBlacklisted;
 
         private void txtBlacklistSearch_TextChanged(object sender, EventArgs e)
         {
             _filterName = txtBlacklistSearch.Text;
-            btnRemove.Enabled = false;
+
+            LoadBlacklistToListbox();
+        }
+
+        private void chkHideAutoBlacklistedGames_CheckedChanged(object sender, EventArgs e)
+        {
+            _filterAutoBlacklisted = chkHideAutoBlacklistedGames.Checked;
 
             LoadBlacklistToListbox();
         }
@@ -90,7 +88,6 @@ namespace SteamDlcShopping
                 GameBlacklistDto game = (GameBlacklistDto)lsbBlacklist.SelectedItems[index];
 
                 _unblacklist.Add(game.AppId);
-                _blacklist.Remove(game);
             }
 
             if (_unblacklist.Any())
@@ -104,6 +101,11 @@ namespace SteamDlcShopping
         {
             List<int> _unblacklist = new();
 
+            if (_blacklist is null)
+            {
+                return;
+            }
+
             for (int index = _blacklist.Count - 1; index >= 0; index--)
             {
                 GameBlacklistDto game = _blacklist[index];
@@ -114,7 +116,6 @@ namespace SteamDlcShopping
                 }
 
                 _unblacklist.Add(game.AppId);
-                _blacklist.Remove(game);
             }
 
             if (_unblacklist.Any())

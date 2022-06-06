@@ -70,5 +70,28 @@ namespace SteamDlcShopping.Properties {
                 this["AutoBlacklist"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int AutoBlacklistReminder {
+            get {
+                return ((int)(this["AutoBlacklistReminder"]));
+            }
+            set {
+                this["AutoBlacklistReminder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.DateTime AutoBlacklistLastReminder {
+            get {
+                return ((global::System.DateTime)(this["AutoBlacklistLastReminder"]));
+            }
+            set {
+                this["AutoBlacklistLastReminder"] = value;
+            }
+        }
     }
 }

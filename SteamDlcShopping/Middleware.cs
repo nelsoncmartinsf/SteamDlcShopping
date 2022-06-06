@@ -41,11 +41,15 @@ namespace SteamDlcShopping
 
         public static SteamProfileDto GetSteamProfile()
         {
-            SteamProfileDto result = new()
+            SteamProfileDto result = new();
+
+            if (_steamProfile is null)
             {
-                Username = _steamProfile?.Username,
-                AvatarUrl = _steamProfile?.AvatarUrl
-            };
+                return result;
+            }
+
+            result.Username = _steamProfile?.Username;
+            result.AvatarUrl = _steamProfile?.AvatarUrl;
 
             return result;
         }
@@ -55,14 +59,14 @@ namespace SteamDlcShopping
             LibraryDto result = new();
             result.Games = new();
 
-            decimal totalCost = 0m;
-
-            List<Game>? library = _steamProfile?.Library?.Games;
-
-            if (library is null)
+            if (_steamProfile?.Library?.Games is null)
             {
                 return new();
             }
+
+            decimal totalCost = 0m;
+
+            List<Game> library = _steamProfile.Library.Games;
 
             foreach (Game game in library)
             {
@@ -103,7 +107,12 @@ namespace SteamDlcShopping
         {
             List<DlcDto> result = new();
 
-            Game? game = _steamProfile?.Library?.Games?.FirstOrDefault(x => x.AppId == appId);
+            if (_steamProfile?.Library?.Games is null)
+            {
+                return result;
+            }
+
+            Game? game = _steamProfile.Library.Games.FirstOrDefault(x => x.AppId == appId);
 
             if (game is null)
             {
@@ -165,15 +174,20 @@ namespace SteamDlcShopping
 
         public static void LoadGamesDlc()
         {
-            _steamProfile?.Library?.LoadDynamicStore();
-            _steamProfile?.Library?.LoadGames();
-            _steamProfile?.Library?.LoadBlacklist();
+            if (_steamProfile?.Library is null)
+            {
+                return;
+            }
 
-            _steamProfile?.Library?.ApplyBlacklist();
+            _steamProfile.Library.LoadDynamicStore();
+            _steamProfile.Library.LoadGames();
+            _steamProfile.Library.LoadBlacklist();
 
-            _steamProfile?.Library?.LoadGamesDlc();
+            _steamProfile.Library.ApplyBlacklist();
 
-            _steamProfile?.Library?.ImproveGamesList();
+            _steamProfile.Library.LoadGamesDlc();
+
+            _steamProfile.Library.ImproveGamesList();
 
             if (_steamProfile?.Library?.Games is null)
             {
@@ -188,7 +202,7 @@ namespace SteamDlcShopping
 
 
 
-        public static List<GameBlacklistDto> GetBlacklist()
+        public static List<GameBlacklistDto> GetBlacklist(string? filterName = null, bool _filterAutoBlacklisted = false)
         {
             List<GameBlacklistDto> result = new();
 
@@ -199,6 +213,18 @@ namespace SteamDlcShopping
 
             foreach (GameBlacklist game in _steamProfile.Library.Blacklist)
             {
+                //Filter by name search
+                if (string.IsNullOrWhiteSpace(game.Name) || !game.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
+
+                //Filter by games not auto blacklisted
+                if (_filterAutoBlacklisted && game.AutoBlacklisted)
+                {
+                    continue;
+                }
+
                 GameBlacklistDto gameBlacklist = new()
                 {
                     AppId = game.AppId,
@@ -231,12 +257,12 @@ namespace SteamDlcShopping
         {
             Dictionary<int, string> result = new();
 
-            List<Game>? games = _steamProfile?.Library?.Games?.Where(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree)).ToList();
-
-            if (games is null)
+            if (_steamProfile?.Library?.Games is null)
             {
                 return result;
             }
+
+            List<Game>? games = _steamProfile.Library.Games.Where(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree)).ToList();
 
             foreach (Game game in games)
             {
@@ -246,6 +272,28 @@ namespace SteamDlcShopping
             }
 
             return result;
+        }
+
+        public static void ClearAutoBlacklist()
+        {
+            if (_steamProfile?.Library?.Blacklist is null)
+            {
+                return;
+            }
+
+            for (int index = _steamProfile.Library.Blacklist.Count - 1; index >= 0; index--)
+            {
+                GameBlacklist game = _steamProfile.Library.Blacklist[index];
+
+                if (!game.AutoBlacklisted)
+                {
+                    continue;
+                }
+
+                _steamProfile.Library.UnBlacklistGame(game.AppId);
+            }
+
+            _steamProfile.Library.SaveBlacklist();
         }
     }
 }

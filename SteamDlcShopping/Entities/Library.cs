@@ -75,7 +75,7 @@ namespace SteamDlcShopping.Entities
 
             for (int count = 0; (count * size) < Size; count++)
             {
-                ThreadPool.QueueUserWorkItem(delegate (object? count)
+                ThreadPool.QueueUserWorkItem((WaitCallback)delegate (object? count)
                 {
                     for (int? index = (count as int?) * size; index < ((count as int?) + 1) * size; index++)
                     {
@@ -170,7 +170,17 @@ namespace SteamDlcShopping.Entities
 
         internal void BlacklistGame(int appId, bool autoBlacklisted = true)
         {
-            Game? game = Games?.First(x => x.AppId == appId);
+            if (Games is null)
+            {
+                return;
+            }
+
+            if (Blacklist is null)
+            {
+                return;
+            }
+
+            Game? game = Games.FirstOrDefault(x => x.AppId == appId);
 
             if (game is null)
             {
@@ -184,7 +194,7 @@ namespace SteamDlcShopping.Entities
                 AutoBlacklisted = autoBlacklisted
             };
 
-            Blacklist?.Add(gameBlacklist);
+            Blacklist.Add(gameBlacklist);
         }
 
         internal void UnBlacklistGame(int appId)
@@ -200,17 +210,22 @@ namespace SteamDlcShopping.Entities
             }
 
             int index = Blacklist.FindIndex(x => x.AppId == appId);
-            Blacklist?.RemoveAt(index);
+            Blacklist.RemoveAt(index);
         }
 
         internal void ApplyBlacklist()
         {
+            if (Games is null)
+            {
+                return;
+            }
+
             if (Blacklist is null)
             {
                 return;
             }
 
-            Games?.RemoveAll(x => Blacklist.Any(y => x.AppId == y.AppId));
+            Games.RemoveAll(x => Blacklist.Any(y => x.AppId == y.AppId));
         }
 
         internal void LoadBlacklist()

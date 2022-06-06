@@ -1,4 +1,5 @@
 ﻿using SteamDlcShopping.Dtos;
+using SteamDlcShopping.Properties;
 using System.Diagnostics;
 using Timer = System.Threading.Timer;
 
@@ -16,6 +17,50 @@ namespace SteamDlcShopping
         private void FrmMain_Load(object sender, EventArgs e)
         {
             VerifySession();
+        }
+
+        private void FrmMain_Shown(object sender, EventArgs e)
+        {
+            if (!Settings.Default.AutoBlacklist)
+            {
+                return;
+            }
+
+            string timePeriod = string.Empty;
+            DateTime reminderDate = new();
+
+            switch (Settings.Default.AutoBlacklistReminder)
+            {
+                case 0:
+                    timePeriod = "week";
+                    reminderDate = Settings.Default.AutoBlacklistLastReminder.AddDays(7);
+                    break;
+                case 1:
+                    timePeriod = "month";
+                    reminderDate = Settings.Default.AutoBlacklistLastReminder.AddMonths(1);
+                    break;
+                case 2:
+                    timePeriod = "year";
+                    reminderDate = Settings.Default.AutoBlacklistLastReminder.AddYears(1);
+                    break;
+            }
+
+            if (DateTime.Today.Date < reminderDate.Date)
+            {
+                return;
+            }
+
+            string title = "Auto Blacklist Reminder";
+            string message = $"It has been a new {timePeriod} since the last time the auto blacklist was cleared. Is it okay to clear it now?";
+
+            DialogResult result = MessageBox.Show(message, title, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+
+            Middleware.ClearAutoBlacklist();
         }
 
         private void tmrLibrary_Tick()

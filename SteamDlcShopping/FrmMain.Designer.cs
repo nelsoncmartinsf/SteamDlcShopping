@@ -380,6 +380,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Steam DLC Shopping";
             this.Load += new System.EventHandler(this.FrmMain_Load);
+            this.Shown += new System.EventHandler(this.FrmMain_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).EndInit();
             this.grbLibrary.ResumeLayout(false);
             this.grbLibrary.PerformLayout();

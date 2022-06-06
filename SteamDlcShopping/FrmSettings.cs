@@ -38,7 +38,9 @@ namespace SteamDlcShopping
             txtSteamApiKey.Text = Settings.Default.SteamApiKey;
             chkAutoBlacklist.Checked = Settings.Default.AutoBlacklist;
 
-
+            lblReminder.Enabled = chkAutoBlacklist.Checked;
+            ddlReminder.Enabled = chkAutoBlacklist.Checked;
+            ddlReminder.SelectedIndex = Settings.Default.AutoBlacklistReminder;
         }
 
         private void FrmSettings_FormClosing(object sender, FormClosingEventArgs e)
@@ -73,12 +75,26 @@ namespace SteamDlcShopping
             process.Start();
         }
 
+        //////////////////////////////////////// AUTO BLACKLIST ////////////////////////////////////////
+
+        private void chkAutoBlacklist_CheckedChanged(object sender, EventArgs e)
+        {
+            lblReminder.Enabled = chkAutoBlacklist.Checked;
+            ddlReminder.Enabled = chkAutoBlacklist.Checked;
+        }
+
         //////////////////////////////////////// BUTTONS ////////////////////////////////////////
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            if (Settings.Default.AutoBlacklistReminder != ddlReminder.SelectedIndex)
+            {
+                Settings.Default.AutoBlacklistLastReminder = DateTime.Now.Date;
+            }
+
             Settings.Default.SteamApiKey = txtSteamApiKey.Text;
             Settings.Default.AutoBlacklist = chkAutoBlacklist.Checked;
+            Settings.Default.AutoBlacklistReminder = ddlReminder.SelectedIndex;
             Settings.Default.Save();
 
             Close();
