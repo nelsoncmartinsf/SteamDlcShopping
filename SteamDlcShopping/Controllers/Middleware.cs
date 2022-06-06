@@ -1,8 +1,8 @@
-﻿using SteamDlcShopping.Dtos;
-using SteamDlcShopping.Entities;
+﻿using SteamDlcShopping.Models;
 using SteamDlcShopping.Properties;
+using SteamDlcShopping.ViewModels;
 
-namespace SteamDlcShopping
+namespace SteamDlcShopping.Controllers
 {
     public static class Middleware
     {
@@ -39,9 +39,9 @@ namespace SteamDlcShopping
 
 
 
-        public static SteamProfileDto GetSteamProfile()
+        public static SteamProfileView GetSteamProfile()
         {
-            SteamProfileDto result = new();
+            SteamProfileView result = new();
 
             if (_steamProfile is null)
             {
@@ -54,9 +54,9 @@ namespace SteamDlcShopping
             return result;
         }
 
-        public static LibraryDto GetGames(string? filterName = null, bool filterOnSale = false)
+        public static LibraryView GetGames(string? filterName = null, bool filterOnSale = false)
         {
-            LibraryDto result = new();
+            LibraryView result = new();
             result.Games = new();
 
             if (_steamProfile?.Library?.Games is null)
@@ -82,7 +82,7 @@ namespace SteamDlcShopping
                     continue;
                 }
 
-                GameDto gameDto = new()
+                GameView gameDto = new()
                 {
                     AppId = game.AppId,
                     Name = game.Name,
@@ -103,9 +103,9 @@ namespace SteamDlcShopping
             return result;
         }
 
-        public static List<DlcDto> GetDlc(int appId, string? filterName = null, bool filterOwned = false)
+        public static List<DlcView> GetDlc(int appId, string? filterName = null, bool filterOwned = false)
         {
-            List<DlcDto> result = new();
+            List<DlcView> result = new();
 
             if (_steamProfile?.Library?.Games is null)
             {
@@ -151,7 +151,7 @@ namespace SteamDlcShopping
                     }
                 }
 
-                DlcDto dlcDto = new()
+                DlcView dlcDto = new()
                 {
                     AppId = dlc.AppId,
                     Name = dlc.Name,
@@ -202,9 +202,9 @@ namespace SteamDlcShopping
 
 
 
-        public static List<GameBlacklistDto> GetBlacklist(string? filterName = null, bool _filterAutoBlacklisted = false)
+        public static List<GameBlacklistView> GetBlacklist(string? filterName = null, bool _filterAutoBlacklisted = false)
         {
-            List<GameBlacklistDto> result = new();
+            List<GameBlacklistView> result = new();
 
             if (_steamProfile?.Library?.Blacklist is null)
             {
@@ -225,7 +225,7 @@ namespace SteamDlcShopping
                     continue;
                 }
 
-                GameBlacklistDto gameBlacklist = new()
+                GameBlacklistView gameBlacklist = new()
                 {
                     AppId = game.AppId,
                     Name = game.AutoBlacklisted ? $"{game.Name} (Auto Blacklist)" : game.Name,

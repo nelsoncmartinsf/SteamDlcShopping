@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 using SteamDlcShopping.Properties;
 using System.Net;
 
-namespace SteamDlcShopping.Entities
+namespace SteamDlcShopping.Models
 {
     public class Library
     {
@@ -73,9 +73,9 @@ namespace SteamDlcShopping.Entities
 
             using CountdownEvent countdownEvent = new(Size % threads == 0 ? threads : threads + 1);
 
-            for (int count = 0; (count * size) < Size; count++)
+            for (int count = 0; count * size < Size; count++)
             {
-                ThreadPool.QueueUserWorkItem((WaitCallback)delegate (object? count)
+                ThreadPool.QueueUserWorkItem(delegate (object? count)
                 {
                     for (int? index = (count as int?) * size; index < ((count as int?) + 1) * size; index++)
                     {

@@ -1,6 +1,6 @@
-﻿namespace SteamDlcShopping.Entities
+﻿namespace SteamDlcShopping.ViewModels
 {
-    internal class GameBlacklist
+    public class GameBlacklistView
     {
         //Properties
         public int AppId { get; set; }

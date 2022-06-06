@@ -1,9 +1,9 @@
-﻿namespace SteamDlcShopping.Dtos
+﻿namespace SteamDlcShopping.ViewModels
 {
-    public class LibraryDto
+    public class LibraryView
     {
         //Properties
-        public List<GameDto>? Games { get; set; }
+        public List<GameView>? Games { get; set; }
 
         public int Size { get; set; }
 

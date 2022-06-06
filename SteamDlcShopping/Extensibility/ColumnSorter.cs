@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace SteamDlcShopping
+namespace SteamDlcShopping.Extensibility
 {
     public class ColumnSorter : IComparer
     {
@@ -83,7 +83,7 @@ namespace SteamDlcShopping
             return _order switch
             {
                 SortOrder.Ascending => compareResult,
-                SortOrder.Descending => (-compareResult),
+                SortOrder.Descending => -compareResult,
                 _ => 0
             };
         }

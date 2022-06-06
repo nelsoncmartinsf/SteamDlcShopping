@@ -2,7 +2,7 @@
 using System.Net;
 using System.Xml;
 
-namespace SteamDlcShopping.Entities
+namespace SteamDlcShopping.Models
 {
     internal class SteamProfile
     {

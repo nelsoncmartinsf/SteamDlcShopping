@@ -1,6 +1,6 @@
-﻿namespace SteamDlcShopping.Dtos
+﻿namespace SteamDlcShopping.Models
 {
-    public class GameBlacklistDto
+    internal class GameBlacklist
     {
         //Properties
         public int AppId { get; set; }

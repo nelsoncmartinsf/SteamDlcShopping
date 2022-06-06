@@ -1,6 +1,6 @@
-﻿namespace SteamDlcShopping.Dtos
+﻿namespace SteamDlcShopping.ViewModels
 {
-    public class DlcDto
+    public class DlcView
     {
         //Properties
         public int AppId { get; set; }

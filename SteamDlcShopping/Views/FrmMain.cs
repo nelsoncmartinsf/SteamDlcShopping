@@ -1,5 +1,7 @@
-﻿using SteamDlcShopping.Dtos;
+﻿using SteamDlcShopping.Controllers;
+using SteamDlcShopping.Extensibility;
 using SteamDlcShopping.Properties;
+using SteamDlcShopping.ViewModels;
 using System.Diagnostics;
 using Timer = System.Threading.Timer;
 
@@ -165,14 +167,14 @@ namespace SteamDlcShopping
         private ColumnSorter? _gameColumnSorter;
         private int _selectedGame;
 
-        private void LoadGameToListview(List<GameDto> games)
+        private void LoadGameToListview(List<GameView> games)
         {
             lsvGame.Items.Clear();
             lsvGame.ListViewItemSorter = null;
 
             lsvGame.BeginUpdate();
 
-            foreach (GameDto game in games)
+            foreach (GameView game in games)
             {
                 ListViewItem item;
                 ListViewItem.ListViewSubItem subItem;
@@ -261,13 +263,13 @@ namespace SteamDlcShopping
 
         private ColumnSorter? _dlcColumnSorter;
 
-        private void LoadDlcToListview(List<DlcDto> dlcs)
+        private void LoadDlcToListview(List<DlcView> dlcs)
         {
             lsvDlc.Items.Clear();
 
             lsvDlc.BeginUpdate();
 
-            foreach (DlcDto dlc in dlcs)
+            foreach (DlcView dlc in dlcs)
             {
                 ListViewItem item;
                 ListViewItem.ListViewSubItem subItem;
@@ -356,7 +358,7 @@ namespace SteamDlcShopping
         {
             if (Middleware.IsSessionActive())
             {
-                SteamProfileDto steamProfile = Middleware.GetSteamProfile();
+                SteamProfileView steamProfile = Middleware.GetSteamProfile();
 
                 ptbAvatar.LoadAsync(steamProfile.AvatarUrl);
                 lblUsername.Text = steamProfile.Username;
@@ -385,7 +387,7 @@ namespace SteamDlcShopping
 
         private void lsvGame_EnabledChanged(object sender, EventArgs e)
         {
-            LibraryDto library = new();
+            LibraryView library = new();
 
             if (lsvGame.Enabled)
             {
@@ -422,7 +424,7 @@ namespace SteamDlcShopping
         {
             if (lsvDlc.Enabled)
             {
-                List<DlcDto> dlcList = Middleware.GetDlc(_selectedGame, _filterDlc, _filterOwned);
+                List<DlcView> dlcList = Middleware.GetDlc(_selectedGame, _filterDlc, _filterOwned);
                 LoadDlcToListview(dlcList);
 
                 if (Middleware.GameHasTooManyDlc(_selectedGame))

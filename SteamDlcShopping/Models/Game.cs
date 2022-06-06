@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Net;
 using System.Web;
 
-namespace SteamDlcShopping.Entities
+namespace SteamDlcShopping.Models
 {
     internal class Game
     {

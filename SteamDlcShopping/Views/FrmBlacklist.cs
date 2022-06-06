@@ -1,4 +1,5 @@
-﻿using SteamDlcShopping.Dtos;
+﻿using SteamDlcShopping.Controllers;
+using SteamDlcShopping.ViewModels;
 
 namespace SteamDlcShopping
 {
@@ -22,7 +23,7 @@ namespace SteamDlcShopping
 
         //////////////////////////////////////// LISTBOX ////////////////////////////////////////
 
-        public List<GameBlacklistDto>? _blacklist;
+        public List<GameBlacklistView>? _blacklist;
 
         private void LoadBlacklistToListbox()
         {
@@ -32,7 +33,7 @@ namespace SteamDlcShopping
 
             lsbBlacklist.BeginUpdate();
 
-            foreach (GameBlacklistDto game in _blacklist)
+            foreach (GameBlacklistView game in _blacklist)
             {
                 lsbBlacklist.Items.Add(game);
             }
@@ -85,7 +86,7 @@ namespace SteamDlcShopping
 
             for (int index = lsbBlacklist.SelectedItems.Count - 1; index >= 0; index--)
             {
-                GameBlacklistDto game = (GameBlacklistDto)lsbBlacklist.SelectedItems[index];
+                GameBlacklistView game = (GameBlacklistView)lsbBlacklist.SelectedItems[index];
 
                 _unblacklist.Add(game.AppId);
             }
@@ -108,7 +109,7 @@ namespace SteamDlcShopping
 
             for (int index = _blacklist.Count - 1; index >= 0; index--)
             {
-                GameBlacklistDto game = _blacklist[index];
+                GameBlacklistView game = _blacklist[index];
 
                 if (!game.AutoBlacklisted)
                 {

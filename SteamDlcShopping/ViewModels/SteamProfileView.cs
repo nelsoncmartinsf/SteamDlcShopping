@@ -1,6 +1,6 @@
-﻿namespace SteamDlcShopping.Dtos
+﻿namespace SteamDlcShopping.ViewModels
 {
-    public class SteamProfileDto
+    public class SteamProfileView
     {
         public string? Username { get; set; }
 

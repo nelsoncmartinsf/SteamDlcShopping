@@ -1,6 +1,6 @@
-﻿namespace SteamDlcShopping.Dtos
+﻿namespace SteamDlcShopping.ViewModels
 {
-    public class SaleDto
+    public class SaleView
     {
         //Properties
         public int Percentage { get; set; }
