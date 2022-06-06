@@ -43,15 +43,6 @@ namespace SteamDlcShopping
             ddlReminder.SelectedIndex = Settings.Default.AutoBlacklistReminder;
         }
 
-        private void FrmSettings_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(Settings.Default.SteamApiKey))
-            {
-                _erpSteamApiKey?.SetError(txtSteamApiKey, "Steam API Key is required!");
-                e.Cancel = true;
-            }
-        }
-
         //////////////////////////////////////// STEAM API KEY ////////////////////////////////////////
 
         private void txtSteamApiKey_TextChanged(object sender, EventArgs e)
@@ -87,6 +78,12 @@ namespace SteamDlcShopping
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtSteamApiKey.Text))
+            {
+                _erpSteamApiKey?.SetError(txtSteamApiKey, "Steam API Key is required!");
+                return;
+            }
+
             if (Settings.Default.AutoBlacklistReminder != ddlReminder.SelectedIndex)
             {
                 Settings.Default.AutoBlacklistLastReminder = DateTime.Now.Date;
@@ -95,6 +92,7 @@ namespace SteamDlcShopping
             Settings.Default.SteamApiKey = txtSteamApiKey.Text;
             Settings.Default.AutoBlacklist = chkAutoBlacklist.Checked;
             Settings.Default.AutoBlacklistReminder = ddlReminder.SelectedIndex;
+            Settings.Default.AutoBlacklistLastReminder = DateTime.Now;
             Settings.Default.Save();
 
             Close();

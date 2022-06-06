@@ -19,7 +19,10 @@ namespace SteamDlcShopping
                 Application.Run(new FrmSettings());
             }
 
-            Application.Run(new FrmMain());
+            if (!string.IsNullOrWhiteSpace(Settings.Default.SteamApiKey))
+            {
+                Application.Run(new FrmMain());
+            }
         }
     }
 }
