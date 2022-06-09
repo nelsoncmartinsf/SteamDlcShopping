@@ -62,7 +62,7 @@ namespace SteamDlcShopping
                 return;
             }
 
-            Middleware.ClearAutoBlacklist();
+            BlacklistController.ClearAutoBlacklist();
         }
 
         private void tmrLibrary_Tick()
@@ -75,11 +75,20 @@ namespace SteamDlcShopping
                 btnCalculate.Enabled = false;
                 lsvDlc.Enabled = false;
                 grbLibrary.Enabled = false;
+
+                ucLoading ucLoading = new()
+                {
+                    Name = "ucLoading",
+                    Location = grbLibrary.Location
+                };
+
+                Controls.Add(ucLoading);
+                ucLoading.BringToFront();
             }));
 
             Stopwatch timer = Stopwatch.StartNew();//DEBUG
 
-            Middleware.LoadGamesDlc();
+            LibraryController.LoadGamesDlc();
 
             timer.Stop();//DEBUG
             lbldebug.Invoke(new Action(() => lbldebug.Text = $"{timer.Elapsed}"));//DEBUG
@@ -91,6 +100,7 @@ namespace SteamDlcShopping
                 btnLogout.Visible = true;
                 btnCalculate.Enabled = true;
                 grbLibrary.Enabled = true;
+                Controls["ucLoading"].Dispose();
             }));
         }
 
@@ -125,13 +135,13 @@ namespace SteamDlcShopping
             form.ShowDialog();
             form.Dispose();
 
-            Middleware.Login();
+            SteamProfileController.Login();
             VerifySession();
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            Middleware.Logout();
+            SteamProfileController.Logout();
             VerifySession();
         }
 
@@ -157,7 +167,7 @@ namespace SteamDlcShopping
                 lsvGame.Items.Remove(item);
             }
 
-            Middleware.BlacklistGames(appIds);
+            BlacklistController.BlacklistGames(appIds);
 
             lsvGame_EnabledChanged(new(), new());
         }
@@ -356,9 +366,9 @@ namespace SteamDlcShopping
 
         private void VerifySession()
         {
-            if (Middleware.IsSessionActive())
+            if (SteamProfileController.IsSessionActive())
             {
-                SteamProfileView steamProfile = Middleware.GetSteamProfile();
+                SteamProfileView steamProfile = SteamProfileController.GetSteamProfile();
 
                 ptbAvatar.LoadAsync(steamProfile.AvatarUrl);
                 lblUsername.Text = steamProfile.Username;
@@ -370,9 +380,9 @@ namespace SteamDlcShopping
             }
 
             smiFreeDlc.Enabled = default;
-            btnLogin.Visible = !Middleware.IsSessionActive();
-            btnLogout.Visible = Middleware.IsSessionActive();
-            btnCalculate.Enabled = Middleware.IsSessionActive();
+            btnLogin.Visible = !SteamProfileController.IsSessionActive();
+            btnLogout.Visible = SteamProfileController.IsSessionActive();
+            btnCalculate.Enabled = SteamProfileController.IsSessionActive();
             grbLibrary.Enabled = default;
         }
 
@@ -391,7 +401,7 @@ namespace SteamDlcShopping
 
             if (lsvGame.Enabled)
             {
-                library = Middleware.GetGames(_filterGame, _filterOnSale);
+                library = LibraryController.GetGames(_filterGame, _filterOnSale);
 
                 if (library.Games is null)
                 {
@@ -424,10 +434,10 @@ namespace SteamDlcShopping
         {
             if (lsvDlc.Enabled)
             {
-                List<DlcView> dlcList = Middleware.GetDlc(_selectedGame, _filterDlc, _filterOwned);
+                List<DlcView> dlcList = LibraryController.GetDlc(_selectedGame, _filterDlc, _filterOwned);
                 LoadDlcToListview(dlcList);
 
-                if (Middleware.GameHasTooManyDlc(_selectedGame))
+                if (LibraryController.GameHasTooManyDlc(_selectedGame))
                 {
                     lblTooManyDlc.Visible = true;
                     lnkTooManyDlc.Visible = true;
@@ -505,7 +515,7 @@ namespace SteamDlcShopping
         {
             Process process = new()
             {
-                StartInfo = new ProcessStartInfo()
+                StartInfo = new()
                 {
                     CreateNoWindow = true,
                     UseShellExecute = false,

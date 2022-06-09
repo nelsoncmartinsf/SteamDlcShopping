@@ -41,7 +41,7 @@ namespace SteamDlcShopping.Extensibility
         {
             _column = -1;
             _order = SortOrder.None;
-            _comparer = new CaseInsensitiveComparer();
+            _comparer = new();
         }
 
         //Methods

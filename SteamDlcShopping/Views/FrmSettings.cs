@@ -54,7 +54,7 @@ namespace SteamDlcShopping
         {
             Process process = new()
             {
-                StartInfo = new ProcessStartInfo()
+                StartInfo = new()
                 {
                     CreateNoWindow = true,
                     UseShellExecute = false,

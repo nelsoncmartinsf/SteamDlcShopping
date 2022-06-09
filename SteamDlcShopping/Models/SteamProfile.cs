@@ -15,8 +15,6 @@ namespace SteamDlcShopping.Models
 
         internal string? AvatarUrl { get; }
 
-        internal Library? Library { get; }
-
         //Constructor
         internal SteamProfile()
         {
@@ -60,9 +58,6 @@ namespace SteamDlcShopping.Models
 
             xmlNode = xmlDocument.SelectSingleNode("//avatarMedium");
             AvatarUrl = xmlNode is not null ? WebUtility.HtmlDecode(xmlNode.InnerText) : null;
-
-            //Library
-            Library = new(Id);
         }
     }
 }

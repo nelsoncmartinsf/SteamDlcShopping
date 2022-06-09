@@ -15,10 +15,6 @@ namespace SteamDlcShopping.Models
 
         internal List<Game>? Games { get; private set; }
 
-        internal List<GameBlacklist>? Blacklist { get; private set; }
-
-        internal int? Size => Games?.Count;
-
         internal decimal? TotalCost => Games?.Sum(x => x.DlcTotalPrice);
 
         //Constructor
@@ -27,7 +23,6 @@ namespace SteamDlcShopping.Models
             _steamId = steamId;
 
             LoadDynamicStore();
-            LoadBlacklist();
         }
 
         //Methods
@@ -37,7 +32,7 @@ namespace SteamDlcShopping.Models
             Uri uri = new("https://store.steampowered.com/dynamicstore/userdata/");
 
             using HttpClientHandler handler = new();
-            handler.CookieContainer = new CookieContainer();
+            handler.CookieContainer = new();
             handler.CookieContainer.Add(uri, new Cookie("sessionid", Settings.Default.SessionId));
             handler.CookieContainer.Add(uri, new Cookie("steamLoginSecure", Settings.Default.SteamLoginSecure));
 
@@ -58,8 +53,6 @@ namespace SteamDlcShopping.Models
             Games = JsonConvert.DeserializeObject<List<Game>>($"{jObject["response"]?["games"]}");
         }
 
-
-
         internal void LoadGamesDlc()
         {
             if (Games is null)
@@ -69,11 +62,11 @@ namespace SteamDlcShopping.Models
 
             //Load all dlc for all games
             int threads = 10;
-            int size = (Size ?? 0) / threads;
+            int size = Games.Count / threads;
 
-            using CountdownEvent countdownEvent = new(Size % threads == 0 ? threads : threads + 1);
+            using CountdownEvent countdownEvent = new(Games.Count % threads == 0 ? threads : threads + 1);
 
-            for (int count = 0; count * size < Size; count++)
+            for (int count = 0; count * size < Games.Count; count++)
             {
                 ThreadPool.QueueUserWorkItem(delegate (object? count)
                 {
@@ -84,7 +77,7 @@ namespace SteamDlcShopping.Models
                             continue;
                         }
 
-                        if (index == Size)
+                        if (index == Games.Count)
                         {
                             break;
                         }
@@ -166,89 +159,14 @@ namespace SteamDlcShopping.Models
             }
         }
 
-
-
-        internal void BlacklistGame(int appId, bool autoBlacklisted = true)
+        internal void ApplyBlacklist(List<int> appIds)
         {
             if (Games is null)
             {
                 return;
             }
 
-            if (Blacklist is null)
-            {
-                return;
-            }
-
-            Game? game = Games.FirstOrDefault(x => x.AppId == appId);
-
-            if (game is null)
-            {
-                return;
-            }
-
-            GameBlacklist gameBlacklist = new()
-            {
-                AppId = game.AppId,
-                Name = game.Name,
-                AutoBlacklisted = autoBlacklisted
-            };
-
-            Blacklist.Add(gameBlacklist);
-        }
-
-        internal void UnBlacklistGame(int appId)
-        {
-            if (Blacklist is null)
-            {
-                return;
-            }
-
-            if (!Blacklist.Any(x => x.AppId == appId))
-            {
-                return;
-            }
-
-            int index = Blacklist.FindIndex(x => x.AppId == appId);
-            Blacklist.RemoveAt(index);
-        }
-
-        internal void ApplyBlacklist()
-        {
-            if (Games is null)
-            {
-                return;
-            }
-
-            if (Blacklist is null)
-            {
-                return;
-            }
-
-            Games.RemoveAll(x => Blacklist.Any(y => x.AppId == y.AppId));
-        }
-
-        internal void LoadBlacklist()
-        {
-            if (!File.Exists("blacklist.txt"))
-            {
-                Blacklist = new();
-                return;
-            }
-
-            string content = File.ReadAllText("blacklist.txt");
-            Blacklist = JsonConvert.DeserializeObject<List<GameBlacklist>>(content);
-
-            if (Blacklist is null)
-            {
-                Blacklist = new();
-            }
-        }
-
-        internal void SaveBlacklist()
-        {
-            string content = JsonConvert.SerializeObject(Blacklist);
-            File.WriteAllText("blacklist.txt", content);
+            Games.RemoveAll(x => appIds.Any(y => x.AppId == y));
         }
     }
 }

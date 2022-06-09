@@ -20,7 +20,7 @@ namespace SteamDlcShopping.Models
 
         internal int DlcHighestPercentage { get; private set; }
 
-        internal bool TooManyDlc { get; set; }
+        internal bool HasTooManyDlc { get; set; }
 
         internal List<Dlc> DlcList { get; private set; }
 
@@ -40,7 +40,7 @@ namespace SteamDlcShopping.Models
                 Uri uri = new("https://store.steampowered.com");
 
                 using HttpClientHandler handler = new();
-                handler.CookieContainer = new CookieContainer();
+                handler.CookieContainer = new();
                 handler.CookieContainer.Add(uri, new Cookie("birthtime", HttpUtility.UrlEncode("birthtime=0; path=/; max-age=315360000")));
 
                 HttpClient httpClient = new(handler);
@@ -60,7 +60,7 @@ namespace SteamDlcShopping.Models
 
                 if (response.Contains("game_area_dlc_excluded_by_preferences"))
                 {
-                    TooManyDlc = true;
+                    HasTooManyDlc = true;
                 }
 
                 HtmlAgilityPack.HtmlDocument htmlDoc = new();
@@ -80,7 +80,7 @@ namespace SteamDlcShopping.Models
                     return;
                 }
 
-                DlcList = new List<Dlc>();
+                DlcList = new();
 
                 foreach (HtmlNode node in dlcList)
                 {
@@ -119,7 +119,7 @@ namespace SteamDlcShopping.Models
                                 salePrice = salePrice.Replace('-', '0');
                                 decimal dSalePrice = decimal.Parse(salePrice, NumberStyles.Currency, new CultureInfo("pt-PT"));
 
-                                sale = new Sale(iSalePercentage, dSalePrice);
+                                sale = new(iSalePercentage, dSalePrice);
                             }
 
                             //Formatting of rounded values with -- on the decimal part
