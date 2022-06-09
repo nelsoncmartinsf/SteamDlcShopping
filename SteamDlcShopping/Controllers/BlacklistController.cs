@@ -7,7 +7,32 @@ namespace SteamDlcShopping.Controllers
     {
         private static Blacklist? _blacklist;
 
-        public static List<GameBlacklistView> GetBlacklist(string? filterName = null, bool _filterAutoBlacklisted = false)
+        public static void Reset()
+        {
+            _blacklist = null;
+        }
+
+        public static void Load()
+        {
+            if (_blacklist is null)
+            {
+                _blacklist = new Blacklist();
+            }
+
+            _blacklist.Load();
+        }
+
+        public static void Save()
+        {
+            if (_blacklist is null)
+            {
+                return;
+            }
+
+            _blacklist.Save();
+        }
+
+        public static List<GameBlacklistView> Get(string? filterName = null, bool _filterAutoBlacklisted = false)
         {
             List<GameBlacklistView> result = new();
 
@@ -48,15 +73,15 @@ namespace SteamDlcShopping.Controllers
             return result;
         }
 
-        public static void BlacklistGames(List<int> appIds)
+        public static void AddGames(List<int> appIds)
         {
             if (_blacklist is null)
             {
                 return;
             }
 
-            appIds.ForEach(x => _blacklist.BlacklistGame(x, LibraryController.GetGameName(x), false));
-            _blacklist.SaveBlacklist();
+            appIds.ForEach(x => _blacklist.AddGame(x, LibraryController.GetGameName(x), false));
+            _blacklist.Save();
 
             if (_blacklist.Games is null)
             {
@@ -66,15 +91,15 @@ namespace SteamDlcShopping.Controllers
             LibraryController.ApplyBlacklist(appIds);
         }
 
-        public static void UnblacklistGames(List<int> appIds)
+        public static void RemoveGames(List<int> appIds)
         {
             if (_blacklist is null)
             {
                 return;
             }
 
-            appIds.ForEach(x => _blacklist.UnBlacklistGame(x));
-            _blacklist.SaveBlacklist();
+            appIds.ForEach(x => _blacklist.RemoveGame(x));
+            _blacklist.Save();
         }
 
         public static void ClearAutoBlacklist()
@@ -98,10 +123,10 @@ namespace SteamDlcShopping.Controllers
                     continue;
                 }
 
-                _blacklist.UnBlacklistGame(game.AppId);
+                _blacklist.RemoveGame(game.AppId);
             }
 
-            _blacklist.SaveBlacklist();
+            _blacklist.Save();
         }
     }
 }

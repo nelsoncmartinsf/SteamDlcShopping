@@ -11,7 +11,7 @@ namespace SteamDlcShopping.Models
         private readonly long _steamId;
 
         //Properties
-        internal List<int>? DynamicStore { get; private set; }
+        internal List<int>? DynamicStore { get; set; }
 
         internal List<Game>? Games { get; private set; }
 
@@ -21,8 +21,6 @@ namespace SteamDlcShopping.Models
         internal Library(long steamId)
         {
             _steamId = steamId;
-
-            LoadDynamicStore();
         }
 
         //Methods
@@ -108,7 +106,7 @@ namespace SteamDlcShopping.Models
                 {
                     if (Settings.Default.AutoBlacklist)
                     {
-                        BlacklistGame(game.AppId);
+                        //BlacklistGame(game.AppId);
                     }
 
                     int index = Games.IndexOf(game);
@@ -155,7 +153,7 @@ namespace SteamDlcShopping.Models
 
             if (Settings.Default.AutoBlacklist)
             {
-                SaveBlacklist();
+                //SaveBlacklist();
             }
         }
 

@@ -93,6 +93,7 @@ namespace SteamDlcShopping
             Settings.Default.AutoBlacklist = chkAutoBlacklist.Checked;
             Settings.Default.AutoBlacklistReminder = ddlReminder.SelectedIndex;
             Settings.Default.AutoBlacklistLastReminder = DateTime.Now;
+            Settings.Default.UseMemeLoading = chkUseMemeLoading.Checked;
             Settings.Default.Save();
 
             Close();

@@ -27,7 +27,7 @@ namespace SteamDlcShopping
 
         private void LoadBlacklistToListbox()
         {
-            _blacklist = BlacklistController.GetBlacklist(_filterName, _filterAutoBlacklisted);
+            _blacklist = BlacklistController.Get(_filterName, _filterAutoBlacklisted);
 
             lsbBlacklist.Items.Clear();
 
@@ -93,7 +93,7 @@ namespace SteamDlcShopping
 
             if (_unblacklist.Any())
             {
-                BlacklistController.UnblacklistGames(_unblacklist);
+                BlacklistController.RemoveGames(_unblacklist);
                 LoadBlacklistToListbox();
             }
         }
@@ -121,7 +121,7 @@ namespace SteamDlcShopping
 
             if (_unblacklist.Any())
             {
-                BlacklistController.UnblacklistGames(_unblacklist);
+                BlacklistController.RemoveGames(_unblacklist);
                 LoadBlacklistToListbox();
             }
         }

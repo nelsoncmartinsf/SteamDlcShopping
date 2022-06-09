@@ -39,6 +39,7 @@
             this.ptbSmartLoading = new System.Windows.Forms.PictureBox();
             this.lblReminder = new System.Windows.Forms.Label();
             this.ddlReminder = new System.Windows.Forms.ComboBox();
+            this.chkUseMemeLoading = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbtSteamApiKey)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbSmartLoading)).BeginInit();
             this.SuspendLayout();
@@ -62,7 +63,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(232, 148);
+            this.btnSave.Location = new System.Drawing.Point(232, 182);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 5;
@@ -72,7 +73,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(313, 148);
+            this.btnCancel.Location = new System.Drawing.Point(313, 182);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 6;
@@ -153,17 +154,30 @@
             this.ddlReminder.Size = new System.Drawing.Size(75, 23);
             this.ddlReminder.TabIndex = 4;
             // 
+            // chkUseMemeLoading
+            // 
+            this.chkUseMemeLoading.AutoSize = true;
+            this.chkUseMemeLoading.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkUseMemeLoading.Location = new System.Drawing.Point(28, 128);
+            this.chkUseMemeLoading.Name = "chkUseMemeLoading";
+            this.chkUseMemeLoading.Size = new System.Drawing.Size(182, 19);
+            this.chkUseMemeLoading.TabIndex = 3;
+            this.chkUseMemeLoading.Text = "Use meme loading animation";
+            this.chkUseMemeLoading.UseVisualStyleBackColor = true;
+            this.chkUseMemeLoading.CheckedChanged += new System.EventHandler(this.chkAutoBlacklist_CheckedChanged);
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 183);
+            this.ClientSize = new System.Drawing.Size(400, 217);
             this.Controls.Add(this.ddlReminder);
             this.Controls.Add(this.lblReminder);
             this.Controls.Add(this.lnkGetSteamApiKey);
             this.Controls.Add(this.lblGetSteamApiKey);
             this.Controls.Add(this.ptbSmartLoading);
             this.Controls.Add(this.pbtSteamApiKey);
+            this.Controls.Add(this.chkUseMemeLoading);
             this.Controls.Add(this.chkAutoBlacklist);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
@@ -198,5 +212,6 @@
         private PictureBox ptbSmartLoading;
         private Label lblReminder;
         private ComboBox ddlReminder;
+        private CheckBox chkUseMemeLoading;
     }
 }

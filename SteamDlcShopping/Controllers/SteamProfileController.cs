@@ -8,11 +8,18 @@ namespace SteamDlcShopping.Controllers
     {
         private static SteamProfile? _steamProfile;
 
+        public static void Reset()
+        {
+            _steamProfile = null;
+        }
+
         public static bool IsSessionActive()
         {
+            bool result = false;
+
             if (string.IsNullOrWhiteSpace(Settings.Default.SessionId) || string.IsNullOrWhiteSpace(Settings.Default.SteamLoginSecure))
             {
-                return false;
+                return result;
             }
 
             if (_steamProfile is null)
@@ -20,7 +27,9 @@ namespace SteamDlcShopping.Controllers
                 Login();
             }
 
-            return LibraryController.DynamicStoreIsFilled();
+            result = LibraryController.DynamicStoreIsFilled();
+
+            return result;
         }
 
         public static void Login()
@@ -34,7 +43,9 @@ namespace SteamDlcShopping.Controllers
             Settings.Default.SteamLoginSecure = null;
             Settings.Default.Save();
 
-            _steamProfile = null;
+            Reset();
+            LibraryController.Reset();
+            BlacklistController.Reset();
         }
 
         public static SteamProfileView GetSteamProfile()
@@ -48,6 +59,20 @@ namespace SteamDlcShopping.Controllers
 
             result.Username = _steamProfile?.Username;
             result.AvatarUrl = _steamProfile?.AvatarUrl;
+
+            return result;
+        }
+
+        public static long GetSteamId()
+        {
+            long result = 0;
+
+            if (_steamProfile is null)
+            {
+                return result;
+            }
+
+            result = _steamProfile.Id;
 
             return result;
         }

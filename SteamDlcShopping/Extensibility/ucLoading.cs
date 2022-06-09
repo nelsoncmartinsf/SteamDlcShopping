@@ -1,4 +1,6 @@
-﻿namespace SteamDlcShopping.Extensibility
+﻿using SteamDlcShopping.Properties;
+
+namespace SteamDlcShopping.Extensibility
 {
     public partial class ucLoading : UserControl
     {
@@ -9,8 +11,8 @@
 
         private void ucLoading_Load(object sender, EventArgs e)
         {
-            ptbLoading.ImageLocation = "C:\\Users\\VM\\Desktop\\FlGsjNI.gif";
-            //ptbLoading.ImageLocation = "C:\\Users\\VM\\Desktop\\loading_large.gif";
+            string loading = Settings.Default.UseMemeLoading ? "FlGsjNI" : "loading_large";
+            ptbLoading.ImageLocation = $"C:\\Users\\VM\\Desktop\\{loading}.gif";
         }
     }
 }

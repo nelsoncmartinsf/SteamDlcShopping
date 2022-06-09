@@ -167,7 +167,7 @@ namespace SteamDlcShopping
                 lsvGame.Items.Remove(item);
             }
 
-            BlacklistController.BlacklistGames(appIds);
+            BlacklistController.AddGames(appIds);
 
             lsvGame_EnabledChanged(new(), new());
         }
@@ -425,7 +425,7 @@ namespace SteamDlcShopping
                 }
             }
 
-            lblGameCount.Text = lsvGame.Enabled ? $"Count: {library.Size}" : default;
+            lblGameCount.Text = lsvGame.Enabled ? $"Count: {lsvGame.Items.Count}" : default;
             lblLibraryCost.Text = lsvGame.Enabled ? $"Cost: {library.TotalCost}€" : default;
             btnBlacklist.Visible = default;
         }

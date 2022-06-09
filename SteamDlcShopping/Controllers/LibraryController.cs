@@ -7,36 +7,85 @@ namespace SteamDlcShopping.Controllers
     {
         private static Library? _library;
 
+        public static void Reset()
+        {
+            _library = null;
+        }
+
         public static bool DynamicStoreIsFilled()
         {
             if (_library is null)
             {
-                return false;
+                _library = new(SteamProfileController.GetSteamId());
             }
 
             if (_library.DynamicStore is null)
             {
-                return false;
+                _library.DynamicStore = new();
+                LoadDynamicStore();
             }
 
-            return _library.DynamicStore.Any();
+            bool result = _library.DynamicStore.Any();
+            return result;
+        }
+
+        public static void LoadDynamicStore()
+        {
+            if (_library is null)
+            {
+                return;
+            }
+
+            _library.LoadDynamicStore();
+        }
+
+        public static void LoadGamesDlc()
+        {
+            if (_library is null)
+            {
+                return;
+            }
+
+            _library.LoadDynamicStore();
+            _library.LoadGames();
+            BlacklistController.Load();
+
+            List<GameBlacklistView>? blacklist = BlacklistController.Get();
+            _library.ApplyBlacklist(blacklist.Select(x => x.AppId).ToList());
+
+            _library.LoadGamesDlc();
+
+            _library.ImproveGamesList();
+
+            if (_library.Games is null)
+            {
+                return;
+            }
+
+            foreach (Game game in _library.Games)
+            {
+                game.CalculateDlcMetrics();
+            }
         }
 
         public static LibraryView GetGames(string? filterName = null, bool filterOnSale = false)
         {
-            LibraryView result = new();
-            result.Games = new();
-
-            if (_library?.Games is null)
+            LibraryView result = new()
             {
-                return new();
+                Games = new()
+            };
+
+            if (_library is null)
+            {
+                return result;
             }
 
-            decimal totalCost = 0m;
+            if (_library.Games is null)
+            {
+                return result;
+            }
 
-            List<Game> library = _library.Games;
-
-            foreach (Game game in library)
+            foreach (Game game in _library.Games)
             {
                 //Filter by name search
                 if (!string.IsNullOrWhiteSpace(game.Name) && !game.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
@@ -60,13 +109,10 @@ namespace SteamDlcShopping.Controllers
                     DlcHighestPercentage = game.DlcHighestPercentage > 0 ? $"{game.DlcHighestPercentage}%" : null
                 };
 
-                totalCost += game.DlcTotalPrice ?? 0m;
+                result.TotalCost += game.DlcTotalPrice ?? 0m;
 
                 result.Games.Add(gameDto);
             }
-
-            result.Size = result.Games.Count;
-            result.TotalCost = totalCost;
 
             return result;
         }
@@ -156,44 +202,21 @@ namespace SteamDlcShopping.Controllers
             return game.HasTooManyDlc;
         }
 
-        public static void LoadGamesDlc()
-        {
-            if (_library is null)
-            {
-                return;
-            }
-
-            _library.LoadDynamicStore();
-            _library.LoadGames();
-            _library.LoadBlacklist();
-
-            _library.ApplyBlacklist();
-
-            _library.LoadGamesDlc();
-
-            _library.ImproveGamesList();
-
-            if (_library.Games is null)
-            {
-                return;
-            }
-
-            foreach (Game game in _library.Games)
-            {
-                game.CalculateDlcMetrics();
-            }
-        }
-
         public static Dictionary<int, string> GetFreeDlc()
         {
             Dictionary<int, string> result = new();
 
-            if (_steamProfile?.Library?.Games is null)
+            if (_library is null)
             {
                 return result;
             }
 
-            List<Game>? games = _steamProfile.Library.Games.Where(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree)).ToList();
+            if (_library.Games is null)
+            {
+                return result;
+            }
+
+            List<Game>? games = _library.Games.Where(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree)).ToList();
 
             foreach (Game game in games)
             {
