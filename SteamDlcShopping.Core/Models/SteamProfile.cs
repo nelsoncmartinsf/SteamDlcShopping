@@ -1,8 +1,7 @@
-﻿using SteamDlcShopping.Properties;
-using System.Net;
+﻿using System.Net;
 using System.Xml;
 
-namespace SteamDlcShopping.Models
+namespace SteamDlcShopping.Core.Models
 {
     internal class SteamProfile
     {
@@ -15,23 +14,16 @@ namespace SteamDlcShopping.Models
 
         internal string? AvatarUrl { get; }
 
-        internal Library? Library { get; }
-
         //Constructor
-        internal SteamProfile()
+        internal SteamProfile(string steamLoginSecure)
         {
-            if (string.IsNullOrWhiteSpace(Settings.Default.SessionId) || string.IsNullOrWhiteSpace(Settings.Default.SteamLoginSecure))
-            {
-                return;
-            }
-
             HttpClient httpClient;
             string xml;
             XmlDocument xmlDocument;
             XmlNode? xmlNode;
 
             //Id
-            string steamId = WebUtility.UrlDecode(Settings.Default.SteamLoginSecure);
+            string steamId = WebUtility.UrlDecode(steamLoginSecure);
             int index = steamId.IndexOf('|', 0);
 
             if (index != -1)
@@ -60,9 +52,6 @@ namespace SteamDlcShopping.Models
 
             xmlNode = xmlDocument.SelectSingleNode("//avatarMedium");
             AvatarUrl = xmlNode is not null ? WebUtility.HtmlDecode(xmlNode.InnerText) : null;
-
-            //Library
-            Library = new(Id);
         }
     }
 }

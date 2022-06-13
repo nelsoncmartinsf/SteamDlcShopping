@@ -1,4 +1,4 @@
-﻿namespace SteamDlcShopping.ViewModels
+﻿namespace SteamDlcShopping.Core.ViewModels
 {
     public class GameView
     {

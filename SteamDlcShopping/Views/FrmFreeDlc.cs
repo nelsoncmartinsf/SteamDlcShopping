@@ -1,4 +1,4 @@
-﻿using SteamDlcShopping.Controllers;
+﻿using SteamDlcShopping.Core.Controllers;
 using System.Diagnostics;
 
 namespace SteamDlcShopping
@@ -17,7 +17,7 @@ namespace SteamDlcShopping
             lsbDlc.DisplayMember = "Value";
             lsbDlc.ValueMember = "Key";
 
-            Dictionary<int, string> dlcList = Middleware.GetFreeDlc();
+            Dictionary<int, string> dlcList = LibraryController.GetFreeDlc();
 
             lsbDlc.BeginUpdate();
 
@@ -37,7 +37,7 @@ namespace SteamDlcShopping
 
             Process process = new()
             {
-                StartInfo = new ProcessStartInfo()
+                StartInfo = new()
                 {
                     CreateNoWindow = true,
                     UseShellExecute = false,

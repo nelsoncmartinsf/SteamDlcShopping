@@ -1,4 +1,4 @@
-﻿namespace SteamDlcShopping.Models
+﻿namespace SteamDlcShopping.Core.Models
 {
     internal class Sale
     {

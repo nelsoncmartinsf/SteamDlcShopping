@@ -37,6 +37,7 @@ namespace SteamDlcShopping
             //Controls
             txtSteamApiKey.Text = Settings.Default.SteamApiKey;
             chkAutoBlacklist.Checked = Settings.Default.AutoBlacklist;
+            chkUseMemeLoading.Checked = Settings.Default.UseMemeLoading;
 
             lblReminder.Enabled = chkAutoBlacklist.Checked;
             ddlReminder.Enabled = chkAutoBlacklist.Checked;
@@ -54,7 +55,7 @@ namespace SteamDlcShopping
         {
             Process process = new()
             {
-                StartInfo = new ProcessStartInfo()
+                StartInfo = new()
                 {
                     CreateNoWindow = true,
                     UseShellExecute = false,
@@ -93,6 +94,7 @@ namespace SteamDlcShopping
             Settings.Default.AutoBlacklist = chkAutoBlacklist.Checked;
             Settings.Default.AutoBlacklistReminder = ddlReminder.SelectedIndex;
             Settings.Default.AutoBlacklistLastReminder = DateTime.Now;
+            Settings.Default.UseMemeLoading = chkUseMemeLoading.Checked;
             Settings.Default.Save();
 
             Close();
