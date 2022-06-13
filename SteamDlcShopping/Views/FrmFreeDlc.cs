@@ -1,4 +1,4 @@
-﻿using SteamDlcShopping.Controllers;
+﻿using SteamDlcShopping.Core.Controllers;
 using System.Diagnostics;
 
 namespace SteamDlcShopping

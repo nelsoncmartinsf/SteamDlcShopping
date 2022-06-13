@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SteamDlcShopping.Models
+namespace SteamDlcShopping.Core.Models
 {
     internal class Blacklist
     {
@@ -21,7 +21,7 @@ namespace SteamDlcShopping.Models
 
         internal void Save()
         {
-            if (Games is not null)
+            if (Games is null)
             {
                 return;
             }
@@ -35,6 +35,11 @@ namespace SteamDlcShopping.Models
             if (Games is null)
             {
                 Games = new();
+            }
+
+            if (Games.Any(x => x.AppId == appId))
+            {
+                return;
             }
 
             GameBlacklist gameBlacklist = new()

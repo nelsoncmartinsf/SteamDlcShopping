@@ -1,48 +1,36 @@
-﻿using SteamDlcShopping.Models;
-using SteamDlcShopping.Properties;
-using SteamDlcShopping.ViewModels;
+﻿using SteamDlcShopping.Core.Models;
+using SteamDlcShopping.Core.ViewModels;
 
-namespace SteamDlcShopping.Controllers
+namespace SteamDlcShopping.Core.Controllers
 {
     public static class SteamProfileController
     {
         private static SteamProfile? _steamProfile;
 
-        public static void Reset()
+        private static void Reset()
         {
             _steamProfile = null;
         }
 
-        public static bool IsSessionActive()
+        public static bool IsSessionActive(string sessionId, string steamLoginSecure)
         {
-            bool result = false;
-
-            if (string.IsNullOrWhiteSpace(Settings.Default.SessionId) || string.IsNullOrWhiteSpace(Settings.Default.SteamLoginSecure))
-            {
-                return result;
-            }
-
             if (_steamProfile is null)
             {
-                Login();
+                Login(steamLoginSecure);
             }
 
-            result = LibraryController.DynamicStoreIsFilled();
+            bool result = LibraryController.DynamicStoreIsFilled(sessionId, steamLoginSecure);
 
             return result;
         }
 
-        public static void Login()
+        public static void Login(string steamLoginSecure)
         {
-            _steamProfile = new();
+            _steamProfile = new(steamLoginSecure);
         }
 
         public static void Logout()
         {
-            Settings.Default.SessionId = null;
-            Settings.Default.SteamLoginSecure = null;
-            Settings.Default.Save();
-
             Reset();
             LibraryController.Reset();
             BlacklistController.Reset();
@@ -63,7 +51,7 @@ namespace SteamDlcShopping.Controllers
             return result;
         }
 
-        public static long GetSteamId()
+        internal static long GetSteamId()
         {
             long result = 0;
 

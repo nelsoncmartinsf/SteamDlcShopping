@@ -1,7 +1,7 @@
-﻿using SteamDlcShopping.Controllers;
+﻿using SteamDlcShopping.Core.Controllers;
+using SteamDlcShopping.Core.ViewModels;
 using SteamDlcShopping.Extensibility;
 using SteamDlcShopping.Properties;
-using SteamDlcShopping.ViewModels;
 using System.Diagnostics;
 using Timer = System.Threading.Timer;
 
@@ -88,7 +88,7 @@ namespace SteamDlcShopping
 
             Stopwatch timer = Stopwatch.StartNew();//DEBUG
 
-            LibraryController.LoadGamesDlc();
+            LibraryController.Calculate(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure, Settings.Default.AutoBlacklist);
 
             timer.Stop();//DEBUG
             lbldebug.Invoke(new Action(() => lbldebug.Text = $"{timer.Elapsed}"));//DEBUG
@@ -135,12 +135,16 @@ namespace SteamDlcShopping
             form.ShowDialog();
             form.Dispose();
 
-            SteamProfileController.Login();
+            SteamProfileController.Login(Settings.Default.SteamLoginSecure);
             VerifySession();
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
+            Settings.Default.SessionId = null;
+            Settings.Default.SteamLoginSecure = null;
+            Settings.Default.Save();
+
             SteamProfileController.Logout();
             VerifySession();
         }
@@ -167,7 +171,7 @@ namespace SteamDlcShopping
                 lsvGame.Items.Remove(item);
             }
 
-            BlacklistController.AddGames(appIds);
+            BlacklistController.AddGames(appIds, false);
 
             lsvGame_EnabledChanged(new(), new());
         }
@@ -223,6 +227,7 @@ namespace SteamDlcShopping
             //No selected game
             if (lsvGame.SelectedIndices.Count == 0)
             {
+                _selectedGame = 0;
                 btnBlacklist.Visible = false;
                 lsvDlc.Enabled = false;
                 return;
@@ -233,6 +238,7 @@ namespace SteamDlcShopping
             //Multiple games selected
             if (lsvGame.SelectedIndices.Count > 1)
             {
+                _selectedGame = 0;
                 lsvDlc.Enabled = false;
                 return;
             }
@@ -240,6 +246,7 @@ namespace SteamDlcShopping
             //Parse the item tag
             if (!int.TryParse(lsvGame.SelectedItems[0].Tag.ToString(), out int newGame))
             {
+                _selectedGame = 0;
                 return;
             }
 
@@ -366,7 +373,7 @@ namespace SteamDlcShopping
 
         private void VerifySession()
         {
-            if (SteamProfileController.IsSessionActive())
+            if (SteamProfileController.IsSessionActive(Settings.Default.SessionId, Settings.Default.SteamLoginSecure))
             {
                 SteamProfileView steamProfile = SteamProfileController.GetSteamProfile();
 
@@ -380,9 +387,9 @@ namespace SteamDlcShopping
             }
 
             smiFreeDlc.Enabled = default;
-            btnLogin.Visible = !SteamProfileController.IsSessionActive();
-            btnLogout.Visible = SteamProfileController.IsSessionActive();
-            btnCalculate.Enabled = SteamProfileController.IsSessionActive();
+            btnLogin.Visible = !SteamProfileController.IsSessionActive(Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
+            btnLogout.Visible = SteamProfileController.IsSessionActive(Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
+            btnCalculate.Enabled = SteamProfileController.IsSessionActive(Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
             grbLibrary.Enabled = default;
         }
 

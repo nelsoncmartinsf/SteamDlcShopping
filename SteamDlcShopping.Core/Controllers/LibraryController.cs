@@ -1,18 +1,18 @@
-﻿using SteamDlcShopping.Models;
-using SteamDlcShopping.ViewModels;
+﻿using SteamDlcShopping.Core.Models;
+using SteamDlcShopping.Core.ViewModels;
 
-namespace SteamDlcShopping.Controllers
+namespace SteamDlcShopping.Core.Controllers
 {
     public class LibraryController
     {
         private static Library? _library;
 
-        public static void Reset()
+        internal static void Reset()
         {
             _library = null;
         }
 
-        public static bool DynamicStoreIsFilled()
+        internal static bool DynamicStoreIsFilled(string sessionId, string steamLoginSecure)
         {
             if (_library is null)
             {
@@ -22,50 +22,93 @@ namespace SteamDlcShopping.Controllers
             if (_library.DynamicStore is null)
             {
                 _library.DynamicStore = new();
-                LoadDynamicStore();
+                LoadDynamicStore(sessionId, steamLoginSecure);
             }
 
             bool result = _library.DynamicStore.Any();
+
             return result;
         }
 
-        public static void LoadDynamicStore()
+        private static void LoadDynamicStore(string sessionId, string steamLoginSecure)
         {
             if (_library is null)
             {
                 return;
             }
 
-            _library.LoadDynamicStore();
+            _library.LoadDynamicStore(sessionId, steamLoginSecure);
         }
 
-        public static void LoadGamesDlc()
+        public static void Calculate(string steamApiKey, string sessionId, string steamLoginSecure, bool autoBlacklist)
         {
             if (_library is null)
             {
                 return;
             }
 
-            _library.LoadDynamicStore();
-            _library.LoadGames();
+            LoadDynamicStore(sessionId, steamLoginSecure);
+            _library.LoadGames(steamApiKey);
             BlacklistController.Load();
 
-            List<GameBlacklistView>? blacklist = BlacklistController.Get();
-            _library.ApplyBlacklist(blacklist.Select(x => x.AppId).ToList());
+            _library.ApplyBlacklist(BlacklistController.Get());
 
             _library.LoadGamesDlc();
-
-            _library.ImproveGamesList();
 
             if (_library.Games is null)
             {
                 return;
             }
 
+            List<int> gamesToRemove = new();
+
             foreach (Game game in _library.Games)
             {
-                game.CalculateDlcMetrics();
+                //Mark to remove games without dlc
+                if (game.DlcList is null || game.DlcList.Count == 0)
+                {
+                    gamesToRemove.Add(game.AppId);
+                    continue;
+                }
+
+                bool allOwned = true;
+
+                foreach (Dlc dlc in game.DlcList)
+                {
+                    //Mark dlc as owned
+                    if (_library.DynamicStore is not null && _library.DynamicStore.Contains(dlc.AppId))
+                    {
+                        dlc.MarkAsOwned();
+                        continue;
+                    }
+
+                    //Special rule to consider N/A dlc as owned
+                    //This marks games that are only missing N/A dlc as completed
+                    if (dlc.IsNotAvailable)
+                    {
+                        continue;
+                    }
+
+                    allOwned = false;
+                }
+
+                //Mark to remove games with all dlc owned
+                if (allOwned)
+                {
+                    gamesToRemove.Add(game.AppId);
+                    continue;
+                }
             }
+
+            if (autoBlacklist)
+            {
+                BlacklistController.AddGames(gamesToRemove, true);
+                BlacklistController.Save();
+            }
+
+            _library.ApplyBlacklist(gamesToRemove);
+
+            _library.Games.ForEach(x => x.CalculateDlcMetrics());
         }
 
         public static LibraryView GetGames(string? filterName = null, bool filterOnSale = false)
@@ -121,12 +164,17 @@ namespace SteamDlcShopping.Controllers
         {
             List<DlcView> result = new();
 
-            if (_library?.Games is null)
+            if (_library is null)
             {
                 return result;
             }
 
-            Game? game = _library.Games.FirstOrDefault(x => x.AppId == appId);
+            if (_library.Games is null)
+            {
+                return result;
+            }
+
+            Game game = _library.Games.First(x => x.AppId == appId);
 
             if (game is null)
             {
@@ -180,28 +228,6 @@ namespace SteamDlcShopping.Controllers
             return result;
         }
 
-        public static bool GameHasTooManyDlc(int appId)
-        {
-            if (_library is null)
-            {
-                return false;
-            }
-
-            if (_library.Games is null)
-            {
-                return false;
-            }
-
-            Game? game = _library.Games.FirstOrDefault(x => x.AppId == appId);
-
-            if (game is null)
-            {
-                return false;
-            }
-
-            return game.HasTooManyDlc;
-        }
-
         public static Dictionary<int, string> GetFreeDlc()
         {
             Dictionary<int, string> result = new();
@@ -216,7 +242,7 @@ namespace SteamDlcShopping.Controllers
                 return result;
             }
 
-            List<Game>? games = _library.Games.Where(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree)).ToList();
+            List<Game> games = _library.Games.Where(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree)).ToList();
 
             foreach (Game game in games)
             {
@@ -226,6 +252,28 @@ namespace SteamDlcShopping.Controllers
             }
 
             return result;
+        }
+
+        public static bool GameHasTooManyDlc(int appId)
+        {
+            if (_library is null)
+            {
+                return false;
+            }
+
+            if (_library.Games is null)
+            {
+                return false;
+            }
+
+            Game game = _library.Games.First(x => x.AppId == appId);
+
+            if (game is null)
+            {
+                return false;
+            }
+
+            return game.HasTooManyDlc;
         }
 
 
@@ -255,7 +303,7 @@ namespace SteamDlcShopping.Controllers
             return result;
         }
 
-        public static void ApplyBlacklist(List<int> appIds)
+        internal static void ApplyBlacklist(List<int> appIds)
         {
             if (_library is null)
             {

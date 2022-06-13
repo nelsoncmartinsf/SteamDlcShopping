@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Net;
 using System.Web;
 
-namespace SteamDlcShopping.Models
+namespace SteamDlcShopping.Core.Models
 {
     internal class Game
     {
@@ -63,7 +63,7 @@ namespace SteamDlcShopping.Models
                     HasTooManyDlc = true;
                 }
 
-                HtmlAgilityPack.HtmlDocument htmlDoc = new();
+                HtmlDocument htmlDoc = new();
                 htmlDoc.LoadHtml(response);
 
                 //The html parse failed

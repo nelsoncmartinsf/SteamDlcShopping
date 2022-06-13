@@ -37,6 +37,7 @@ namespace SteamDlcShopping
             //Controls
             txtSteamApiKey.Text = Settings.Default.SteamApiKey;
             chkAutoBlacklist.Checked = Settings.Default.AutoBlacklist;
+            chkUseMemeLoading.Checked = Settings.Default.UseMemeLoading;
 
             lblReminder.Enabled = chkAutoBlacklist.Checked;
             ddlReminder.Enabled = chkAutoBlacklist.Checked;

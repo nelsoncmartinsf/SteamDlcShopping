@@ -1,13 +1,13 @@
-﻿using SteamDlcShopping.Models;
-using SteamDlcShopping.ViewModels;
+﻿using SteamDlcShopping.Core.Models;
+using SteamDlcShopping.Core.ViewModels;
 
-namespace SteamDlcShopping.Controllers
+namespace SteamDlcShopping.Core.Controllers
 {
     public class BlacklistController
     {
         private static Blacklist? _blacklist;
 
-        public static void Reset()
+        internal static void Reset()
         {
             _blacklist = null;
         }
@@ -22,7 +22,7 @@ namespace SteamDlcShopping.Controllers
             _blacklist.Load();
         }
 
-        public static void Save()
+        internal static void Save()
         {
             if (_blacklist is null)
             {
@@ -32,9 +32,9 @@ namespace SteamDlcShopping.Controllers
             _blacklist.Save();
         }
 
-        public static List<GameBlacklistView> Get(string? filterName = null, bool _filterAutoBlacklisted = false)
+        public static List<int> Get()
         {
-            List<GameBlacklistView> result = new();
+            List<int> result = new();
 
             if (_blacklist is null)
             {
@@ -46,10 +46,29 @@ namespace SteamDlcShopping.Controllers
                 return result;
             };
 
+            _blacklist.Games.ForEach(x => result.Add(x.AppId));
+
+            return result;
+        }
+
+        public static List<GameBlacklistView> GetView(string? filterName = null, bool _filterAutoBlacklisted = false)
+        {
+            List<GameBlacklistView> result = new();
+
+            if (_blacklist is null)
+            {
+                return result;
+            }
+
+            if (_blacklist.Games is null)
+            {
+                return result;
+            }
+
             foreach (GameBlacklist game in _blacklist.Games)
             {
                 //Filter by name search
-                if (string.IsNullOrWhiteSpace(game.Name) || !game.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                if (!string.IsNullOrWhiteSpace(game.Name) && !game.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
                 {
                     continue;
                 }
@@ -73,14 +92,14 @@ namespace SteamDlcShopping.Controllers
             return result;
         }
 
-        public static void AddGames(List<int> appIds)
+        public static void AddGames(List<int> appIds, bool autoBlacklist)
         {
             if (_blacklist is null)
             {
                 return;
             }
 
-            appIds.ForEach(x => _blacklist.AddGame(x, LibraryController.GetGameName(x), false));
+            appIds.ForEach(x => _blacklist.AddGame(x, LibraryController.GetGameName(x), autoBlacklist));
             _blacklist.Save();
 
             if (_blacklist.Games is null)
