@@ -42,13 +42,7 @@ namespace SteamDlcShopping.Core.Models
                 return;
             }
 
-            GameBlacklist gameBlacklist = new()
-            {
-                AppId = appId,
-                Name = name,
-                AutoBlacklisted = autoBlacklisted
-            };
-
+            GameBlacklist gameBlacklist = new(appId, name, autoBlacklisted);
             Games.Add(gameBlacklist);
         }
 

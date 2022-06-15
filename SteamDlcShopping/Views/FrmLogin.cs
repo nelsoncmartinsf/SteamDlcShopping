@@ -23,6 +23,18 @@ namespace SteamDlcShopping
         private void webLogin_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
             webLogin.CoreWebView2.CookieManager.DeleteAllCookies();
+            webLogin.CoreWebView2.DOMContentLoaded += webLogin_CoreWebView2_DOMContentLoaded;
+        }
+
+        private void webLogin_CoreWebView2_DOMContentLoaded(object? sender, CoreWebView2DOMContentLoadedEventArgs e)
+        {
+            if (webLogin.Source.AbsoluteUri == "https://store.steampowered.com/login")
+            {
+                webLogin.ExecuteScriptAsync("document.getElementsByClassName('responsive_header')[0].remove();");
+                webLogin.ExecuteScriptAsync("document.getElementsByClassName('login_right_col')[0].remove();");
+                webLogin.ExecuteScriptAsync("document.getElementById('link_forgot_password').remove();");
+                webLogin.ExecuteScriptAsync("document.body.style.overflow = 'hidden';");
+            }
         }
 
         private async void webLogin_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)

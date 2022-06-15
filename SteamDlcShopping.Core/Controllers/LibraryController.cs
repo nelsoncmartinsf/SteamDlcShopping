@@ -19,7 +19,7 @@ namespace SteamDlcShopping.Core.Controllers
                 _library = new(SteamProfileController.GetSteamId());
             }
 
-            if (_library.DynamicStore is null)
+            if (_library.DynamicStore is null || !_library.DynamicStore.Any())
             {
                 _library.DynamicStore = new();
                 LoadDynamicStore(sessionId, steamLoginSecure);
@@ -109,6 +109,16 @@ namespace SteamDlcShopping.Core.Controllers
             _library.ApplyBlacklist(gamesToRemove);
 
             _library.Games.ForEach(x => x.CalculateDlcMetrics());
+        }
+
+        public static int GetCurrentlyLoaded()
+        {
+            if (_library is null)
+            {
+                return 0;
+            }
+
+            return _library.CurrentlyLoaded;
         }
 
         public static LibraryView GetGames(string? filterName = null, bool filterOnSale = false)
@@ -276,9 +286,7 @@ namespace SteamDlcShopping.Core.Controllers
             return game.HasTooManyDlc;
         }
 
-
-
-        public static string GetGameName(int appId)
+        internal static string GetGameName(int appId)
         {
             string result = string.Empty;
 

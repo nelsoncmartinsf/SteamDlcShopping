@@ -3,10 +3,18 @@
     internal class GameBlacklist
     {
         //Properties
-        public int AppId { get; set; }
+        internal int AppId { get; }
 
-        public string? Name { get; set; }
+        internal string? Name { get; }
 
-        public bool AutoBlacklisted { get; set; }
+        internal bool AutoBlacklisted { get; }
+
+        //Constructor
+        public GameBlacklist(int appId, string? name, bool autoBlacklisted)
+        {
+            AppId = appId;
+            Name = name;
+            AutoBlacklisted = autoBlacklisted;
+        }
     }
 }

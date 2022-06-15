@@ -17,6 +17,11 @@ namespace SteamDlcShopping.Core.Models
         //Constructor
         internal SteamProfile(string steamLoginSecure)
         {
+            if (string.IsNullOrWhiteSpace(steamLoginSecure))
+            {
+                return;
+            }
+
             HttpClient httpClient;
             string xml;
             XmlDocument xmlDocument;

@@ -1,4 +1,6 @@
-﻿using SteamDlcShopping.Properties;
+﻿using SteamDlcShopping.Core.Controllers;
+using SteamDlcShopping.Properties;
+using Timer = System.Threading.Timer;
 
 namespace SteamDlcShopping.Extensibility
 {
@@ -11,8 +13,18 @@ namespace SteamDlcShopping.Extensibility
 
         private void ucLoading_Load(object sender, EventArgs e)
         {
-            string loading = Settings.Default.UseMemeLoading ? "FlGsjNI" : "loading_large";
-            ptbLoading.ImageLocation = $"C:\\Users\\VM\\Desktop\\{loading}.gif";
+            ptbLoading.Image = Settings.Default.UseMemeLoading ? Resources.memeLoading : Resources.defaultLoading;
+            Timer tmrLoading = new(_ => tmrLoading_Tick(), null, 0, 500);
+        }
+
+        private void tmrLoading_Tick()
+        {
+            int count = LibraryController.GetCurrentlyLoaded();
+
+            Invoke(new Action(() =>
+            {
+                pgbLoading.Value = count;
+            }));
         }
     }
 }

@@ -32,7 +32,7 @@ namespace SteamDlcShopping.Core.Controllers
             _blacklist.Save();
         }
 
-        public static List<int> Get()
+        internal static List<int> Get()
         {
             List<int> result = new();
 

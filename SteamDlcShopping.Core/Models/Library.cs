@@ -4,7 +4,7 @@ using System.Net;
 
 namespace SteamDlcShopping.Core.Models
 {
-    public class Library
+    internal class Library
     {
         //Fields
         private readonly long _steamId;
@@ -15,6 +15,8 @@ namespace SteamDlcShopping.Core.Models
         internal List<Game>? Games { get; private set; }
 
         internal decimal? TotalCost => Games?.Sum(x => x.DlcTotalPrice);
+
+        public int CurrentlyLoaded { get; private set; }
 
         //Constructor
         internal Library(long steamId)
@@ -61,6 +63,7 @@ namespace SteamDlcShopping.Core.Models
             int threads = 10;
             int size = Games.Count / threads;
 
+            CurrentlyLoaded = 0;
             using CountdownEvent countdownEvent = new(Games.Count % threads == 0 ? threads : threads + 1);
 
             for (int count = 0; count * size < Games.Count; count++)
@@ -80,6 +83,7 @@ namespace SteamDlcShopping.Core.Models
                         }
 
                         Games[index.Value].LoadDlc();
+                        CurrentlyLoaded++;
                     }
 
                     countdownEvent.Signal();
