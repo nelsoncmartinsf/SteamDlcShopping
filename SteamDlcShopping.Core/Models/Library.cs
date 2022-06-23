@@ -91,6 +91,7 @@ namespace SteamDlcShopping.Core.Models
             }
 
             countdownEvent.Wait();
+            CurrentlyLoaded = 0;
         }
 
         internal void ApplyBlacklist(List<int> appIds)

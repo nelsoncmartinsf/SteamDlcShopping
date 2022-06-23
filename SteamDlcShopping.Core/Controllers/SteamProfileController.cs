@@ -7,32 +7,30 @@ namespace SteamDlcShopping.Core.Controllers
     {
         private static SteamProfile? _steamProfile;
 
-        private static void Reset()
+        public static bool IsSessionActive()
         {
-            _steamProfile = null;
-        }
+            bool result = false;
 
-        public static bool IsSessionActive(string sessionId, string steamLoginSecure)
-        {
             if (_steamProfile is null)
             {
-                Login(steamLoginSecure);
+                return result;
             }
 
-            bool result = LibraryController.DynamicStoreIsFilled(sessionId, steamLoginSecure);
+            result = LibraryController.DynamicStoreIsFilled() && LibraryController.GamesIsFilled();
 
             return result;
         }
 
-        public static void Login(string steamLoginSecure)
+        public static void Login(string steamApiKey, string sessionId, string steamLoginSecure)
         {
             _steamProfile = new(steamLoginSecure);
+            LibraryController.Login(steamApiKey, sessionId, steamLoginSecure);
         }
 
         public static void Logout()
         {
-            Reset();
-            LibraryController.Reset();
+            _steamProfile = null;
+            LibraryController.Logout();
             BlacklistController.Reset();
         }
 

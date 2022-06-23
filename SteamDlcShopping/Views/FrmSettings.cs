@@ -5,23 +5,29 @@ namespace SteamDlcShopping
 {
     public partial class FrmSettings : Form
     {
-        ErrorProvider? _erpSteamApiKey;
+        readonly ErrorProvider _erpSteamApiKey;
 
         public FrmSettings()
         {
             InitializeComponent();
+            _erpSteamApiKey = new();
         }
 
         //////////////////////////////////////// FORM ////////////////////////////////////////
 
         private void FrmSettings_Load(object sender, EventArgs e)
         {
-            //Errors
-            _erpSteamApiKey = new()
-            {
-                BlinkStyle = ErrorBlinkStyle.NeverBlink
-            };
+            //Controls
+            txtSteamApiKey.Text = Settings.Default.SteamApiKey;
+            chkAutoBlacklist.Checked = Settings.Default.AutoBlacklist;
+            chkUseMemeLoading.Checked = Settings.Default.UseMemeLoading;
 
+            lblReminder.Enabled = chkAutoBlacklist.Checked;
+            ddlReminder.Enabled = chkAutoBlacklist.Checked;
+            ddlReminder.SelectedIndex = Settings.Default.AutoBlacklistReminder;
+
+            //Errors
+            _erpSteamApiKey.BlinkStyle = ErrorBlinkStyle.NeverBlink;
             _erpSteamApiKey.SetIconAlignment(txtSteamApiKey, ErrorIconAlignment.MiddleRight);
             _erpSteamApiKey.SetIconPadding(txtSteamApiKey, 5);
 
@@ -33,22 +39,13 @@ namespace SteamDlcShopping
             ToolTip toolTip = new();
             toolTip.SetToolTip(pbtSteamApiKey, "This key is required in order to retrieve the owned games information.");
             toolTip.SetToolTip(ptbSmartLoading, "Improves loading times by automatically blacklisting games without DLC after the first time they were loaded.");
-
-            //Controls
-            txtSteamApiKey.Text = Settings.Default.SteamApiKey;
-            chkAutoBlacklist.Checked = Settings.Default.AutoBlacklist;
-            chkUseMemeLoading.Checked = Settings.Default.UseMemeLoading;
-
-            lblReminder.Enabled = chkAutoBlacklist.Checked;
-            ddlReminder.Enabled = chkAutoBlacklist.Checked;
-            ddlReminder.SelectedIndex = Settings.Default.AutoBlacklistReminder;
         }
 
         //////////////////////////////////////// STEAM API KEY ////////////////////////////////////////
 
         private void txtSteamApiKey_TextChanged(object sender, EventArgs e)
         {
-            _erpSteamApiKey?.Clear();
+            _erpSteamApiKey.Clear();
         }
 
         private void lnkGetSteamApiKey_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -81,7 +78,7 @@ namespace SteamDlcShopping
         {
             if (string.IsNullOrWhiteSpace(txtSteamApiKey.Text))
             {
-                _erpSteamApiKey?.SetError(txtSteamApiKey, "Steam API Key is required!");
+                _erpSteamApiKey.SetError(txtSteamApiKey, "Steam API Key is required!");
                 return;
             }
 

@@ -18,6 +18,7 @@ namespace SteamDlcShopping
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            SteamProfileController.Login(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
             VerifySession();
         }
 
@@ -135,7 +136,7 @@ namespace SteamDlcShopping
             form.ShowDialog();
             form.Dispose();
 
-            SteamProfileController.Login(Settings.Default.SteamLoginSecure);
+            SteamProfileController.Login(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
             VerifySession();
         }
 
@@ -373,7 +374,7 @@ namespace SteamDlcShopping
 
         private void VerifySession()
         {
-            if (SteamProfileController.IsSessionActive(Settings.Default.SessionId, Settings.Default.SteamLoginSecure))
+            if (SteamProfileController.IsSessionActive())
             {
                 SteamProfileView steamProfile = SteamProfileController.GetSteamProfile();
 
@@ -387,9 +388,9 @@ namespace SteamDlcShopping
             }
 
             smiFreeDlc.Enabled = default;
-            btnLogin.Visible = !SteamProfileController.IsSessionActive(Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
-            btnLogout.Visible = SteamProfileController.IsSessionActive(Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
-            btnCalculate.Enabled = SteamProfileController.IsSessionActive(Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
+            btnLogin.Visible = !SteamProfileController.IsSessionActive();
+            btnLogout.Visible = SteamProfileController.IsSessionActive();
+            btnCalculate.Enabled = SteamProfileController.IsSessionActive();
             grbLibrary.Enabled = default;
         }
 

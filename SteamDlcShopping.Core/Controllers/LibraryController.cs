@@ -7,37 +7,58 @@ namespace SteamDlcShopping.Core.Controllers
     {
         private static Library? _library;
 
-        internal static void Reset()
+        internal static void Login(string steamApiKey, string sessionId, string steamLoginSecure)
+        {
+            _library = new(SteamProfileController.GetSteamId());
+            _library.LoadDynamicStore(sessionId, steamLoginSecure);
+            _library.LoadGames(steamApiKey);
+
+            BlacklistController.Load();
+
+            _library.ApplyBlacklist(BlacklistController.Get());
+        }
+
+        internal static void Logout()
         {
             _library = null;
         }
 
-        internal static bool DynamicStoreIsFilled(string sessionId, string steamLoginSecure)
+        internal static bool DynamicStoreIsFilled()
         {
+            bool result = false;
+
             if (_library is null)
             {
-                _library = new(SteamProfileController.GetSteamId());
+                return result;
             }
 
-            if (_library.DynamicStore is null || !_library.DynamicStore.Any())
+            if (_library.DynamicStore is null)
             {
-                _library.DynamicStore = new();
-                LoadDynamicStore(sessionId, steamLoginSecure);
+                return result;
             }
 
-            bool result = _library.DynamicStore.Any();
+            result = _library.DynamicStore.Any();
 
             return result;
         }
 
-        private static void LoadDynamicStore(string sessionId, string steamLoginSecure)
+        internal static bool GamesIsFilled()
         {
+            bool result = false;
+
             if (_library is null)
             {
-                return;
+                return result;
             }
 
-            _library.LoadDynamicStore(sessionId, steamLoginSecure);
+            if (_library.Games is null)
+            {
+                return result;
+            }
+
+            result = _library.Games.Any();
+
+            return result;
         }
 
         public static void Calculate(string steamApiKey, string sessionId, string steamLoginSecure, bool autoBlacklist)
@@ -47,7 +68,7 @@ namespace SteamDlcShopping.Core.Controllers
                 return;
             }
 
-            LoadDynamicStore(sessionId, steamLoginSecure);
+            _library.LoadDynamicStore(sessionId, steamLoginSecure);
             _library.LoadGames(steamApiKey);
             BlacklistController.Load();
 
@@ -307,6 +328,25 @@ namespace SteamDlcShopping.Core.Controllers
 
             Game game = _library.Games.First(x => x.AppId == appId);
             result = game.Name ?? result;
+
+            return result;
+        }
+
+        public static int GetLibrarySize()
+        {
+            int result = 0;
+
+            if (_library is null)
+            {
+                return result;
+            }
+
+            if (_library.Games is null)
+            {
+                return result;
+            }
+
+            result = _library.Games.Count;
 
             return result;
         }

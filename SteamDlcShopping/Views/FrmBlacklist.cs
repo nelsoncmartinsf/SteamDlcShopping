@@ -8,8 +8,7 @@ namespace SteamDlcShopping
         public FrmBlacklist()
         {
             InitializeComponent();
-
-            _filterName = string.Empty;
+            _blacklist = new();
         }
 
         //////////////////////////////////////// FORM ////////////////////////////////////////
@@ -18,18 +17,23 @@ namespace SteamDlcShopping
         {
             lsbBlacklist.DisplayMember = "Name";
 
-            LoadBlacklistToListbox();
+            LoadBlacklist();
+            LoadListbox();
+            SetupFields();
         }
 
         //////////////////////////////////////// LISTBOX ////////////////////////////////////////
 
-        public List<GameBlacklistView>? _blacklist;
+        public List<GameBlacklistView> _blacklist;
 
-        private void LoadBlacklistToListbox()
+        private void LoadBlacklist()
         {
             BlacklistController.Load();
-            _blacklist = BlacklistController.GetView(_filterName, _filterAutoBlacklisted);
+            _blacklist = BlacklistController.GetView(txtBlacklistSearch.Text, chkHideAutoBlacklistedGames.Checked);
+        }
 
+        private void LoadListbox()
+        {
             lsbBlacklist.Items.Clear();
 
             lsbBlacklist.BeginUpdate();
@@ -40,90 +44,79 @@ namespace SteamDlcShopping
             }
 
             lsbBlacklist.EndUpdate();
+        }
 
-            //Fill in metric fields
-            lblGameCount.Text = lsbBlacklist.Items.Count > 0 ? $"Count: {lsbBlacklist.Items.Count}" : null;
-
+        private void SetupFields()
+        {
+            lblGameCount.Text = _blacklist.Count > 0 ? $"Count: {_blacklist.Count}" : null;
             btnRemove.Enabled = false;
             btnClearAutoBlacklisted.Enabled = _blacklist.Any(x => x.AutoBlacklisted);
         }
 
         private void lsbBlacklist_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //No selected game
-            if (lsbBlacklist.SelectedIndices.Count == 0)
-            {
-                btnRemove.Enabled = false;
-                return;
-            }
-
-            btnRemove.Enabled = true;
+            btnRemove.Enabled = lsbBlacklist.SelectedIndices.Count > 0;
         }
 
         //////////////////////////////////////// FILTERS ////////////////////////////////////////
 
-        private string _filterName;
-        private bool _filterAutoBlacklisted;
-
         private void txtBlacklistSearch_TextChanged(object sender, EventArgs e)
         {
-            _filterName = txtBlacklistSearch.Text;
-
-            LoadBlacklistToListbox();
+            LoadBlacklist();
+            LoadListbox();
+            SetupFields();
         }
 
         private void chkHideAutoBlacklistedGames_CheckedChanged(object sender, EventArgs e)
         {
-            _filterAutoBlacklisted = chkHideAutoBlacklistedGames.Checked;
-
-            LoadBlacklistToListbox();
+            LoadBlacklist();
+            LoadListbox();
+            SetupFields();
         }
 
         //////////////////////////////////////// BUTTONS ////////////////////////////////////////
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            List<int> _unblacklist = new();
+            List<int> unblacklist = new();
 
-            for (int index = lsbBlacklist.SelectedItems.Count - 1; index >= 0; index--)
+            foreach (object item in lsbBlacklist.SelectedItems)
             {
-                GameBlacklistView game = (GameBlacklistView)lsbBlacklist.SelectedItems[index];
-
-                _unblacklist.Add(game.AppId);
+                GameBlacklistView game = (GameBlacklistView)item;
+                unblacklist.Add(game.AppId);
             }
 
-            if (_unblacklist.Any())
+            if (unblacklist.Any())
             {
-                BlacklistController.RemoveGames(_unblacklist);
-                LoadBlacklistToListbox();
+                BlacklistController.RemoveGames(unblacklist);
+
+                LoadBlacklist();
+                LoadListbox();
+                SetupFields();
             }
         }
 
         private void btnClearAutoBlacklisted_Click(object sender, EventArgs e)
         {
-            List<int> _unblacklist = new();
+            List<int> unblacklist = new();
 
-            if (_blacklist is null)
+            foreach (GameBlacklistView game in _blacklist)
             {
-                return;
-            }
-
-            for (int index = _blacklist.Count - 1; index >= 0; index--)
-            {
-                GameBlacklistView game = _blacklist[index];
-
                 if (!game.AutoBlacklisted)
                 {
                     continue;
                 }
 
-                _unblacklist.Add(game.AppId);
+                unblacklist.Add(game.AppId);
             }
 
-            if (_unblacklist.Any())
+            if (unblacklist.Any())
             {
-                BlacklistController.RemoveGames(_unblacklist);
-                LoadBlacklistToListbox();
+                BlacklistController.RemoveGames(unblacklist);
+
+                LoadBlacklist();
+                LoadListbox();
+                SetupFields();
             }
         }
     }

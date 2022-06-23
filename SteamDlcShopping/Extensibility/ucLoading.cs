@@ -13,17 +13,16 @@ namespace SteamDlcShopping.Extensibility
 
         private void ucLoading_Load(object sender, EventArgs e)
         {
+            pgbLoading.Maximum = LibraryController.GetLibrarySize();
             ptbLoading.Image = Settings.Default.UseMemeLoading ? Resources.memeLoading : Resources.defaultLoading;
             Timer tmrLoading = new(_ => tmrLoading_Tick(), null, 0, 500);
         }
 
         private void tmrLoading_Tick()
         {
-            int count = LibraryController.GetCurrentlyLoaded();
-
             Invoke(new Action(() =>
             {
-                pgbLoading.Value = count;
+                pgbLoading.Value = LibraryController.GetCurrentlyLoaded();
             }));
         }
     }
