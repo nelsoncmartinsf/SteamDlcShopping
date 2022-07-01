@@ -9,13 +9,20 @@ namespace SteamDlcShopping.Core.Controllers
 
         internal static void Login(string steamApiKey, string sessionId, string steamLoginSecure)
         {
-            _library = new(SteamProfileController.GetSteamId());
-            _library.LoadDynamicStore(sessionId, steamLoginSecure);
-            _library.LoadGames(steamApiKey);
+            try
+            {
+                _library = new(SteamProfileController.GetSteamId());
+                _library.LoadDynamicStore(sessionId, steamLoginSecure);
+                _library.LoadGames(steamApiKey);
 
-            BlacklistController.Load();
+                BlacklistController.Load();
 
-            _library.ApplyBlacklist(BlacklistController.Get());
+                _library.ApplyBlacklist(BlacklistController.Get());
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
         }
 
         internal static void Logout()
@@ -37,7 +44,14 @@ namespace SteamDlcShopping.Core.Controllers
                 return result;
             }
 
-            result = _library.DynamicStore.Any();
+            try
+            {
+                result = _library.DynamicStore.Any();
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
 
             return result;
         }
@@ -56,7 +70,14 @@ namespace SteamDlcShopping.Core.Controllers
                 return result;
             }
 
-            result = _library.Games.Any();
+            try
+            {
+                result = _library.Games.Any();
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
 
             return result;
         }
@@ -68,78 +89,75 @@ namespace SteamDlcShopping.Core.Controllers
                 return;
             }
 
-            _library.LoadDynamicStore(sessionId, steamLoginSecure);
-            _library.LoadGames(steamApiKey);
-            BlacklistController.Load();
-
-            _library.ApplyBlacklist(BlacklistController.Get());
-
-            _library.LoadGamesDlc();
-
-            if (_library.Games is null)
+            try
             {
-                return;
-            }
+                _library.LoadDynamicStore(sessionId, steamLoginSecure);
+                _library.LoadGames(steamApiKey);
+                BlacklistController.Load();
 
-            List<int> gamesToRemove = new();
+                _library.ApplyBlacklist(BlacklistController.Get());
 
-            foreach (Game game in _library.Games)
-            {
-                //Mark to remove games without dlc
-                if (game.DlcList is null || game.DlcList.Count == 0)
+                _library.LoadGamesDlc();
+
+                if (_library.Games is null)
                 {
-                    gamesToRemove.Add(game.AppId);
-                    continue;
+                    return;
                 }
 
-                bool allOwned = true;
+                List<int> gamesToRemove = new();
 
-                foreach (Dlc dlc in game.DlcList)
+                foreach (Game game in _library.Games)
                 {
-                    //Mark dlc as owned
-                    if (_library.DynamicStore is not null && _library.DynamicStore.Contains(dlc.AppId))
+                    //Mark to remove games without dlc
+                    if (game.DlcList is null || game.DlcList.Count == 0)
                     {
-                        dlc.MarkAsOwned();
+                        gamesToRemove.Add(game.AppId);
                         continue;
                     }
 
-                    //Special rule to consider N/A dlc as owned
-                    //This marks games that are only missing N/A dlc as completed
-                    if (dlc.IsNotAvailable)
+                    bool allOwned = true;
+
+                    foreach (Dlc dlc in game.DlcList)
                     {
-                        continue;
+                        //Mark dlc as owned
+                        if (_library.DynamicStore is not null && _library.DynamicStore.Contains(dlc.AppId))
+                        {
+                            dlc.MarkAsOwned();
+                            continue;
+                        }
+
+                        //Special rule to consider N/A dlc as owned
+                        //This marks games that are only missing N/A dlc as completed
+                        if (dlc.IsNotAvailable)
+                        {
+                            continue;
+                        }
+
+                        allOwned = false;
                     }
 
-                    allOwned = false;
+                    //Mark to remove games with all dlc owned
+                    if (allOwned)
+                    {
+                        gamesToRemove.Add(game.AppId);
+                        continue;
+                    }
                 }
 
-                //Mark to remove games with all dlc owned
-                if (allOwned)
+                if (autoBlacklist)
                 {
-                    gamesToRemove.Add(game.AppId);
-                    continue;
+                    BlacklistController.AddGames(gamesToRemove, true);
+                    BlacklistController.Save();
                 }
-            }
 
-            if (autoBlacklist)
+                _library.ApplyBlacklist(gamesToRemove);
+
+                _library.Games.ForEach(x => x.CalculateDlcMetrics());
+            }
+            catch (Exception exception)
             {
-                BlacklistController.AddGames(gamesToRemove, true);
-                BlacklistController.Save();
+                Log.Fatal(exception);
             }
-
-            _library.ApplyBlacklist(gamesToRemove);
-
-            _library.Games.ForEach(x => x.CalculateDlcMetrics());
-        }
-
-        public static int GetCurrentlyLoaded()
-        {
-            if (_library is null)
-            {
-                return 0;
-            }
-
-            return _library.CurrentlyLoaded;
         }
 
         public static LibraryView GetGames(string? filterName = null, bool filterOnSale = false)
@@ -159,33 +177,40 @@ namespace SteamDlcShopping.Core.Controllers
                 return result;
             }
 
-            foreach (Game game in _library.Games)
+            try
             {
-                //Filter by name search
-                if (!string.IsNullOrWhiteSpace(game.Name) && !game.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                foreach (Game game in _library.Games)
                 {
-                    continue;
+                    //Filter by name search
+                    if (!string.IsNullOrWhiteSpace(game.Name) && !game.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    //Filter by games on sale
+                    if (filterOnSale && game.DlcHighestPercentage == 0)
+                    {
+                        continue;
+                    }
+
+                    GameView gameDto = new()
+                    {
+                        AppId = game.AppId,
+                        Name = game.Name,
+                        DlcTotalPrice = $"{game.DlcTotalPrice}€",
+                        DlcLeft = game.DlcLeft,
+                        DlcLowestPercentage = game.DlcLowestPercentage > 0 ? $"{game.DlcLowestPercentage}%" : null,
+                        DlcHighestPercentage = game.DlcHighestPercentage > 0 ? $"{game.DlcHighestPercentage}%" : null
+                    };
+
+                    result.TotalCost += game.DlcTotalPrice ?? 0m;
+
+                    result.Games.Add(gameDto);
                 }
-
-                //Filter by games on sale
-                if (filterOnSale && game.DlcHighestPercentage == 0)
-                {
-                    continue;
-                }
-
-                GameView gameDto = new()
-                {
-                    AppId = game.AppId,
-                    Name = game.Name,
-                    DlcTotalPrice = $"{game.DlcTotalPrice}€",
-                    DlcLeft = game.DlcLeft,
-                    DlcLowestPercentage = game.DlcLowestPercentage > 0 ? $"{game.DlcLowestPercentage}%" : null,
-                    DlcHighestPercentage = game.DlcHighestPercentage > 0 ? $"{game.DlcHighestPercentage}%" : null
-                };
-
-                result.TotalCost += game.DlcTotalPrice ?? 0m;
-
-                result.Games.Add(gameDto);
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
             }
 
             return result;
@@ -205,55 +230,88 @@ namespace SteamDlcShopping.Core.Controllers
                 return result;
             }
 
-            Game game = _library.Games.First(x => x.AppId == appId);
+            try
+            {
+                Game game = _library.Games.First(x => x.AppId == appId);
 
-            if (game is null)
+                if (game is null)
+                {
+                    return result;
+                }
+
+                foreach (Dlc dlc in game.DlcList)
+                {
+                    //Filter by name search
+                    if (!string.IsNullOrWhiteSpace(dlc.Name) && !dlc.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    //Filter by owned dlc
+                    if (filterOwned && dlc.IsOwned)
+                    {
+                        continue;
+                    }
+
+                    string price;
+
+                    if (dlc.IsFree)
+                    {
+                        price = "Free";
+                    }
+                    else
+                    {
+                        if (dlc.IsNotAvailable)
+                        {
+                            price = "N/A";
+                        }
+                        else
+                        {
+                            price = $"{(dlc.Sale is not null ? dlc.Sale?.Price : dlc.Price)}€";
+                        }
+                    }
+
+                    DlcView dlcDto = new()
+                    {
+                        AppId = dlc.AppId,
+                        Name = dlc.Name,
+                        Price = price,
+                        Discount = dlc.Sale is not null ? $"{dlc.Sale?.Percentage}%" : null,
+                        IsOwned = dlc.IsOwned
+                    };
+
+                    result.Add(dlcDto);
+                }
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
+
+            return result;
+        }
+
+        public static bool FreeDlcExist()
+        {
+            bool result = false;
+
+            if (_library is null)
             {
                 return result;
             }
 
-            foreach (Dlc dlc in game.DlcList)
+            if (_library.Games is null)
             {
-                //Filter by name search
-                if (!string.IsNullOrWhiteSpace(dlc.Name) && !dlc.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    continue;
-                }
+                return result;
+            }
 
-                //Filter by owned dlc
-                if (filterOwned && dlc.IsOwned)
-                {
-                    continue;
-                }
-
-                string price;
-
-                if (dlc.IsFree)
-                {
-                    price = "Free";
-                }
-                else
-                {
-                    if (dlc.IsNotAvailable)
-                    {
-                        price = "N/A";
-                    }
-                    else
-                    {
-                        price = $"{(dlc.Sale is not null ? dlc.Sale?.Price : dlc.Price)}€";
-                    }
-                }
-
-                DlcView dlcDto = new()
-                {
-                    AppId = dlc.AppId,
-                    Name = dlc.Name,
-                    Price = price,
-                    Discount = dlc.Sale is not null ? $"{dlc.Sale?.Percentage}%" : null,
-                    IsOwned = dlc.IsOwned
-                };
-
-                result.Add(dlcDto);
+            try
+            {
+                result = _library.Games.Any(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree));
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
             }
 
             return result;
@@ -273,13 +331,20 @@ namespace SteamDlcShopping.Core.Controllers
                 return result;
             }
 
-            List<Game> games = _library.Games.Where(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree)).ToList();
-
-            foreach (Game game in games)
+            try
             {
-                List<Dlc> dlcList = game.DlcList.Where(x => !x.IsOwned && x.IsFree).ToList();
+                List<Game> games = _library.Games.Where(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree)).ToList();
 
-                dlcList.ForEach(x => result.Add(x.AppId, $"{game.Name} - {x.Name}"));
+                foreach (Game game in games)
+                {
+                    List<Dlc> dlcList = game.DlcList.Where(x => !x.IsOwned && x.IsFree).ToList();
+
+                    dlcList.ForEach(x => result.Add(x.AppId, $"{game.Name} - {x.Name}"));
+                }
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
             }
 
             return result;
@@ -287,24 +352,35 @@ namespace SteamDlcShopping.Core.Controllers
 
         public static bool GameHasTooManyDlc(int appId)
         {
+            bool result = false;
+
             if (_library is null)
             {
-                return false;
+                return result;
             }
 
             if (_library.Games is null)
             {
-                return false;
+                return result;
             }
 
-            Game game = _library.Games.First(x => x.AppId == appId);
-
-            if (game is null)
+            try
             {
-                return false;
+                Game game = _library.Games.First(x => x.AppId == appId);
+
+                if (game is null)
+                {
+                    return result;
+                }
+
+                result = game.HasTooManyDlc;
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
             }
 
-            return game.HasTooManyDlc;
+            return result;
         }
 
         internal static string GetGameName(int appId)
@@ -326,8 +402,15 @@ namespace SteamDlcShopping.Core.Controllers
                 return result;
             }
 
-            Game game = _library.Games.First(x => x.AppId == appId);
-            result = game.Name ?? result;
+            try
+            {
+                Game game = _library.Games.First(x => x.AppId == appId);
+                result = game.Name ?? result;
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
 
             return result;
         }
@@ -346,7 +429,14 @@ namespace SteamDlcShopping.Core.Controllers
                 return result;
             }
 
-            result = _library.Games.Count;
+            try
+            {
+                result = _library.Games.Count;
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
 
             return result;
         }
@@ -358,7 +448,14 @@ namespace SteamDlcShopping.Core.Controllers
                 return;
             }
 
-            _library.ApplyBlacklist(appIds);
+            try
+            {
+                _library.ApplyBlacklist(appIds);
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
         }
     }
 }

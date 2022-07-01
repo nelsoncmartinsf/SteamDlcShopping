@@ -16,8 +16,6 @@ namespace SteamDlcShopping.Core.Models
 
         internal decimal? TotalCost => Games?.Sum(x => x.DlcTotalPrice);
 
-        public int CurrentlyLoaded { get; private set; }
-
         //Constructor
         internal Library(long steamId)
         {
@@ -45,9 +43,16 @@ namespace SteamDlcShopping.Core.Models
         internal void LoadGames(string steamApiKey)
         {
             HttpClient httpClient = new();
-            string response = httpClient.GetStringAsync($"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={steamApiKey}&steamid={_steamId}&include_appinfo=true").Result;
 
-            JObject jObject = JObject.Parse(response);
+            Task<string> response = httpClient.GetStringAsync($"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={steamApiKey}&steamid={_steamId}&include_appinfo=true");
+            response.Wait();
+
+            if (!response.IsCompletedSuccessfully)
+            {
+                return;
+            }
+
+            JObject jObject = JObject.Parse(response.Result);
 
             Games = JsonConvert.DeserializeObject<List<Game>>($"{jObject["response"]?["games"]}");
         }
@@ -63,7 +68,6 @@ namespace SteamDlcShopping.Core.Models
             int threads = 10;
             int size = Games.Count / threads;
 
-            CurrentlyLoaded = 0;
             using CountdownEvent countdownEvent = new(Games.Count % threads == 0 ? threads : threads + 1);
 
             for (int count = 0; count * size < Games.Count; count++)
@@ -83,7 +87,6 @@ namespace SteamDlcShopping.Core.Models
                         }
 
                         Games[index.Value].LoadDlc();
-                        CurrentlyLoaded++;
                     }
 
                     countdownEvent.Signal();
@@ -91,7 +94,6 @@ namespace SteamDlcShopping.Core.Models
             }
 
             countdownEvent.Wait();
-            CurrentlyLoaded = 0;
         }
 
         internal void ApplyBlacklist(List<int> appIds)

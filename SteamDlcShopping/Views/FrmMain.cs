@@ -18,52 +18,24 @@ namespace SteamDlcShopping
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            SteamProfileController.Login(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
-            VerifySession();
+            ucLoad ucLoad = new()
+            {
+                Name = "ucLoad",
+                Location = new Point(0, 0)
+            };
+
+            Controls.Add(ucLoad);
+            ucLoad.BringToFront();
         }
 
         private void FrmMain_Shown(object sender, EventArgs e)
         {
-            if (!Settings.Default.AutoBlacklist)
-            {
-                return;
-            }
+            SteamProfileController.Login(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
+            SetControlsState();
 
-            string timePeriod = string.Empty;
-            DateTime reminderDate = new();
+            Controls["ucLoad"].Visible = false;
 
-            switch (Settings.Default.AutoBlacklistReminder)
-            {
-                case 0:
-                    timePeriod = "week";
-                    reminderDate = Settings.Default.AutoBlacklistLastReminder.AddDays(7);
-                    break;
-                case 1:
-                    timePeriod = "month";
-                    reminderDate = Settings.Default.AutoBlacklistLastReminder.AddMonths(1);
-                    break;
-                case 2:
-                    timePeriod = "year";
-                    reminderDate = Settings.Default.AutoBlacklistLastReminder.AddYears(1);
-                    break;
-            }
-
-            if (DateTime.Today.Date < reminderDate.Date)
-            {
-                return;
-            }
-
-            string title = "Auto Blacklist Reminder";
-            string message = $"It has been a new {timePeriod} since the last time the auto blacklist was cleared. Is it okay to clear it now?";
-
-            DialogResult result = MessageBox.Show(message, title, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-
-            if (result != DialogResult.OK)
-            {
-                return;
-            }
-
-            BlacklistController.ClearAutoBlacklist();
+            AutoBlacklistReminder();
         }
 
         private void tmrLibrary_Tick()
@@ -72,19 +44,18 @@ namespace SteamDlcShopping
             {
                 smiSettings.Enabled = false;
                 smiBlacklist.Enabled = false;
-                btnLogout.Visible = false;
+                smiFreeDlc.Enabled = false;
+                btnLogout.Enabled = false;
                 btnCalculate.Enabled = false;
-                lsvDlc.Enabled = false;
-                grbLibrary.Enabled = false;
 
-                ucLoading ucLoading = new()
+                ucCalculate ucCalculate = new()
                 {
-                    Name = "ucLoading",
+                    Name = "ucCalculate",
                     Location = grbLibrary.Location
                 };
 
-                Controls.Add(ucLoading);
-                ucLoading.BringToFront();
+                Controls.Add(ucCalculate);
+                ucCalculate.BringToFront();
             }));
 
             Stopwatch timer = Stopwatch.StartNew();//DEBUG
@@ -96,12 +67,14 @@ namespace SteamDlcShopping
 
             Invoke(new Action(() =>
             {
+                LoadGames();
+
                 smiSettings.Enabled = true;
-                smiBlacklist.Enabled = true;
-                btnLogout.Visible = true;
+                smiBlacklist.Enabled = BlacklistController.HasGames();
+                smiFreeDlc.Enabled = LibraryController.FreeDlcExist();
+                btnLogout.Enabled = true;
                 btnCalculate.Enabled = true;
-                grbLibrary.Enabled = true;
-                Controls["ucLoading"].Dispose();
+                Controls["ucCalculate"].Dispose();
             }));
         }
 
@@ -136,18 +109,25 @@ namespace SteamDlcShopping
             form.ShowDialog();
             form.Dispose();
 
+            Controls["ucLoad"].Visible = true;
+
             SteamProfileController.Login(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
-            VerifySession();
+            SetControlsState();
+
+            Controls["ucLoad"].Visible = false;
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
+            UnloadGames();
+            UnloadDlc();
+
             Settings.Default.SessionId = null;
             Settings.Default.SteamLoginSecure = null;
             Settings.Default.Save();
 
             SteamProfileController.Logout();
-            VerifySession();
+            SetControlsState();
         }
 
         private void btnCalculate_Click(object sender, EventArgs e)
@@ -168,13 +148,12 @@ namespace SteamDlcShopping
                 }
 
                 appIds.Add(appId);
-
-                lsvGame.Items.Remove(item);
             }
 
             BlacklistController.AddGames(appIds, false);
 
-            lsvGame_EnabledChanged(new(), new());
+            LoadGames();
+            UnloadDlc();
         }
 
         //////////////////////////////////////// GAME LIST ////////////////////////////////////////
@@ -182,10 +161,46 @@ namespace SteamDlcShopping
         private ColumnSorter? _gameColumnSorter;
         private int _selectedGame;
 
-        private void LoadGameToListview(List<GameView> games)
+        private void LoadGames()
+        {
+            LibraryView library = LibraryController.GetGames(txtGameSearch.Text, chkHideGamesNotOnSale.Checked);
+
+            if (library.Games is null)
+            {
+                return;
+            }
+
+            lsvGame_Load(library.Games);
+
+            lsvGame.Enabled = true;
+
+            txtGameSearch.Enabled = true;
+
+            chkHideGamesNotOnSale.Enabled = true;
+
+            lblGameCount.Text = $"Count: {lsvGame.Items.Count}";
+            lblLibraryCost.Text = $"Cost: {library.TotalCost}€";
+            btnBlacklist.Visible = false;
+        }
+
+        private void UnloadGames()
+        {
+            lsvGame.Unload();
+            lsvGame.Enabled = false;
+
+            txtGameSearch.Enabled = false;
+            txtGameSearch.Text = null;
+
+            chkHideGamesNotOnSale.Enabled = false;
+
+            lblGameCount.Text = null;
+            lblLibraryCost.Text = null;
+            btnBlacklist.Visible = false;
+        }
+
+        private void lsvGame_Load(List<GameView> games)
         {
             lsvGame.Items.Clear();
-            lsvGame.ListViewItemSorter = null;
 
             lsvGame.BeginUpdate();
 
@@ -219,8 +234,11 @@ namespace SteamDlcShopping
 
             lsvGame.EndUpdate();
 
-            _gameColumnSorter = new();
-            lsvGame.ListViewItemSorter = _gameColumnSorter;
+            if (lsvGame.ListViewItemSorter is null)
+            {
+                _gameColumnSorter = new();
+                lsvGame.ListViewItemSorter = _gameColumnSorter;
+            }
         }
 
         private void lsvGame_SelectedIndexChanged(object sender, EventArgs e)
@@ -230,7 +248,7 @@ namespace SteamDlcShopping
             {
                 _selectedGame = 0;
                 btnBlacklist.Visible = false;
-                lsvDlc.Enabled = false;
+                UnloadDlc();
                 return;
             }
 
@@ -240,7 +258,7 @@ namespace SteamDlcShopping
             if (lsvGame.SelectedIndices.Count > 1)
             {
                 _selectedGame = 0;
-                lsvDlc.Enabled = false;
+                UnloadDlc();
                 return;
             }
 
@@ -258,8 +276,7 @@ namespace SteamDlcShopping
             }
 
             _selectedGame = newGame;
-            lsvDlc.Enabled = false;
-            lsvDlc.Enabled = true;
+            LoadDlc();
         }
 
         private void lsvGame_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -281,7 +298,45 @@ namespace SteamDlcShopping
 
         private ColumnSorter? _dlcColumnSorter;
 
-        private void LoadDlcToListview(List<DlcView> dlcs)
+        private void LoadDlc()
+        {
+            List<DlcView> dlcList = LibraryController.GetDlc(_selectedGame, txtDlcSearch.Text, chkHideOwnedDlc.Checked);
+
+            lsvDlc_Load(dlcList);
+            lsvDlc.Sort();
+
+            lsvDlc.Enabled = true;
+
+            txtDlcSearch.Enabled = true;
+
+            chkHideOwnedDlc.Enabled = true;
+
+            lblDlcCount.Text = $"Count: {lsvDlc.Items.Count}";
+
+            if (LibraryController.GameHasTooManyDlc(_selectedGame))
+            {
+                lblTooManyDlc.Visible = true;
+                lnkTooManyDlc.Visible = true;
+            }
+        }
+
+        private void UnloadDlc()
+        {
+            lsvDlc.Unload();
+            lsvDlc.Enabled = false;
+
+            txtDlcSearch.Enabled = false;
+            txtDlcSearch.Text = null;
+
+            chkHideOwnedDlc.Enabled = false;
+
+            lblDlcCount.Text = null;
+
+            lblTooManyDlc.Visible = false;
+            lnkTooManyDlc.Visible = false;
+        }
+
+        private void lsvDlc_Load(List<DlcView> dlcs)
         {
             lsvDlc.Items.Clear();
 
@@ -336,144 +391,28 @@ namespace SteamDlcShopping
 
         //////////////////////////////////////// GAME FILTERS ////////////////////////////////////////
 
-        private string? _filterGame;
-        private bool _filterOnSale;
-
         private void txtLibrarySearch_TextChanged(object sender, EventArgs e)
         {
-            _filterGame = txtGameSearch.Text;
-            lsvGame_EnabledChanged(new(), new());
-            lsvDlc.Enabled = false;
+            LoadGames();
+            UnloadDlc();
         }
 
         private void chkHideGamesNotOnSale_CheckedChanged(object sender, EventArgs e)
         {
-            _filterOnSale = chkHideGamesNotOnSale.Checked;
-            lsvGame_EnabledChanged(new(), new());
-            lsvDlc.Enabled = false;
+            LoadGames();
+            UnloadDlc();
         }
 
         //////////////////////////////////////// DLC FILTERS ////////////////////////////////////////
 
-        private string? _filterDlc;
-        private bool _filterOwned;
-
         private void txtDlcSearch_TextChanged(object sender, EventArgs e)
         {
-            _filterDlc = txtDlcSearch.Text;
-            lsvDlc_EnabledChanged(new(), new());
+            LoadDlc();
         }
 
         private void chkHideOwnedDlc_CheckedChanged(object sender, EventArgs e)
         {
-            _filterOwned = chkHideOwnedDlc.Checked;
-            lsvDlc_EnabledChanged(new(), new());
-        }
-
-        //////////////////////////////////////// CONTROL STATES ////////////////////////////////////////
-
-        private void VerifySession()
-        {
-            if (SteamProfileController.IsSessionActive())
-            {
-                SteamProfileView steamProfile = SteamProfileController.GetSteamProfile();
-
-                ptbAvatar.LoadAsync(steamProfile.AvatarUrl);
-                lblUsername.Text = steamProfile.Username;
-            }
-            else
-            {
-                ptbAvatar.Image = ptbAvatar.InitialImage;
-                lblUsername.Text = null;
-            }
-
-            smiFreeDlc.Enabled = default;
-            btnLogin.Visible = !SteamProfileController.IsSessionActive();
-            btnLogout.Visible = SteamProfileController.IsSessionActive();
-            btnCalculate.Enabled = SteamProfileController.IsSessionActive();
-            grbLibrary.Enabled = default;
-        }
-
-        private void grbLibrary_EnabledChanged(object sender, EventArgs e)
-        {
-            smiFreeDlc.Enabled = grbLibrary.Enabled;
-            txtGameSearch.Text = default;
-            chkHideGamesNotOnSale.Checked = default;
-            txtDlcSearch.Text = default;
-            chkHideOwnedDlc.Checked = default;
-        }
-
-        private void lsvGame_EnabledChanged(object sender, EventArgs e)
-        {
-            LibraryView library = new();
-
-            if (lsvGame.Enabled)
-            {
-                library = LibraryController.GetGames(_filterGame, _filterOnSale);
-
-                if (library.Games is null)
-                {
-                    return;
-                }
-
-                LoadGameToListview(library.Games);
-            }
-            else
-            {
-                lsvGame.Items.Clear();
-
-                foreach (ColumnHeader column in lsvGame.Columns)
-                {
-                    if (!int.TryParse(column.Tag?.ToString(), out int length))
-                    {
-                        continue;
-                    }
-
-                    column.Text = column.Text[..length];
-                }
-            }
-
-            lblGameCount.Text = lsvGame.Enabled ? $"Count: {lsvGame.Items.Count}" : default;
-            lblLibraryCost.Text = lsvGame.Enabled ? $"Cost: {library.TotalCost}€" : default;
-            btnBlacklist.Visible = default;
-        }
-
-        private void lsvDlc_EnabledChanged(object sender, EventArgs e)
-        {
-            if (lsvDlc.Enabled)
-            {
-                List<DlcView> dlcList = LibraryController.GetDlc(_selectedGame, _filterDlc, _filterOwned);
-                LoadDlcToListview(dlcList);
-
-                if (LibraryController.GameHasTooManyDlc(_selectedGame))
-                {
-                    lblTooManyDlc.Visible = true;
-                    lnkTooManyDlc.Visible = true;
-                }
-            }
-            else
-            {
-                lsvDlc.Items.Clear();
-                lblTooManyDlc.Visible = false;
-                lnkTooManyDlc.Visible = false;
-
-                foreach (ColumnHeader column in lsvDlc.Columns)
-                {
-                    if (!int.TryParse(column.Tag?.ToString(), out int length))
-                    {
-                        continue;
-                    }
-
-                    column.Text = column.Text[..length];
-                }
-            }
-
-            txtDlcSearch.Enabled = lsvDlc.Enabled;
-            chkHideOwnedDlc.Enabled = lsvDlc.Enabled;
-
-            txtDlcSearch.Text = lsvDlc.Enabled ? txtDlcSearch.Text : default;
-            chkHideOwnedDlc.Checked = lsvDlc.Enabled && chkHideOwnedDlc.Checked;
-            lblDlcCount.Text = lsvDlc.Enabled ? $"Count: {lsvDlc.Items.Count}" : default;
+            LoadDlc();
         }
 
         //////////////////////////////////////// METHODS ////////////////////////////////////////
@@ -519,6 +458,33 @@ namespace SteamDlcShopping
             listView.Sort();
         }
 
+        private void SetControlsState()
+        {
+            bool session = SteamProfileController.IsSessionActive();
+
+            if (session)
+            {
+                SteamProfileView steamProfile = SteamProfileController.GetSteamProfile();
+
+                ptbAvatar.LoadAsync(steamProfile.AvatarUrl);
+                lblUsername.Text = steamProfile.Username;
+            }
+            else
+            {
+                ptbAvatar.Image = ptbAvatar.InitialImage;
+                lblUsername.Text = null;
+            }
+
+            smiBlacklist.Enabled = BlacklistController.HasGames();
+            smiFreeDlc.Enabled = false;
+            btnLogin.Visible = !session;
+            btnLogout.Visible = session;
+            btnCalculate.Enabled = session;
+
+            UnloadGames();
+            UnloadDlc();
+        }
+
         private static void ClickLink(string url)
         {
             Process process = new()
@@ -533,6 +499,50 @@ namespace SteamDlcShopping
             };
 
             process.Start();
+        }
+
+        private static void AutoBlacklistReminder()
+        {
+            if (!Settings.Default.AutoBlacklist)
+            {
+                return;
+            }
+
+            string timePeriod = string.Empty;
+            DateTime reminderDate = new();
+
+            switch (Settings.Default.AutoBlacklistReminder)
+            {
+                case 0:
+                    timePeriod = "week";
+                    reminderDate = Settings.Default.AutoBlacklistLastReminder.AddDays(7);
+                    break;
+                case 1:
+                    timePeriod = "month";
+                    reminderDate = Settings.Default.AutoBlacklistLastReminder.AddMonths(1);
+                    break;
+                case 2:
+                    timePeriod = "year";
+                    reminderDate = Settings.Default.AutoBlacklistLastReminder.AddYears(1);
+                    break;
+            }
+
+            if (DateTime.Today.Date < reminderDate.Date)
+            {
+                return;
+            }
+
+            string title = "Auto Blacklist Reminder";
+            string message = $"It has been a new {timePeriod} since the last time the auto blacklist was cleared. Is it okay to clear it now?";
+
+            DialogResult result = MessageBox.Show(message, title, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+
+            BlacklistController.ClearAutoBlacklist();
         }
     }
 }

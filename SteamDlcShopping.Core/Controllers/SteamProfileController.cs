@@ -11,27 +11,48 @@ namespace SteamDlcShopping.Core.Controllers
         {
             bool result = false;
 
-            if (_steamProfile is null)
+            try
             {
-                return result;
-            }
+                if (_steamProfile is null)
+                {
+                    return result;
+                }
 
-            result = LibraryController.DynamicStoreIsFilled() && LibraryController.GamesIsFilled();
+                result = LibraryController.DynamicStoreIsFilled() && LibraryController.GamesIsFilled();
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
 
             return result;
         }
 
         public static void Login(string steamApiKey, string sessionId, string steamLoginSecure)
         {
-            _steamProfile = new(steamLoginSecure);
-            LibraryController.Login(steamApiKey, sessionId, steamLoginSecure);
+            try
+            {
+                _steamProfile = new(steamLoginSecure);
+                LibraryController.Login(steamApiKey, sessionId, steamLoginSecure);
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
         }
 
         public static void Logout()
         {
-            _steamProfile = null;
-            LibraryController.Logout();
-            BlacklistController.Reset();
+            try
+            {
+                _steamProfile = null;
+                LibraryController.Logout();
+                BlacklistController.Reset();
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
         }
 
         public static SteamProfileView GetSteamProfile()
@@ -43,8 +64,15 @@ namespace SteamDlcShopping.Core.Controllers
                 return result;
             }
 
-            result.Username = _steamProfile?.Username;
-            result.AvatarUrl = _steamProfile?.AvatarUrl;
+            try
+            {
+                result.Username = _steamProfile?.Username;
+                result.AvatarUrl = _steamProfile?.AvatarUrl;
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
 
             return result;
         }
@@ -58,7 +86,14 @@ namespace SteamDlcShopping.Core.Controllers
                 return result;
             }
 
-            result = _steamProfile.Id;
+            try
+            {
+                result = _steamProfile.Id;
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
 
             return result;
         }

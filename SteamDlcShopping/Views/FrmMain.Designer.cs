@@ -1,4 +1,6 @@
-﻿namespace SteamDlcShopping
+﻿using SteamDlcShopping.Extensibility;
+
+namespace SteamDlcShopping
 {
     partial class FrmMain
     {
@@ -33,13 +35,13 @@
             this.ptbAvatar = new System.Windows.Forms.PictureBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.btnCalculate = new System.Windows.Forms.Button();
-            this.lsvGame = new System.Windows.Forms.ListView();
+            this.lsvGame = new SteamDlcShopping.Extensibility.ListViewPlus();
             this.colGame = new System.Windows.Forms.ColumnHeader();
             this.ColCost = new System.Windows.Forms.ColumnHeader();
             this.colDlcLeft = new System.Windows.Forms.ColumnHeader();
             this.colMinDiscount = new System.Windows.Forms.ColumnHeader();
             this.colMaxDiscount = new System.Windows.Forms.ColumnHeader();
-            this.lsvDlc = new System.Windows.Forms.ListView();
+            this.lsvDlc = new SteamDlcShopping.Extensibility.ListViewPlus();
             this.colDlc = new System.Windows.Forms.ColumnHeader();
             this.colPrice = new System.Windows.Forms.ColumnHeader();
             this.colDiscount = new System.Windows.Forms.ColumnHeader();
@@ -122,7 +124,6 @@
             this.lsvGame.View = System.Windows.Forms.View.Details;
             this.lsvGame.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvGame_ColumnClick);
             this.lsvGame.SelectedIndexChanged += new System.EventHandler(this.lsvGame_SelectedIndexChanged);
-            this.lsvGame.EnabledChanged += new System.EventHandler(this.lsvGame_EnabledChanged);
             this.lsvGame.DoubleClick += new System.EventHandler(this.lsvGame_DoubleClick);
             // 
             // colGame
@@ -171,7 +172,6 @@
             this.lsvDlc.UseCompatibleStateImageBehavior = false;
             this.lsvDlc.View = System.Windows.Forms.View.Details;
             this.lsvDlc.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvDlc_ColumnClick);
-            this.lsvDlc.EnabledChanged += new System.EventHandler(this.lsvDlc_EnabledChanged);
             this.lsvDlc.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvDlc_MouseDoubleClick);
             // 
             // colDlc
@@ -247,7 +247,6 @@
             this.grbLibrary.TabIndex = 4;
             this.grbLibrary.TabStop = false;
             this.grbLibrary.Text = "Library";
-            this.grbLibrary.EnabledChanged += new System.EventHandler(this.grbLibrary_EnabledChanged);
             // 
             // lnkTooManyDlc
             // 
@@ -397,9 +396,9 @@
         private PictureBox ptbAvatar;
         private Button btnLogin;
         private Button btnCalculate;
-        private ListView lsvGame;
+        private ListViewPlus lsvGame;
         private ColumnHeader colGame;
-        private ListView lsvDlc;
+        private ListViewPlus lsvDlc;
         private ColumnHeader colDlc;
         private ColumnHeader colPrice;
         private ColumnHeader colDiscount;

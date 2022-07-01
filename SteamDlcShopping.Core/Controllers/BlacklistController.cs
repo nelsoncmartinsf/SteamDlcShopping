@@ -19,7 +19,14 @@ namespace SteamDlcShopping.Core.Controllers
                 _blacklist = new Blacklist();
             }
 
-            _blacklist.Load();
+            try
+            {
+                _blacklist.Load();
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
         }
 
         internal static void Save()
@@ -29,7 +36,14 @@ namespace SteamDlcShopping.Core.Controllers
                 return;
             }
 
-            _blacklist.Save();
+            try
+            {
+                _blacklist.Save();
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
         }
 
         internal static List<int> Get()
@@ -46,7 +60,40 @@ namespace SteamDlcShopping.Core.Controllers
                 return result;
             };
 
-            _blacklist.Games.ForEach(x => result.Add(x.AppId));
+            try
+            {
+                _blacklist.Games.ForEach(x => result.Add(x.AppId));
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
+
+            return result;
+        }
+
+        public static bool HasGames()
+        {
+            bool result = false;
+
+            if (_blacklist is null)
+            {
+                return result;
+            };
+
+            if (_blacklist.Games is null)
+            {
+                return result;
+            };
+
+            try
+            {
+                result = _blacklist.Games.Any();
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
 
             return result;
         }
@@ -65,28 +112,35 @@ namespace SteamDlcShopping.Core.Controllers
                 return result;
             }
 
-            foreach (GameBlacklist game in _blacklist.Games)
+            try
             {
-                //Filter by name search
-                if (!string.IsNullOrWhiteSpace(game.Name) && !game.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                foreach (GameBlacklist game in _blacklist.Games)
                 {
-                    continue;
+                    //Filter by name search
+                    if (!string.IsNullOrWhiteSpace(game.Name) && !game.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    //Filter by games not auto blacklisted
+                    if (_filterAutoBlacklisted && game.AutoBlacklisted)
+                    {
+                        continue;
+                    }
+
+                    GameBlacklistView gameBlacklist = new()
+                    {
+                        AppId = game.AppId,
+                        Name = game.AutoBlacklisted ? $"{game.Name} (Auto Blacklist)" : game.Name,
+                        AutoBlacklisted = game.AutoBlacklisted
+                    };
+
+                    result.Add(gameBlacklist);
                 }
-
-                //Filter by games not auto blacklisted
-                if (_filterAutoBlacklisted && game.AutoBlacklisted)
-                {
-                    continue;
-                }
-
-                GameBlacklistView gameBlacklist = new()
-                {
-                    AppId = game.AppId,
-                    Name = game.AutoBlacklisted ? $"{game.Name} (Auto Blacklist)" : game.Name,
-                    AutoBlacklisted = game.AutoBlacklisted
-                };
-
-                result.Add(gameBlacklist);
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
             }
 
             return result;
@@ -99,15 +153,22 @@ namespace SteamDlcShopping.Core.Controllers
                 return;
             }
 
-            appIds.ForEach(x => _blacklist.AddGame(x, LibraryController.GetGameName(x), autoBlacklist));
-            _blacklist.Save();
-
-            if (_blacklist.Games is null)
+            try
             {
-                return;
-            }
+                appIds.ForEach(x => _blacklist.AddGame(x, LibraryController.GetGameName(x), autoBlacklist));
+                _blacklist.Save();
 
-            LibraryController.ApplyBlacklist(appIds);
+                if (_blacklist.Games is null)
+                {
+                    return;
+                }
+
+                LibraryController.ApplyBlacklist(appIds);
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
         }
 
         public static void RemoveGames(List<int> appIds)
@@ -117,8 +178,15 @@ namespace SteamDlcShopping.Core.Controllers
                 return;
             }
 
-            appIds.ForEach(x => _blacklist.RemoveGame(x));
-            _blacklist.Save();
+            try
+            {
+                appIds.ForEach(x => _blacklist.RemoveGame(x));
+                _blacklist.Save();
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
         }
 
         public static void ClearAutoBlacklist()
@@ -133,19 +201,26 @@ namespace SteamDlcShopping.Core.Controllers
                 return;
             }
 
-            for (int index = _blacklist.Games.Count - 1; index >= 0; index--)
+            try
             {
-                GameBlacklist game = _blacklist.Games[index];
-
-                if (!game.AutoBlacklisted)
+                for (int index = _blacklist.Games.Count - 1; index >= 0; index--)
                 {
-                    continue;
+                    GameBlacklist game = _blacklist.Games[index];
+
+                    if (!game.AutoBlacklisted)
+                    {
+                        continue;
+                    }
+
+                    _blacklist.RemoveGame(game.AppId);
                 }
 
-                _blacklist.RemoveGame(game.AppId);
+                _blacklist.Save();
             }
-
-            _blacklist.Save();
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
         }
     }
 }

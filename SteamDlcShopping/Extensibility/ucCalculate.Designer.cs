@@ -1,6 +1,6 @@
 ﻿namespace SteamDlcShopping.Extensibility
 {
-    partial class ucLoading
+    partial class ucCalculate
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,34 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pgbLoading = new System.Windows.Forms.ProgressBar();
             this.ptbLoading = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.ptbLoading)).BeginInit();
             this.SuspendLayout();
             // 
-            // pgbLoading
-            // 
-            this.pgbLoading.Location = new System.Drawing.Point(83, 400);
-            this.pgbLoading.Name = "pgbLoading";
-            this.pgbLoading.Size = new System.Drawing.Size(600, 30);
-            this.pgbLoading.TabIndex = 0;
-            // 
             // ptbLoading
             // 
-            this.ptbLoading.Location = new System.Drawing.Point(258, 212);
+            this.ptbLoading.Location = new System.Drawing.Point(240, 230);
             this.ptbLoading.Name = "ptbLoading";
-            this.ptbLoading.Size = new System.Drawing.Size(250, 182);
+            this.ptbLoading.Size = new System.Drawing.Size(287, 182);
             this.ptbLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ptbLoading.TabIndex = 0;
             this.ptbLoading.TabStop = false;
             // 
-            // ucLoading
+            // ucCalculate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.pgbLoading);
             this.Controls.Add(this.ptbLoading);
-            this.Name = "ucLoading";
+            this.Name = "ucCalculate";
             this.Size = new System.Drawing.Size(767, 642);
             this.Load += new System.EventHandler(this.ucLoading_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ptbLoading)).EndInit();
@@ -64,7 +55,6 @@
         }
 
         #endregion
-        private ProgressBar pgbLoading;
         private PictureBox ptbLoading;
     }
 }

@@ -39,7 +39,7 @@
             this.webLogin.DefaultBackgroundColor = System.Drawing.Color.White;
             this.webLogin.Location = new System.Drawing.Point(0, 0);
             this.webLogin.Name = "webLogin";
-            this.webLogin.Size = new System.Drawing.Size(784, 461);
+            this.webLogin.Size = new System.Drawing.Size(784, 495);
             this.webLogin.Source = new System.Uri("https://store.steampowered.com/login", System.UriKind.Absolute);
             this.webLogin.TabIndex = 0;
             this.webLogin.ZoomFactor = 1D;
@@ -50,7 +50,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 461);
+            this.ClientSize = new System.Drawing.Size(784, 495);
             this.Controls.Add(this.webLogin);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;

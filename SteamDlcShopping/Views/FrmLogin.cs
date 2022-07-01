@@ -23,6 +23,7 @@ namespace SteamDlcShopping
         private void webLogin_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
             webLogin.CoreWebView2.CookieManager.DeleteAllCookies();
+            webLogin.CoreWebView2.Settings.AreDevToolsEnabled = false;
             webLogin.CoreWebView2.DOMContentLoaded += webLogin_CoreWebView2_DOMContentLoaded;
         }
 
@@ -34,6 +35,11 @@ namespace SteamDlcShopping
                 webLogin.ExecuteScriptAsync("document.getElementsByClassName('login_right_col')[0].remove();");
                 webLogin.ExecuteScriptAsync("document.getElementById('link_forgot_password').remove();");
                 webLogin.ExecuteScriptAsync("document.body.style.overflow = 'hidden';");
+            }
+
+            if (webLogin.Source.AbsoluteUri == "https://store.steampowered.com/")
+            {
+                webLogin.Visible = false;
             }
         }
 
