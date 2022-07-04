@@ -5,8 +5,29 @@ namespace SteamDlcShopping.Core.Controllers
 {
     public class LibraryController
     {
+        //Fields
         private static Library? _library;
 
+        //Properties
+        public static bool FreeDlcExist
+        {
+            get
+            {
+                if (_library is null)
+                {
+                    return false;
+                }
+
+                if (_library.Games is null)
+                {
+                    return false;
+                }
+
+                return _library.Games.Any(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree));
+            }
+        }
+
+        //Methods
         internal static void Login(string steamApiKey, string sessionId, string steamLoginSecure)
         {
             try
@@ -282,32 +303,6 @@ namespace SteamDlcShopping.Core.Controllers
 
                     result.Add(dlcDto);
                 }
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
-            }
-
-            return result;
-        }
-
-        public static bool FreeDlcExist()
-        {
-            bool result = false;
-
-            if (_library is null)
-            {
-                return result;
-            }
-
-            if (_library.Games is null)
-            {
-                return result;
-            }
-
-            try
-            {
-                result = _library.Games.Any(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree));
             }
             catch (Exception exception)
             {

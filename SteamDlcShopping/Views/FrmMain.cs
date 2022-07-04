@@ -31,6 +31,7 @@ namespace SteamDlcShopping
         private void FrmMain_Shown(object sender, EventArgs e)
         {
             SteamProfileController.Login(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
+            BlacklistController.Load();
             SetControlsState();
 
             Controls["ucLoad"].Visible = false;
@@ -47,6 +48,9 @@ namespace SteamDlcShopping
                 smiFreeDlc.Enabled = false;
                 btnLogout.Enabled = false;
                 btnCalculate.Enabled = false;
+
+                UnloadGames();
+                UnloadDlc();
 
                 ucCalculate ucCalculate = new()
                 {
@@ -70,8 +74,8 @@ namespace SteamDlcShopping
                 LoadGames();
 
                 smiSettings.Enabled = true;
-                smiBlacklist.Enabled = BlacklistController.HasGames();
-                smiFreeDlc.Enabled = LibraryController.FreeDlcExist();
+                smiBlacklist.Enabled = BlacklistController.HasGames;
+                smiFreeDlc.Enabled = LibraryController.FreeDlcExist;
                 btnLogout.Enabled = true;
                 btnCalculate.Enabled = true;
                 Controls["ucCalculate"].Dispose();
@@ -92,6 +96,8 @@ namespace SteamDlcShopping
             FrmBlacklist form = new();
             form.ShowDialog();
             form.Dispose();
+
+            smiBlacklist.Enabled = BlacklistController.HasGames;
         }
 
         private void smiFreeDlc_Click(object sender, EventArgs e)
@@ -99,6 +105,8 @@ namespace SteamDlcShopping
             FrmFreeDlc form = new();
             form.ShowDialog();
             form.Dispose();
+
+            smiFreeDlc.Enabled = LibraryController.FreeDlcExist;
         }
 
         //////////////////////////////////////// BUTTONS ////////////////////////////////////////
@@ -150,10 +158,13 @@ namespace SteamDlcShopping
                 appIds.Add(appId);
             }
 
-            BlacklistController.AddGames(appIds, false);
-
             LoadGames();
             UnloadDlc();
+
+            BlacklistController.AddGames(appIds, false);
+            smiBlacklist.Enabled = true;
+
+            smiFreeDlc.Enabled = LibraryController.FreeDlcExist;
         }
 
         //////////////////////////////////////// GAME LIST ////////////////////////////////////////
@@ -171,11 +182,10 @@ namespace SteamDlcShopping
             }
 
             lsvGame_Load(library.Games);
+            lsvGame.Sort();
 
             lsvGame.Enabled = true;
-
             txtGameSearch.Enabled = true;
-
             chkHideGamesNotOnSale.Enabled = true;
 
             lblGameCount.Text = $"Count: {lsvGame.Items.Count}";
@@ -306,9 +316,7 @@ namespace SteamDlcShopping
             lsvDlc.Sort();
 
             lsvDlc.Enabled = true;
-
             txtDlcSearch.Enabled = true;
-
             chkHideOwnedDlc.Enabled = true;
 
             lblDlcCount.Text = $"Count: {lsvDlc.Items.Count}";
@@ -365,8 +373,11 @@ namespace SteamDlcShopping
 
             lsvDlc.EndUpdate();
 
-            _dlcColumnSorter = new();
-            lsvDlc.ListViewItemSorter = _dlcColumnSorter;
+            if (lsvGame.ListViewItemSorter is null)
+            {
+                _gameColumnSorter = new();
+                lsvGame.ListViewItemSorter = _gameColumnSorter;
+            }
         }
 
         private void lsvDlc_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -475,7 +486,7 @@ namespace SteamDlcShopping
                 lblUsername.Text = null;
             }
 
-            smiBlacklist.Enabled = BlacklistController.HasGames();
+            smiBlacklist.Enabled = BlacklistController.HasGames;
             smiFreeDlc.Enabled = false;
             btnLogin.Visible = !session;
             btnLogout.Visible = session;

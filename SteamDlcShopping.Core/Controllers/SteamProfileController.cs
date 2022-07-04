@@ -5,8 +5,10 @@ namespace SteamDlcShopping.Core.Controllers
 {
     public static class SteamProfileController
     {
+        //Fields
         private static SteamProfile? _steamProfile;
 
+        //Methods
         public static bool IsSessionActive()
         {
             bool result = false;
@@ -33,6 +35,12 @@ namespace SteamDlcShopping.Core.Controllers
             try
             {
                 _steamProfile = new(steamLoginSecure);
+
+                if (_steamProfile.Id == 0)
+                {
+                    return;
+                }
+
                 LibraryController.Login(steamApiKey, sessionId, steamLoginSecure);
             }
             catch (Exception exception)

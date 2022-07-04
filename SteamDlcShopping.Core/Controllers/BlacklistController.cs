@@ -5,8 +5,29 @@ namespace SteamDlcShopping.Core.Controllers
 {
     public class BlacklistController
     {
+        //Fields
         private static Blacklist? _blacklist;
 
+        //Properties
+        public static bool HasGames
+        {
+            get
+            {
+                if (_blacklist is null)
+                {
+                    return false;
+                };
+
+                if (_blacklist.Games is null)
+                {
+                    return false;
+                };
+
+                return _blacklist.Games.Any();
+            }
+        }
+
+        //Methods
         internal static void Reset()
         {
             _blacklist = null;
@@ -63,32 +84,6 @@ namespace SteamDlcShopping.Core.Controllers
             try
             {
                 _blacklist.Games.ForEach(x => result.Add(x.AppId));
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
-            }
-
-            return result;
-        }
-
-        public static bool HasGames()
-        {
-            bool result = false;
-
-            if (_blacklist is null)
-            {
-                return result;
-            };
-
-            if (_blacklist.Games is null)
-            {
-                return result;
-            };
-
-            try
-            {
-                result = _blacklist.Games.Any();
             }
             catch (Exception exception)
             {

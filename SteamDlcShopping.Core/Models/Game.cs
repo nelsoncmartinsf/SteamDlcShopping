@@ -72,6 +72,22 @@ namespace SteamDlcShopping.Core.Models
                     return;
                 }
 
+                HtmlNode dlcBrowse = htmlDoc.DocumentNode.SelectSingleNode("//span[contains(@class, 'note')]");
+
+                //The node selection found no results
+                if (dlcBrowse is null)
+                {
+                    return;
+                }
+
+                int from = dlcBrowse.InnerText.IndexOf("(") + 1;
+                int to = dlcBrowse.InnerText.LastIndexOf(")");
+
+                if (int.TryParse(dlcBrowse.InnerText[from..to], out int count))
+                {
+                    HasTooManyDlc = count > 200;
+                }
+
                 HtmlNodeCollection dlcList = htmlDoc.DocumentNode.SelectNodes("//a[contains(@class, 'game_area_dlc_row')]");
 
                 //The node selection found no results
