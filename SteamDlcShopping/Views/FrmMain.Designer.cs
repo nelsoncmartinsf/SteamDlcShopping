@@ -39,7 +39,6 @@ namespace SteamDlcShopping
             this.colGame = new System.Windows.Forms.ColumnHeader();
             this.ColCost = new System.Windows.Forms.ColumnHeader();
             this.colDlcLeft = new System.Windows.Forms.ColumnHeader();
-            this.colMinDiscount = new System.Windows.Forms.ColumnHeader();
             this.colMaxDiscount = new System.Windows.Forms.ColumnHeader();
             this.lsvDlc = new SteamDlcShopping.Extensibility.ListViewPlus();
             this.colDlc = new System.Windows.Forms.ColumnHeader();
@@ -53,7 +52,8 @@ namespace SteamDlcShopping
             this.lnkTooManyDlc = new System.Windows.Forms.LinkLabel();
             this.lblTooManyDlc = new System.Windows.Forms.Label();
             this.lblLibraryCost = new System.Windows.Forms.Label();
-            this.chkHideOwnedDlc = new System.Windows.Forms.CheckBox();
+            this.chkHideDlcOwned = new System.Windows.Forms.CheckBox();
+            this.chkHideDlcNotOnSale = new System.Windows.Forms.CheckBox();
             this.chkHideGamesNotOnSale = new System.Windows.Forms.CheckBox();
             this.btnBlacklist = new System.Windows.Forms.Button();
             this.txtDlcSearch = new System.Windows.Forms.TextBox();
@@ -111,14 +111,13 @@ namespace SteamDlcShopping
             this.colGame,
             this.ColCost,
             this.colDlcLeft,
-            this.colMinDiscount,
             this.colMaxDiscount});
             this.lsvGame.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lsvGame.FullRowSelect = true;
             this.lsvGame.GridLines = true;
             this.lsvGame.Location = new System.Drawing.Point(6, 51);
             this.lsvGame.Name = "lsvGame";
-            this.lsvGame.Size = new System.Drawing.Size(755, 237);
+            this.lsvGame.Size = new System.Drawing.Size(681, 237);
             this.lsvGame.TabIndex = 4;
             this.lsvGame.UseCompatibleStateImageBehavior = false;
             this.lsvGame.View = System.Windows.Forms.View.Details;
@@ -143,17 +142,11 @@ namespace SteamDlcShopping
             this.colDlcLeft.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.colDlcLeft.Width = 70;
             // 
-            // colMinDiscount
-            // 
-            this.colMinDiscount.Text = "Lowest %";
-            this.colMinDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.colMinDiscount.Width = 75;
-            // 
             // colMaxDiscount
             // 
             this.colMaxDiscount.Text = "Highest %";
             this.colMaxDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.colMaxDiscount.Width = 79;
+            this.colMaxDiscount.Width = 80;
             // 
             // lsvDlc
             // 
@@ -167,7 +160,7 @@ namespace SteamDlcShopping
             this.lsvDlc.Location = new System.Drawing.Point(6, 374);
             this.lsvDlc.MultiSelect = false;
             this.lsvDlc.Name = "lsvDlc";
-            this.lsvDlc.Size = new System.Drawing.Size(683, 237);
+            this.lsvDlc.Size = new System.Drawing.Size(681, 237);
             this.lsvDlc.TabIndex = 6;
             this.lsvDlc.UseCompatibleStateImageBehavior = false;
             this.lsvDlc.View = System.Windows.Forms.View.Details;
@@ -189,7 +182,7 @@ namespace SteamDlcShopping
             // 
             this.colDiscount.Text = "Discount";
             this.colDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.colDiscount.Width = 72;
+            this.colDiscount.Width = 70;
             // 
             // lblGameCount
             // 
@@ -225,14 +218,15 @@ namespace SteamDlcShopping
             this.txtGameSearch.Name = "txtGameSearch";
             this.txtGameSearch.Size = new System.Drawing.Size(200, 23);
             this.txtGameSearch.TabIndex = 1;
-            this.txtGameSearch.TextChanged += new System.EventHandler(this.txtLibrarySearch_TextChanged);
+            this.txtGameSearch.TextChanged += new System.EventHandler(this.lsvGame_FilterChanged);
             // 
             // grbLibrary
             // 
             this.grbLibrary.Controls.Add(this.lnkTooManyDlc);
             this.grbLibrary.Controls.Add(this.lblTooManyDlc);
             this.grbLibrary.Controls.Add(this.lblLibraryCost);
-            this.grbLibrary.Controls.Add(this.chkHideOwnedDlc);
+            this.grbLibrary.Controls.Add(this.chkHideDlcOwned);
+            this.grbLibrary.Controls.Add(this.chkHideDlcNotOnSale);
             this.grbLibrary.Controls.Add(this.chkHideGamesNotOnSale);
             this.grbLibrary.Controls.Add(this.btnBlacklist);
             this.grbLibrary.Controls.Add(this.txtDlcSearch);
@@ -243,7 +237,7 @@ namespace SteamDlcShopping
             this.grbLibrary.Controls.Add(this.lsvDlc);
             this.grbLibrary.Location = new System.Drawing.Point(12, 97);
             this.grbLibrary.Name = "grbLibrary";
-            this.grbLibrary.Size = new System.Drawing.Size(767, 642);
+            this.grbLibrary.Size = new System.Drawing.Size(693, 642);
             this.grbLibrary.TabIndex = 4;
             this.grbLibrary.TabStop = false;
             this.grbLibrary.Text = "Library";
@@ -277,16 +271,27 @@ namespace SteamDlcShopping
             this.lblLibraryCost.TabIndex = 0;
             this.lblLibraryCost.Text = "lblLibraryCost";
             // 
-            // chkHideOwnedDlc
+            // chkHideDlcOwned
             // 
-            this.chkHideOwnedDlc.AutoSize = true;
-            this.chkHideOwnedDlc.Location = new System.Drawing.Point(212, 347);
-            this.chkHideOwnedDlc.Name = "chkHideOwnedDlc";
-            this.chkHideOwnedDlc.Size = new System.Drawing.Size(115, 19);
-            this.chkHideOwnedDlc.TabIndex = 2;
-            this.chkHideOwnedDlc.Text = "Hide owned DLC";
-            this.chkHideOwnedDlc.UseVisualStyleBackColor = true;
-            this.chkHideOwnedDlc.CheckedChanged += new System.EventHandler(this.chkHideOwnedDlc_CheckedChanged);
+            this.chkHideDlcOwned.AutoSize = true;
+            this.chkHideDlcOwned.Location = new System.Drawing.Point(355, 347);
+            this.chkHideDlcOwned.Name = "chkHideDlcOwned";
+            this.chkHideDlcOwned.Size = new System.Drawing.Size(115, 19);
+            this.chkHideDlcOwned.TabIndex = 2;
+            this.chkHideDlcOwned.Text = "Hide DLC owned";
+            this.chkHideDlcOwned.UseVisualStyleBackColor = true;
+            this.chkHideDlcOwned.CheckedChanged += new System.EventHandler(this.lsvDlc_FilterChanged);
+            // 
+            // chkHideDlcNotOnSale
+            // 
+            this.chkHideDlcNotOnSale.AutoSize = true;
+            this.chkHideDlcNotOnSale.Location = new System.Drawing.Point(212, 347);
+            this.chkHideDlcNotOnSale.Name = "chkHideDlcNotOnSale";
+            this.chkHideDlcNotOnSale.Size = new System.Drawing.Size(137, 19);
+            this.chkHideDlcNotOnSale.TabIndex = 2;
+            this.chkHideDlcNotOnSale.Text = "Hide DLC not on sale";
+            this.chkHideDlcNotOnSale.UseVisualStyleBackColor = true;
+            this.chkHideDlcNotOnSale.CheckedChanged += new System.EventHandler(this.lsvDlc_FilterChanged);
             // 
             // chkHideGamesNotOnSale
             // 
@@ -297,11 +302,11 @@ namespace SteamDlcShopping
             this.chkHideGamesNotOnSale.TabIndex = 2;
             this.chkHideGamesNotOnSale.Text = "Hide games not on sale";
             this.chkHideGamesNotOnSale.UseVisualStyleBackColor = true;
-            this.chkHideGamesNotOnSale.CheckedChanged += new System.EventHandler(this.chkHideGamesNotOnSale_CheckedChanged);
+            this.chkHideGamesNotOnSale.CheckedChanged += new System.EventHandler(this.lsvGame_FilterChanged);
             // 
             // btnBlacklist
             // 
-            this.btnBlacklist.Location = new System.Drawing.Point(661, 294);
+            this.btnBlacklist.Location = new System.Drawing.Point(587, 294);
             this.btnBlacklist.Name = "btnBlacklist";
             this.btnBlacklist.Size = new System.Drawing.Size(100, 23);
             this.btnBlacklist.TabIndex = 5;
@@ -315,7 +320,7 @@ namespace SteamDlcShopping
             this.txtDlcSearch.Name = "txtDlcSearch";
             this.txtDlcSearch.Size = new System.Drawing.Size(200, 23);
             this.txtDlcSearch.TabIndex = 1;
-            this.txtDlcSearch.TextChanged += new System.EventHandler(this.txtDlcSearch_TextChanged);
+            this.txtDlcSearch.TextChanged += new System.EventHandler(this.lsvDlc_FilterChanged);
             // 
             // lbldebug
             // 
@@ -355,7 +360,7 @@ namespace SteamDlcShopping
             this.smiFreeDlc});
             this.mnuMenu.Location = new System.Drawing.Point(0, 0);
             this.mnuMenu.Name = "mnuMenu";
-            this.mnuMenu.Size = new System.Drawing.Size(791, 24);
+            this.mnuMenu.Size = new System.Drawing.Size(717, 24);
             this.mnuMenu.TabIndex = 0;
             this.mnuMenu.Text = "menuStrip1";
             // 
@@ -363,7 +368,7 @@ namespace SteamDlcShopping
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(791, 751);
+            this.ClientSize = new System.Drawing.Size(717, 751);
             this.Controls.Add(this.mnuMenu);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.lblUsername);
@@ -413,9 +418,8 @@ namespace SteamDlcShopping
         private CheckBox chkHideGamesNotOnSale;
         private Label lblLibraryCost;
         private Button btnBlacklist;
-        private CheckBox chkHideOwnedDlc;
+        private CheckBox chkHideDlcOwned;
         private TextBox txtDlcSearch;
-        private ColumnHeader colMinDiscount;
         private ColumnHeader colDlcLeft;
         private Label lblTooManyDlc;
         private LinkLabel lnkTooManyDlc;
@@ -423,5 +427,6 @@ namespace SteamDlcShopping
         private ToolStripMenuItem smiBlacklist;
         private ToolStripMenuItem smiFreeDlc;
         private MenuStrip mnuMenu;
+        private CheckBox chkHideDlcNotOnSale;
     }
 }

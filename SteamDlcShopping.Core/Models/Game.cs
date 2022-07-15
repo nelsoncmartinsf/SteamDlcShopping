@@ -16,8 +16,6 @@ namespace SteamDlcShopping.Core.Models
 
         internal int DlcLeft { get; private set; }
 
-        internal int DlcLowestPercentage { get; private set; }
-
         internal int DlcHighestPercentage { get; private set; }
 
         internal bool HasTooManyDlc { get; set; }
@@ -159,7 +157,6 @@ namespace SteamDlcShopping.Core.Models
         {
             DlcTotalPrice = 0;
             DlcLeft = 0;
-            DlcLowestPercentage = 0;
             DlcHighestPercentage = 0;
 
             foreach (Dlc dlc in DlcList)
@@ -178,11 +175,6 @@ namespace SteamDlcShopping.Core.Models
                 }
 
                 DlcTotalPrice += dlc.Sale.Price;
-
-                if (dlc.Sale.Percentage < DlcLowestPercentage || DlcLowestPercentage == 0)
-                {
-                    DlcLowestPercentage = dlc.Sale.Percentage;
-                }
 
                 if (dlc.Sale?.Percentage > DlcHighestPercentage)
                 {

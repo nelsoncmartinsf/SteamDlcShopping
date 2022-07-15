@@ -220,7 +220,6 @@ namespace SteamDlcShopping.Core.Controllers
                         Name = game.Name,
                         DlcTotalPrice = $"{game.DlcTotalPrice}€",
                         DlcLeft = game.DlcLeft,
-                        DlcLowestPercentage = game.DlcLowestPercentage > 0 ? $"{game.DlcLowestPercentage}%" : null,
                         DlcHighestPercentage = game.DlcHighestPercentage > 0 ? $"{game.DlcHighestPercentage}%" : null
                     };
 
@@ -237,7 +236,7 @@ namespace SteamDlcShopping.Core.Controllers
             return result;
         }
 
-        public static List<DlcView> GetDlc(int appId, string? filterName = null, bool filterOwned = false)
+        public static List<DlcView> GetDlc(int appId, string? filterName = null, bool filterOnSale = false, bool filterOwned = false)
         {
             List<DlcView> result = new();
 
@@ -268,7 +267,13 @@ namespace SteamDlcShopping.Core.Controllers
                         continue;
                     }
 
-                    //Filter by owned dlc
+                    //Filter by dlc on sale
+                    if (filterOnSale && dlc.Sale is null)
+                    {
+                        continue;
+                    }
+
+                    //Filter by dlc owned
                     if (filterOwned && dlc.IsOwned)
                     {
                         continue;

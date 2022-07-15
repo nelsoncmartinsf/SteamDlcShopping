@@ -169,7 +169,6 @@ namespace SteamDlcShopping
 
         //////////////////////////////////////// GAME LIST ////////////////////////////////////////
 
-        private ColumnSorter? _gameColumnSorter;
         private int _selectedGame;
 
         private void LoadGames()
@@ -198,8 +197,12 @@ namespace SteamDlcShopping
             lsvGame.Unload();
             lsvGame.Enabled = false;
 
+            _gamefilterEvents = false;
+
             txtGameSearch.Enabled = false;
             txtGameSearch.Text = null;
+
+            _gamefilterEvents = true;
 
             chkHideGamesNotOnSale.Enabled = false;
 
@@ -231,10 +234,6 @@ namespace SteamDlcShopping
                 subItem = new() { Text = game.DlcLeft.ToString(), Tag = Types.Decimal };
                 item.SubItems.Add(subItem);
 
-                //Min Discount
-                subItem = new() { Text = game.DlcLowestPercentage, Tag = Types.Decimal };
-                item.SubItems.Add(subItem);
-
                 //Max Discount
                 subItem = new() { Text = game.DlcHighestPercentage, Tag = Types.Decimal };
                 item.SubItems.Add(subItem);
@@ -246,8 +245,8 @@ namespace SteamDlcShopping
 
             if (lsvGame.ListViewItemSorter is null)
             {
-                _gameColumnSorter = new();
-                lsvGame.ListViewItemSorter = _gameColumnSorter;
+                lsvGame._columnSorter = new();
+                lsvGame.ListViewItemSorter = lsvGame._columnSorter;
             }
         }
 
@@ -291,12 +290,12 @@ namespace SteamDlcShopping
 
         private void lsvGame_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            if (_gameColumnSorter is null)
+            if (lsvGame._columnSorter is null)
             {
                 return;
             }
 
-            SortList(lsvGame, _gameColumnSorter, e.Column);
+            lsvGame.SortList(e.Column);
         }
 
         private void lsvGame_DoubleClick(object sender, EventArgs e)
@@ -306,18 +305,16 @@ namespace SteamDlcShopping
 
         //////////////////////////////////////// DLC LIST ////////////////////////////////////////
 
-        private ColumnSorter? _dlcColumnSorter;
-
         private void LoadDlc()
         {
-            List<DlcView> dlcList = LibraryController.GetDlc(_selectedGame, txtDlcSearch.Text, chkHideOwnedDlc.Checked);
+            List<DlcView> dlcList = LibraryController.GetDlc(_selectedGame, txtDlcSearch.Text, chkHideDlcNotOnSale.Checked, chkHideDlcOwned.Checked);
 
             lsvDlc_Load(dlcList);
             lsvDlc.Sort();
 
             lsvDlc.Enabled = true;
             txtDlcSearch.Enabled = true;
-            chkHideOwnedDlc.Enabled = true;
+            chkHideDlcOwned.Enabled = true;
 
             lblDlcCount.Text = $"Count: {lsvDlc.Items.Count}";
 
@@ -333,10 +330,14 @@ namespace SteamDlcShopping
             lsvDlc.Unload();
             lsvDlc.Enabled = false;
 
+            _dlcFilterEvents = false;
+
             txtDlcSearch.Enabled = false;
             txtDlcSearch.Text = null;
 
-            chkHideOwnedDlc.Enabled = false;
+            _dlcFilterEvents = true;
+
+            chkHideDlcOwned.Enabled = false;
 
             lblDlcCount.Text = null;
 
@@ -373,21 +374,21 @@ namespace SteamDlcShopping
 
             lsvDlc.EndUpdate();
 
-            if (lsvGame.ListViewItemSorter is null)
+            if (lsvDlc.ListViewItemSorter is null)
             {
-                _gameColumnSorter = new();
-                lsvGame.ListViewItemSorter = _gameColumnSorter;
+                lsvDlc._columnSorter = new();
+                lsvDlc.ListViewItemSorter = lsvDlc._columnSorter;
             }
         }
 
         private void lsvDlc_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            if (_dlcColumnSorter is null)
+            if (lsvDlc._columnSorter is null)
             {
                 return;
             }
 
-            SortList(lsvDlc, _dlcColumnSorter, e.Column);
+            lsvDlc.SortList(e.Column);
         }
 
         private void lsvDlc_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -400,74 +401,33 @@ namespace SteamDlcShopping
             ClickLink($"https://store.steampowered.com/dlc/{_selectedGame}");
         }
 
-        //////////////////////////////////////// GAME FILTERS ////////////////////////////////////////
+        //////////////////////////////////////// FILTERS ////////////////////////////////////////
 
-        private void txtLibrarySearch_TextChanged(object sender, EventArgs e)
+        private bool _gamefilterEvents;
+        private bool _dlcFilterEvents;
+
+        private void lsvGame_FilterChanged(object sender, EventArgs e)
         {
+            if (!_gamefilterEvents)
+            {
+                return;
+            }
+
             LoadGames();
             UnloadDlc();
         }
 
-        private void chkHideGamesNotOnSale_CheckedChanged(object sender, EventArgs e)
+        private void lsvDlc_FilterChanged(object sender, EventArgs e)
         {
-            LoadGames();
-            UnloadDlc();
-        }
+            if (!_dlcFilterEvents)
+            {
+                return;
+            }
 
-        //////////////////////////////////////// DLC FILTERS ////////////////////////////////////////
-
-        private void txtDlcSearch_TextChanged(object sender, EventArgs e)
-        {
-            LoadDlc();
-        }
-
-        private void chkHideOwnedDlc_CheckedChanged(object sender, EventArgs e)
-        {
             LoadDlc();
         }
 
         //////////////////////////////////////// METHODS ////////////////////////////////////////
-
-        private static void SortList(ListView listView, ColumnSorter columnSorter, int newColumn)
-        {
-            //Remove sorting characters from the previous column
-            if (columnSorter.Column >= 0 && int.TryParse(listView.Columns[columnSorter.Column].Tag.ToString(), out int length))
-            {
-                listView.Columns[columnSorter.Column].Text = listView.Columns[columnSorter.Column].Text[..length];
-            }
-
-            //Store column title length in order to add and remove sorting characters
-            if (listView.Columns[newColumn].Tag is null)
-            {
-                listView.Columns[newColumn].Tag = listView.Columns[newColumn].Text.Length;
-            }
-
-            //Revert sorting on the same column
-            if (newColumn == columnSorter.Column)
-            {
-                columnSorter.Order = columnSorter.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
-            }
-            else
-            {
-                columnSorter.Column = newColumn;
-                columnSorter.Order = SortOrder.Ascending;
-            }
-
-            //Apply the sorting character
-            switch (columnSorter.Order)
-            {
-                case SortOrder.Ascending:
-                    listView.Columns[columnSorter.Column].Text += " ▲";
-                    break;
-                case SortOrder.Descending:
-                    listView.Columns[columnSorter.Column].Text += " ▼";
-                    break;
-                case SortOrder.None:
-                    break;
-            }
-
-            listView.Sort();
-        }
 
         private void SetControlsState()
         {

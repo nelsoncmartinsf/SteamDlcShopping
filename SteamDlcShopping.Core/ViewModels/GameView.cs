@@ -11,8 +11,6 @@
 
         public int DlcLeft { get; set; }
 
-        public string? DlcLowestPercentage { get; set; }
-
         public string? DlcHighestPercentage { get; set; }
     }
 }
