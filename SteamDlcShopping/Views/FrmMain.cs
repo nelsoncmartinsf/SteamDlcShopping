@@ -62,12 +62,7 @@ namespace SteamDlcShopping
                 ucCalculate.BringToFront();
             }));
 
-            Stopwatch timer = Stopwatch.StartNew();//DEBUG
-
             LibraryController.Calculate(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure, Settings.Default.AutoBlacklist);
-
-            timer.Stop();//DEBUG
-            lbldebug.Invoke(new Action(() => lbldebug.Text = $"{timer.Elapsed}"));//DEBUG
 
             Invoke(new Action(() =>
             {

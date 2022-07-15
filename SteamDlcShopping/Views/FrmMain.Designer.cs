@@ -57,7 +57,6 @@ namespace SteamDlcShopping
             this.chkHideGamesNotOnSale = new System.Windows.Forms.CheckBox();
             this.btnBlacklist = new System.Windows.Forms.Button();
             this.txtDlcSearch = new System.Windows.Forms.TextBox();
-            this.lbldebug = new System.Windows.Forms.Label();
             this.smiSettings = new System.Windows.Forms.ToolStripMenuItem();
             this.smiBlacklist = new System.Windows.Forms.ToolStripMenuItem();
             this.smiFreeDlc = new System.Windows.Forms.ToolStripMenuItem();
@@ -322,15 +321,6 @@ namespace SteamDlcShopping
             this.txtDlcSearch.TabIndex = 1;
             this.txtDlcSearch.TextChanged += new System.EventHandler(this.lsvDlc_FilterChanged);
             // 
-            // lbldebug
-            // 
-            this.lbldebug.AutoSize = true;
-            this.lbldebug.Location = new System.Drawing.Point(605, 24);
-            this.lbldebug.Name = "lbldebug";
-            this.lbldebug.Size = new System.Drawing.Size(38, 15);
-            this.lbldebug.TabIndex = 0;
-            this.lbldebug.Text = "label1";
-            // 
             // smiSettings
             // 
             this.smiSettings.Name = "smiSettings";
@@ -375,7 +365,6 @@ namespace SteamDlcShopping
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.btnCalculate);
             this.Controls.Add(this.ptbAvatar);
-            this.Controls.Add(this.lbldebug);
             this.Controls.Add(this.grbLibrary);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.mnuMenu;
@@ -414,7 +403,6 @@ namespace SteamDlcShopping
         private ColumnHeader ColCost;
         private ColumnHeader colMaxDiscount;
         private GroupBox grbLibrary;
-        private Label lbldebug;
         private CheckBox chkHideGamesNotOnSale;
         private Label lblLibraryCost;
         private Button btnBlacklist;
