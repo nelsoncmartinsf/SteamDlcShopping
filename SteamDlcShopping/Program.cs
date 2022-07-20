@@ -23,6 +23,8 @@ namespace SteamDlcShopping
             {
                 Application.Run(new FrmMain());
             }
+
+            Application.Exit();
         }
     }
 }

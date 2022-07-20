@@ -36,6 +36,7 @@ namespace SteamDlcShopping.Core.Controllers
                 _library.LoadDynamicStore(sessionId, steamLoginSecure);
                 _library.LoadGames(steamApiKey);
 
+                Currency.SetCurrency();
                 BlacklistController.Load();
 
                 _library.ApplyBlacklist(BlacklistController.Get());
@@ -200,6 +201,8 @@ namespace SteamDlcShopping.Core.Controllers
 
             try
             {
+                long totalCost = 0;
+
                 foreach (Game game in _library.Games)
                 {
                     //Filter by name search
@@ -218,15 +221,17 @@ namespace SteamDlcShopping.Core.Controllers
                     {
                         AppId = game.AppId,
                         Name = game.Name,
-                        DlcTotalPrice = $"{game.DlcTotalPrice}€",
+                        DlcTotalPrice = Currency.PriceToTemplate(game.DlcTotalPrice ?? 0),
                         DlcLeft = game.DlcLeft,
                         DlcHighestPercentage = game.DlcHighestPercentage > 0 ? $"{game.DlcHighestPercentage}%" : null
                     };
 
-                    result.TotalCost += game.DlcTotalPrice ?? 0m;
+                    totalCost += game.DlcTotalPrice ?? 0;
 
                     result.Games.Add(gameDto);
                 }
+
+                result.TotalCost = Currency.PriceToTemplate(totalCost);
             }
             catch (Exception exception)
             {
@@ -293,7 +298,8 @@ namespace SteamDlcShopping.Core.Controllers
                         }
                         else
                         {
-                            price = $"{(dlc.Sale is not null ? dlc.Sale?.Price : dlc.Price)}€";
+                            long lPrice = dlc.Sale is not null ? dlc.Sale.Price : dlc.Price;
+                            price = Currency.PriceToTemplate(lPrice);
                         }
                     }
 

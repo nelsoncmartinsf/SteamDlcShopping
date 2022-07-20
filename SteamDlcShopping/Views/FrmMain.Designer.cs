@@ -169,7 +169,7 @@ namespace SteamDlcShopping
             // colDlc
             // 
             this.colDlc.Text = "DLC";
-            this.colDlc.Width = 500;
+            this.colDlc.Width = 490;
             // 
             // colPrice
             // 
@@ -181,7 +181,7 @@ namespace SteamDlcShopping
             // 
             this.colDiscount.Text = "Discount";
             this.colDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.colDiscount.Width = 70;
+            this.colDiscount.Width = 80;
             // 
             // lblGameCount
             // 

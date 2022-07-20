@@ -5,10 +5,10 @@
         //Properties
         internal int Percentage { get; }
 
-        internal decimal Price { get; }
+        internal long Price { get; }
 
         //Constructor
-        internal Sale(int percentage = default, decimal price = default)
+        internal Sale(int percentage = default, long price = default)
         {
             Percentage = percentage;
             Price = price;

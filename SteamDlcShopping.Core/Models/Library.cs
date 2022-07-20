@@ -10,11 +10,11 @@ namespace SteamDlcShopping.Core.Models
         private readonly long _steamId;
 
         //Properties
-        internal List<int>? DynamicStore { get; set; }
+        internal List<int>? DynamicStore { get; private set; }
 
         internal List<Game>? Games { get; private set; }
 
-        internal decimal? TotalCost => Games?.Sum(x => x.DlcTotalPrice);
+        internal long? TotalCost => Games?.Sum(x => x.DlcTotalPrice);
 
         //Constructor
         internal Library(long steamId)

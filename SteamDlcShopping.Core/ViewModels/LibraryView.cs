@@ -5,6 +5,6 @@
         //Properties
         public List<GameView>? Games { get; set; }
 
-        public decimal TotalCost { get; set; }
+        public string? TotalCost { get; set; }
     }
 }

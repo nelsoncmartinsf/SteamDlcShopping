@@ -49,6 +49,18 @@ namespace SteamDlcShopping
                 btnLogout.Enabled = false;
                 btnCalculate.Enabled = false;
 
+                _ignoreGameFilterEvents = true;
+                _ignoreDlcFilterEvents = true;
+
+                txtGameSearch.Text = null;
+                chkHideGamesNotOnSale.Checked = false;
+                txtDlcSearch.Text = null;
+                chkHideDlcNotOnSale.Checked = false;
+                chkHideDlcOwned.Checked = false;
+
+                _ignoreGameFilterEvents = false;
+                _ignoreDlcFilterEvents = false;
+
                 UnloadGames();
                 UnloadDlc();
 
@@ -122,8 +134,17 @@ namespace SteamDlcShopping
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            UnloadGames();
-            UnloadDlc();
+            _ignoreGameFilterEvents = true;
+            _ignoreDlcFilterEvents = true;
+
+            txtGameSearch.Text = null;
+            chkHideGamesNotOnSale.Checked = false;
+            txtDlcSearch.Text = null;
+            chkHideDlcNotOnSale.Checked = false;
+            chkHideDlcOwned.Checked = false;
+
+            _ignoreGameFilterEvents = false;
+            _ignoreDlcFilterEvents = false;
 
             Settings.Default.SessionId = null;
             Settings.Default.SteamLoginSecure = null;
@@ -153,11 +174,11 @@ namespace SteamDlcShopping
                 appIds.Add(appId);
             }
 
-            LoadGames();
-            UnloadDlc();
-
             BlacklistController.AddGames(appIds, false);
             smiBlacklist.Enabled = true;
+
+            LoadGames();
+            UnloadDlc();
 
             smiFreeDlc.Enabled = LibraryController.FreeDlcExist;
         }
@@ -183,7 +204,7 @@ namespace SteamDlcShopping
             chkHideGamesNotOnSale.Enabled = true;
 
             lblGameCount.Text = $"Count: {lsvGame.Items.Count}";
-            lblLibraryCost.Text = $"Cost: {library.TotalCost}€";
+            lblLibraryCost.Text = $"Cost: {library.TotalCost}";
             btnBlacklist.Visible = false;
         }
 
@@ -192,13 +213,7 @@ namespace SteamDlcShopping
             lsvGame.Unload();
             lsvGame.Enabled = false;
 
-            _gamefilterEvents = false;
-
             txtGameSearch.Enabled = false;
-            txtGameSearch.Text = null;
-
-            _gamefilterEvents = true;
-
             chkHideGamesNotOnSale.Enabled = false;
 
             lblGameCount.Text = null;
@@ -309,6 +324,7 @@ namespace SteamDlcShopping
 
             lsvDlc.Enabled = true;
             txtDlcSearch.Enabled = true;
+            chkHideDlcNotOnSale.Enabled = true;
             chkHideDlcOwned.Enabled = true;
 
             lblDlcCount.Text = $"Count: {lsvDlc.Items.Count}";
@@ -325,19 +341,16 @@ namespace SteamDlcShopping
             lsvDlc.Unload();
             lsvDlc.Enabled = false;
 
-            _dlcFilterEvents = false;
-
             txtDlcSearch.Enabled = false;
-            txtDlcSearch.Text = null;
-
-            _dlcFilterEvents = true;
-
+            chkHideDlcNotOnSale.Enabled = false;
             chkHideDlcOwned.Enabled = false;
 
             lblDlcCount.Text = null;
 
             lblTooManyDlc.Visible = false;
             lnkTooManyDlc.Visible = false;
+
+            _selectedGame = 0;
         }
 
         private void lsvDlc_Load(List<DlcView> dlcs)
@@ -398,12 +411,12 @@ namespace SteamDlcShopping
 
         //////////////////////////////////////// FILTERS ////////////////////////////////////////
 
-        private bool _gamefilterEvents;
-        private bool _dlcFilterEvents;
+        private bool _ignoreGameFilterEvents;
+        private bool _ignoreDlcFilterEvents;
 
         private void lsvGame_FilterChanged(object sender, EventArgs e)
         {
-            if (!_gamefilterEvents)
+            if (_ignoreGameFilterEvents)
             {
                 return;
             }
@@ -414,7 +427,7 @@ namespace SteamDlcShopping
 
         private void lsvDlc_FilterChanged(object sender, EventArgs e)
         {
-            if (!_dlcFilterEvents)
+            if (_ignoreDlcFilterEvents)
             {
                 return;
             }

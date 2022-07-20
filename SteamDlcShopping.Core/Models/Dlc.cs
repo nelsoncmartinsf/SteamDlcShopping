@@ -7,7 +7,7 @@
 
         internal string? Name { get; }
 
-        internal decimal Price { get; }
+        internal long Price { get; }
 
         internal Sale? Sale { get; }
 
@@ -18,7 +18,7 @@
         internal bool IsOwned { get; private set; }
 
         //Constructor
-        internal Dlc(int appId = default, string? name = default, decimal price = default, Sale? sale = default, bool isFree = default, bool isNotAvailable = default)
+        internal Dlc(int appId = default, string? name = default, long price = default, Sale? sale = default, bool isFree = default, bool isNotAvailable = default)
         {
             AppId = appId;
             Name = name;
