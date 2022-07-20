@@ -1,6 +1,6 @@
 ﻿namespace SteamDlcShopping.Views
 {
-    partial class FrmFreeDlc
+    partial class FrmAbout
     {
         /// <summary>
         /// Required designer variable.
@@ -28,41 +28,53 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lsbDlc = new System.Windows.Forms.ListBox();
+            this.lblAbout = new System.Windows.Forms.Label();
+            this.lnkAbout = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
-            // lsbDlc
+            // lblAbout
             // 
-            this.lsbDlc.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lsbDlc.FormattingEnabled = true;
-            this.lsbDlc.ItemHeight = 15;
-            this.lsbDlc.Location = new System.Drawing.Point(12, 12);
-            this.lsbDlc.Name = "lsbDlc";
-            this.lsbDlc.Size = new System.Drawing.Size(660, 199);
-            this.lsbDlc.TabIndex = 1;
-            this.lsbDlc.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsbDlc_MouseDoubleClick);
+            this.lblAbout.AutoSize = true;
+            this.lblAbout.Location = new System.Drawing.Point(12, 9);
+            this.lblAbout.Name = "lblAbout";
+            this.lblAbout.Size = new System.Drawing.Size(207, 15);
+            this.lblAbout.TabIndex = 0;
+            this.lblAbout.Text = "Originally developed by DiogoABDias.";
             // 
-            // FrmFreeDlc
+            // lnkAbout
+            // 
+            this.lnkAbout.AutoSize = true;
+            this.lnkAbout.Location = new System.Drawing.Point(12, 33);
+            this.lnkAbout.Name = "lnkAbout";
+            this.lnkAbout.Size = new System.Drawing.Size(45, 15);
+            this.lnkAbout.TabIndex = 1;
+            this.lnkAbout.TabStop = true;
+            this.lnkAbout.Text = "GitHub";
+            this.lnkAbout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkAbout_LinkClicked);
+            // 
+            // FrmAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(684, 223);
-            this.Controls.Add(this.lsbDlc);
+            this.ClientSize = new System.Drawing.Size(234, 61);
+            this.Controls.Add(this.lnkAbout);
+            this.Controls.Add(this.lblAbout);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FrmFreeDlc";
+            this.Name = "FrmAbout";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Free DLC";
-            this.Load += new System.EventHandler(this.FrmFreeDlc_Load);
+            this.Text = "About";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private ListBox lsbDlc;
+        private Label lblAbout;
+        private LinkLabel lnkAbout;
     }
 }

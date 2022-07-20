@@ -1,7 +1,7 @@
 ﻿using SteamDlcShopping.Core.Controllers;
 using SteamDlcShopping.Core.ViewModels;
 
-namespace SteamDlcShopping
+namespace SteamDlcShopping.Views
 {
     public partial class FrmBlacklist : Form
     {

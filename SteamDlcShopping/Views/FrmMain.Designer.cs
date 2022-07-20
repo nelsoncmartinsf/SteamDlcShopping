@@ -1,6 +1,6 @@
 ﻿using SteamDlcShopping.Extensibility;
 
-namespace SteamDlcShopping
+namespace SteamDlcShopping.Views
 {
     partial class FrmMain
     {
@@ -61,6 +61,7 @@ namespace SteamDlcShopping
             this.smiBlacklist = new System.Windows.Forms.ToolStripMenuItem();
             this.smiFreeDlc = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMenu = new System.Windows.Forms.MenuStrip();
+            this.smiAbout = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.grbLibrary.SuspendLayout();
             this.mnuMenu.SuspendLayout();
@@ -347,12 +348,20 @@ namespace SteamDlcShopping
             this.mnuMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.smiSettings,
             this.smiBlacklist,
-            this.smiFreeDlc});
+            this.smiFreeDlc,
+            this.smiAbout});
             this.mnuMenu.Location = new System.Drawing.Point(0, 0);
             this.mnuMenu.Name = "mnuMenu";
             this.mnuMenu.Size = new System.Drawing.Size(717, 24);
             this.mnuMenu.TabIndex = 0;
             this.mnuMenu.Text = "menuStrip1";
+            // 
+            // smiAbout
+            // 
+            this.smiAbout.Name = "smiAbout";
+            this.smiAbout.Size = new System.Drawing.Size(52, 20);
+            this.smiAbout.Text = "About";
+            this.smiAbout.Click += new System.EventHandler(this.smiAbout_Click);
             // 
             // FrmMain
             // 
@@ -416,5 +425,6 @@ namespace SteamDlcShopping
         private ToolStripMenuItem smiFreeDlc;
         private MenuStrip mnuMenu;
         private CheckBox chkHideDlcNotOnSale;
+        private ToolStripMenuItem smiAbout;
     }
 }

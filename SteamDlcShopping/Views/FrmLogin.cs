@@ -1,7 +1,7 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using SteamDlcShopping.Properties;
 
-namespace SteamDlcShopping
+namespace SteamDlcShopping.Views
 {
     public partial class FrmLogin : Form
     {

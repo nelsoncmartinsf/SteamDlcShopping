@@ -5,7 +5,7 @@ using SteamDlcShopping.Properties;
 using System.Diagnostics;
 using Timer = System.Threading.Timer;
 
-namespace SteamDlcShopping
+namespace SteamDlcShopping.Views
 {
     public partial class FrmMain : Form
     {
@@ -114,6 +114,13 @@ namespace SteamDlcShopping
             form.Dispose();
 
             smiFreeDlc.Enabled = LibraryController.FreeDlcExist;
+        }
+
+        private void smiAbout_Click(object sender, EventArgs e)
+        {
+            FrmAbout form = new();
+            form.ShowDialog();
+            form.Dispose();
         }
 
         //////////////////////////////////////// BUTTONS ////////////////////////////////////////

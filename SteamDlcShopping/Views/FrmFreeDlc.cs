@@ -1,7 +1,7 @@
 ﻿using SteamDlcShopping.Core.Controllers;
 using System.Diagnostics;
 
-namespace SteamDlcShopping
+namespace SteamDlcShopping.Views
 {
     public partial class FrmFreeDlc : Form
     {

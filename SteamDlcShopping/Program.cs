@@ -1,4 +1,5 @@
 using SteamDlcShopping.Properties;
+using SteamDlcShopping.Views;
 
 namespace SteamDlcShopping
 {

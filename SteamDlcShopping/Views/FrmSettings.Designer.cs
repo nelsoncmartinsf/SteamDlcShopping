@@ -1,4 +1,4 @@
-﻿namespace SteamDlcShopping
+﻿namespace SteamDlcShopping.Views
 {
     partial class FrmSettings
     {
