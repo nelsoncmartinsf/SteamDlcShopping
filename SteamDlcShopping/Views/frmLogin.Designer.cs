@@ -42,6 +42,7 @@
             this.webLogin.Size = new System.Drawing.Size(784, 495);
             this.webLogin.Source = new System.Uri("https://store.steampowered.com/login", System.UriKind.Absolute);
             this.webLogin.TabIndex = 0;
+            this.webLogin.Visible = false;
             this.webLogin.ZoomFactor = 1D;
             this.webLogin.CoreWebView2InitializationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs>(this.webLogin_CoreWebView2InitializationCompleted);
             this.webLogin.NavigationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs>(this.webLogin_NavigationCompleted);

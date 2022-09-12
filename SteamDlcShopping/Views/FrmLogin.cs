@@ -31,10 +31,16 @@ namespace SteamDlcShopping.Views
         {
             if (webLogin.Source.AbsoluteUri == "https://store.steampowered.com/login")
             {
-                webLogin.ExecuteScriptAsync("document.getElementsByClassName('responsive_header')[0].remove();");
-                webLogin.ExecuteScriptAsync("document.getElementsByClassName('login_right_col')[0].remove();");
-                webLogin.ExecuteScriptAsync("document.getElementById('link_forgot_password').remove();");
-                webLogin.ExecuteScriptAsync("document.body.style.overflow = 'hidden';");
+                Thread.Sleep(500);
+
+                webLogin.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('responsive_header')[0].remove();");
+                webLogin.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('login_bottom_row')[0].remove();");
+                webLogin.CoreWebView2.ExecuteScriptAsync("document.querySelectorAll('[class^=newlogindialog_QRSection]')[0].remove();");
+                webLogin.CoreWebView2.ExecuteScriptAsync("document.querySelector('[class^=newlogindialog_TextLink]').remove();");
+                webLogin.CoreWebView2.ExecuteScriptAsync("document.body.style.overflow = 'hidden';");
+                webLogin.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('page_content')[0].scrollIntoView({behavior: 'auto',block: 'center',inline: 'center'});");
+
+                webLogin.Visible = true;
             }
 
             if (webLogin.Source.AbsoluteUri == "https://store.steampowered.com/")
