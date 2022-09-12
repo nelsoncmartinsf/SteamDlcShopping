@@ -1,5 +1,6 @@
 ﻿using SteamDlcShopping.Core.Controllers;
 using SteamDlcShopping.Core.ViewModels;
+using SteamDlcShopping.Properties;
 
 namespace SteamDlcShopping.Views
 {
@@ -98,25 +99,24 @@ namespace SteamDlcShopping.Views
 
         private void btnClearAutoBlacklisted_Click(object sender, EventArgs e)
         {
-            List<int> unblacklist = new();
+            BlacklistController.ClearAutoBlacklist();
 
-            foreach (GameBlacklistView game in _blacklist)
+            if (!Settings.Default.AutoBlacklist)
             {
-                if (!game.AutoBlacklisted)
-                {
-                    continue;
-                }
-
-                unblacklist.Add(game.AppId);
+                return;
             }
 
-            if (unblacklist.Any())
+            switch (Settings.Default.AutoBlacklistReminder)
             {
-                BlacklistController.RemoveGames(unblacklist);
-
-                LoadBlacklist();
-                LoadListbox();
-                SetupFields();
+                case 0:
+                    Settings.Default.AutoBlacklistLastReminder = Settings.Default.AutoBlacklistLastReminder.AddDays(7);
+                    break;
+                case 1:
+                    Settings.Default.AutoBlacklistLastReminder = Settings.Default.AutoBlacklistLastReminder.AddMonths(1);
+                    break;
+                case 2:
+                    Settings.Default.AutoBlacklistLastReminder = Settings.Default.AutoBlacklistLastReminder.AddYears(1);
+                    break;
             }
         }
     }

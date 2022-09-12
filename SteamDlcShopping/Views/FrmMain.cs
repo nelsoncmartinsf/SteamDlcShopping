@@ -496,20 +496,24 @@ namespace SteamDlcShopping.Views
 
             string timePeriod = string.Empty;
             DateTime reminderDate = new();
+            DateTime nextReminderDate = new();
 
             switch (Settings.Default.AutoBlacklistReminder)
             {
                 case 0:
                     timePeriod = "week";
                     reminderDate = Settings.Default.AutoBlacklistLastReminder.AddDays(7);
+                    nextReminderDate = DateTime.Today.Date.AddDays(7);
                     break;
                 case 1:
                     timePeriod = "month";
                     reminderDate = Settings.Default.AutoBlacklistLastReminder.AddMonths(1);
+                    nextReminderDate = DateTime.Today.Date.AddMonths(1);
                     break;
                 case 2:
                     timePeriod = "year";
                     reminderDate = Settings.Default.AutoBlacklistLastReminder.AddYears(1);
+                    nextReminderDate = DateTime.Today.Date.AddYears(1);
                     break;
             }
 
@@ -529,6 +533,7 @@ namespace SteamDlcShopping.Views
             }
 
             BlacklistController.ClearAutoBlacklist();
+            Settings.Default.AutoBlacklistLastReminder = nextReminderDate;
         }
     }
 }
