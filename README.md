@@ -33,7 +33,13 @@ You can contribute to this project by reporting bugs you find or suggesting new 
 **Q.** &emsp; If it's not possible for a website because of security reasons, then should I be worried using this application?
 
 **A.** &emsp; No account details information is ever accessed! This application only requires you to login to Steam in order to use your session cookies to retrieve your games.
-This is needed because Steam API doesn't provide user libraries, however oddly enough they have a link with that information available. The url used to retrieve the games list is [this one](https://store.steampowered.com/dynamicstore/userdata/), you can access it yourself (make sure you are logged in to Steam on your browser).
+This is needed because Steam API doesn't provide user libraries, however they have an endpoint with that information only available for each user respectively. The url used to retrieve the games list is [this one](https://store.steampowered.com/dynamicstore/userdata/), you can access it yourself (make sure you are logged in to Steam on your browser).
+
+<br/><br/>
+
+**Q.** &emsp; I click calculate but nothing happens, just an endless loading. Is this to be expected?
+
+**A.** &emsp; Yes. At least the first time using this app, performance won't probably be the best. The way your library is calculated is by literally opening the store page for each game and checking the dlc list, so the larger the library, the longer it takes. It is recommended the use of the autoblacklist feature to help improve the loading time in future calculations.
 
 <br/>
 
