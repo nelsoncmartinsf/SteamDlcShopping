@@ -45,6 +45,7 @@
             this.webLogin.Visible = false;
             this.webLogin.ZoomFactor = 1D;
             this.webLogin.CoreWebView2InitializationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs>(this.webLogin_CoreWebView2InitializationCompleted);
+            this.webLogin.NavigationStarting += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs>(this.webLogin_NavigationStarting);
             this.webLogin.NavigationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs>(this.webLogin_NavigationCompleted);
             // 
             // FrmLogin

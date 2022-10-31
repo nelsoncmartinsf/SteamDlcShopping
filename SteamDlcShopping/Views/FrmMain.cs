@@ -515,6 +515,8 @@ namespace SteamDlcShopping.Views
                     reminderDate = Settings.Default.AutoBlacklistLastReminder.AddYears(1);
                     nextReminderDate = DateTime.Today.Date.AddYears(1);
                     break;
+                case 3:
+                    return;
             }
 
             if (DateTime.Today.Date < reminderDate.Date)

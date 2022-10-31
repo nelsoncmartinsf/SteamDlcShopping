@@ -32,10 +32,7 @@ namespace SteamDlcShopping.Core.Models
 
         internal void AddGame(int appId, string name, bool autoBlacklisted = true)
         {
-            if (Games is null)
-            {
-                Games = new();
-            }
+            Games ??= new();
 
             if (Games.Any(x => x.AppId == appId))
             {

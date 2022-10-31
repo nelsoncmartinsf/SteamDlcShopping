@@ -35,10 +35,7 @@ namespace SteamDlcShopping.Core.Controllers
 
         public static void Load()
         {
-            if (_blacklist is null)
-            {
-                _blacklist = new Blacklist();
-            }
+            _blacklist ??= new Blacklist();
 
             try
             {

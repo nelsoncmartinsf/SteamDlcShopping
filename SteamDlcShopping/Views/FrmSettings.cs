@@ -24,7 +24,12 @@ namespace SteamDlcShopping.Views
 
             lblReminder.Enabled = chkAutoBlacklist.Checked;
             ddlReminder.Enabled = chkAutoBlacklist.Checked;
-            ddlReminder.SelectedIndex = Settings.Default.AutoBlacklistReminder;
+
+            ddlReminder.SelectedIndex = Settings.Default.AutoBlacklistReminder switch
+            {
+                -1 => 1,
+                _ => Settings.Default.AutoBlacklistReminder,
+            };
 
             //Errors
             _erpSteamApiKey.BlinkStyle = ErrorBlinkStyle.NeverBlink;
@@ -90,7 +95,6 @@ namespace SteamDlcShopping.Views
             Settings.Default.SteamApiKey = txtSteamApiKey.Text;
             Settings.Default.AutoBlacklist = chkAutoBlacklist.Checked;
             Settings.Default.AutoBlacklistReminder = ddlReminder.SelectedIndex;
-            Settings.Default.AutoBlacklistLastReminder = DateTime.Now;
             Settings.Default.UseMemeLoading = chkUseMemeLoading.Checked;
             Settings.Default.Save();
 
