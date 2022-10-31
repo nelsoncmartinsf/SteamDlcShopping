@@ -29,8 +29,13 @@
             }
         }
 
-        internal void SortList(int newColumn)
+        internal void SortList(int newColumn, bool revertSorting = true)
         {
+            if (newColumn == -1)
+            {
+                return;
+            }
+
             if (_columnSorter is null)
             {
                 return;
@@ -48,15 +53,18 @@
                 Columns[newColumn].Tag = Columns[newColumn].Text.Length;
             }
 
-            //Revert sorting on the same column
-            if (newColumn == _columnSorter.Column)
+            if (revertSorting)
             {
-                _columnSorter.Order = _columnSorter.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
-            }
-            else
-            {
-                _columnSorter.Column = newColumn;
-                _columnSorter.Order = SortOrder.Ascending;
+                //Revert sorting on the same column
+                if (newColumn == _columnSorter.Column)
+                {
+                    _columnSorter.Order = _columnSorter.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+                }
+                else
+                {
+                    _columnSorter.Column = newColumn;
+                    _columnSorter.Order = SortOrder.Ascending;
+                }
             }
 
             //Apply the sorting character

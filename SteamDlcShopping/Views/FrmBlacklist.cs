@@ -101,6 +101,10 @@ namespace SteamDlcShopping.Views
         {
             BlacklistController.ClearAutoBlacklist();
 
+            LoadBlacklist();
+            LoadListbox();
+            SetupFields();
+
             if (!Settings.Default.AutoBlacklist)
             {
                 return;

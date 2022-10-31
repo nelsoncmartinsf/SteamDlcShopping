@@ -27,6 +27,19 @@ namespace SteamDlcShopping.Views
             webLogin.CoreWebView2.DOMContentLoaded += webLogin_CoreWebView2_DOMContentLoaded;
         }
 
+        private void webLogin_NavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs e)
+        {
+            if (e.Uri.Contains("HelpWithLoginInfo"))
+            {
+                e.Cancel = true;
+            }
+
+            if (e.Uri == "https://store.steampowered.com/")
+            {
+                //WindowState = FormWindowState.Minimized;
+            }
+        }
+
         private void webLogin_CoreWebView2_DOMContentLoaded(object? sender, CoreWebView2DOMContentLoadedEventArgs e)
         {
             if (webLogin.Source.AbsoluteUri == "https://store.steampowered.com/login")
@@ -42,11 +55,6 @@ namespace SteamDlcShopping.Views
 
                 webLogin.Visible = true;
             }
-
-            //if (webLogin.Source.AbsoluteUri == "https://store.steampowered.com/")
-            //{
-            //    webLogin.Visible = false;
-            //}
         }
 
         private async void webLogin_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
@@ -76,19 +84,6 @@ namespace SteamDlcShopping.Views
             }
 
             return null;
-        }
-
-        private void webLogin_NavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs e)
-        {
-            if (e.Uri.Contains("HelpWithLoginInfo"))
-            {
-                e.Cancel = true;
-            }
-
-            if (e.Uri == "https://store.steampowered.com/")
-            {
-                Visible = false;
-            }
         }
     }
 }

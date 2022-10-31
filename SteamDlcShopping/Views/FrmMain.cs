@@ -61,6 +61,8 @@ namespace SteamDlcShopping.Views
                 _ignoreGameFilterEvents = false;
                 _ignoreDlcFilterEvents = false;
 
+                lsvGame._columnSorter = null;
+                lsvDlc._columnSorter = null;
                 UnloadGames();
                 UnloadDlc();
 
@@ -204,7 +206,6 @@ namespace SteamDlcShopping.Views
             }
 
             lsvGame_Load(library.Games);
-            lsvGame.Sort();
 
             lsvGame.Enabled = true;
             txtGameSearch.Enabled = true;
@@ -327,7 +328,11 @@ namespace SteamDlcShopping.Views
             List<DlcView> dlcList = LibraryController.GetDlc(_selectedGame, txtDlcSearch.Text, chkHideDlcNotOnSale.Checked, chkHideDlcOwned.Checked);
 
             lsvDlc_Load(dlcList);
-            lsvDlc.Sort();
+
+            if (lsvDlc._columnSorter is not null)
+            {
+                lsvDlc.SortList(lsvDlc._columnSorter.Column, false);
+            }
 
             lsvDlc.Enabled = true;
             txtDlcSearch.Enabled = true;
@@ -391,7 +396,8 @@ namespace SteamDlcShopping.Views
 
             if (lsvDlc.ListViewItemSorter is null)
             {
-                lsvDlc._columnSorter = new();
+                lsvDlc._columnSorter ??= new();
+
                 lsvDlc.ListViewItemSorter = lsvDlc._columnSorter;
             }
         }
