@@ -4,11 +4,15 @@
     {
         internal ColumnSorter? _columnSorter;
 
-        internal protected void Unload()
+        internal protected void Unload(bool resetHeaders)
         {
             Items.Clear();
             ListViewItemSorter = null;
-            ResetHeaders();
+
+            if (resetHeaders)
+            {
+                ResetHeaders();
+            }
         }
 
         internal protected void ResetHeaders()

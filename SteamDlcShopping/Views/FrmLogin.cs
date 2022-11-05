@@ -1,4 +1,5 @@
 ﻿using Microsoft.Web.WebView2.Core;
+using SteamDlcShopping.Extensibility;
 using SteamDlcShopping.Properties;
 
 namespace SteamDlcShopping.Views
@@ -11,6 +12,17 @@ namespace SteamDlcShopping.Views
         }
 
         //////////////////////////////////////// FORM ////////////////////////////////////////
+
+        private void FrmLogin_Load(object sender, EventArgs e)
+        {
+            ucLoad ucLoad = new()
+            {
+                Name = "ucLoad",
+                Location = new Point(0, 0)
+            };
+
+            Controls.Add(ucLoad);
+        }
 
         private void FrmLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -36,7 +48,7 @@ namespace SteamDlcShopping.Views
 
             if (e.Uri == "https://store.steampowered.com/")
             {
-                //WindowState = FormWindowState.Minimized;
+                webLogin.Visible = false;
             }
         }
 
@@ -44,7 +56,7 @@ namespace SteamDlcShopping.Views
         {
             if (webLogin.Source.AbsoluteUri == "https://store.steampowered.com/login")
             {
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
 
                 webLogin.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('responsive_header')[0].remove();");
                 webLogin.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('login_bottom_row')[0].remove();");

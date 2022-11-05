@@ -218,7 +218,7 @@ namespace SteamDlcShopping.Views
 
         private void UnloadGames()
         {
-            lsvGame.Unload();
+            lsvGame.Unload(true);
             lsvGame.Enabled = false;
 
             txtGameSearch.Enabled = false;
@@ -348,9 +348,9 @@ namespace SteamDlcShopping.Views
             }
         }
 
-        private void UnloadDlc()
+        private void UnloadDlc(bool resetHeaders = true)
         {
-            lsvDlc.Unload();
+            lsvDlc.Unload(resetHeaders);
             lsvDlc.Enabled = false;
 
             txtDlcSearch.Enabled = false;
@@ -435,7 +435,7 @@ namespace SteamDlcShopping.Views
             }
 
             LoadGames();
-            UnloadDlc();
+            UnloadDlc(false);
         }
 
         private void lsvDlc_FilterChanged(object sender, EventArgs e)
