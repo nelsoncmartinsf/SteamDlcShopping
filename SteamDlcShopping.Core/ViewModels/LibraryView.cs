@@ -5,6 +5,8 @@
         //Properties
         public List<GameView>? Games { get; set; }
 
-        public string? TotalCost { get; set; }
+        public string? TotalCurrentPrice { get; set; }
+        
+        public string? TotalFullPrice { get; set; }
     }
 }

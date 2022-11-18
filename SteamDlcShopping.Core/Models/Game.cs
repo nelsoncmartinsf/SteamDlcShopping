@@ -11,7 +11,9 @@ namespace SteamDlcShopping.Core.Models
 
         internal string? Name { get; }
 
-        internal long? DlcTotalPrice { get; private set; }
+        internal long? DlcTotalCurrentPrice { get; private set; }
+
+        internal long? DlcTotalFullPrice { get; private set; }
 
         internal int DlcLeft { get; private set; }
 
@@ -141,7 +143,8 @@ namespace SteamDlcShopping.Core.Models
 
         internal void CalculateDlcMetrics()
         {
-            DlcTotalPrice = 0;
+            DlcTotalCurrentPrice = 0;
+            DlcTotalFullPrice = 0;
             DlcLeft = 0;
             DlcHighestPercentage = 0;
 
@@ -154,13 +157,15 @@ namespace SteamDlcShopping.Core.Models
 
                 DlcLeft++;
 
+                DlcTotalFullPrice += dlc.Price;
+
                 if (dlc.Sale is null)
                 {
-                    DlcTotalPrice += dlc.Price;
+                    DlcTotalCurrentPrice += dlc.Price;
                     continue;
                 }
 
-                DlcTotalPrice += dlc.Sale.Price;
+                DlcTotalCurrentPrice += dlc.Sale.Price;
 
                 if (dlc.Sale?.Percentage > DlcHighestPercentage)
                 {

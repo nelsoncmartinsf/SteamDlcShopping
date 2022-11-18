@@ -122,6 +122,8 @@ namespace SteamDlcShopping.Views
                     Settings.Default.AutoBlacklistLastReminder = Settings.Default.AutoBlacklistLastReminder.AddYears(1);
                     break;
             }
+
+            Settings.Default.Save();
         }
     }
 }

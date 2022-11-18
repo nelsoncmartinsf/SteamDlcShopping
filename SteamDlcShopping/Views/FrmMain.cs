@@ -212,7 +212,8 @@ namespace SteamDlcShopping.Views
             chkHideGamesNotOnSale.Enabled = true;
 
             lblGameCount.Text = $"Count: {lsvGame.Items.Count}";
-            lblLibraryCost.Text = $"Cost: {library.TotalCost}";
+            lblLibraryCurrentPrice.Text = $"Current Cost: {library.TotalCurrentPrice}";
+            lblLibraryFullPrice.Text = $"Total Cost: {library.TotalFullPrice}";
             btnBlacklist.Visible = false;
         }
 
@@ -225,7 +226,8 @@ namespace SteamDlcShopping.Views
             chkHideGamesNotOnSale.Enabled = false;
 
             lblGameCount.Text = null;
-            lblLibraryCost.Text = null;
+            lblLibraryCurrentPrice.Text = null;
+            lblLibraryFullPrice.Text = null;
             btnBlacklist.Visible = false;
         }
 
@@ -245,7 +247,7 @@ namespace SteamDlcShopping.Views
                 item.SubItems[0].Tag = Types.String;
 
                 //Cost
-                subItem = new() { Text = game.DlcTotalPrice, Tag = Types.Decimal };
+                subItem = new() { Text = game.DlcTotalCurrentPrice, Tag = Types.Decimal };
                 item.SubItems.Add(subItem);
 
                 //DLC Left
@@ -542,6 +544,7 @@ namespace SteamDlcShopping.Views
 
             BlacklistController.ClearAutoBlacklist();
             Settings.Default.AutoBlacklistLastReminder = nextReminderDate;
+            Settings.Default.Save();
         }
     }
 }

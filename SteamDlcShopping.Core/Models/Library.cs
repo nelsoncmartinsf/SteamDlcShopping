@@ -14,7 +14,9 @@ namespace SteamDlcShopping.Core.Models
 
         internal List<Game>? Games { get; private set; }
 
-        internal long? TotalCost => Games?.Sum(x => x.DlcTotalPrice);
+        internal long? TotalCurrentPrice => Games?.Sum(x => x.DlcTotalCurrentPrice);
+        
+        internal long? TotalFullPrice => Games?.Sum(x => x.DlcTotalFullPrice);
 
         //Constructor
         internal Library(long steamId)

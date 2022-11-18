@@ -201,7 +201,8 @@ namespace SteamDlcShopping.Core.Controllers
 
             try
             {
-                long totalCost = 0;
+                long totalCurrentPrice = 0;
+                long totalFullPrice = 0;
 
                 foreach (Game game in _library.Games)
                 {
@@ -221,17 +222,20 @@ namespace SteamDlcShopping.Core.Controllers
                     {
                         AppId = game.AppId,
                         Name = game.Name,
-                        DlcTotalPrice = Currency.PriceToTemplate(game.DlcTotalPrice ?? 0),
+                        DlcTotalCurrentPrice = Currency.PriceToTemplate(game.DlcTotalCurrentPrice ?? 0),
+                        DlcTotalFullPrice = Currency.PriceToTemplate(game.DlcTotalFullPrice ?? 0),
                         DlcLeft = game.DlcLeft,
                         DlcHighestPercentage = game.DlcHighestPercentage > 0 ? $"{game.DlcHighestPercentage}%" : null
                     };
 
-                    totalCost += game.DlcTotalPrice ?? 0;
+                    totalCurrentPrice += game.DlcTotalCurrentPrice ?? 0;
+                    totalFullPrice += game.DlcTotalFullPrice ?? 0;
 
                     result.Games.Add(gameDto);
                 }
 
-                result.TotalCost = Currency.PriceToTemplate(totalCost);
+                result.TotalCurrentPrice = Currency.PriceToTemplate(totalCurrentPrice);
+                result.TotalFullPrice = Currency.PriceToTemplate(totalFullPrice);
             }
             catch (Exception exception)
             {

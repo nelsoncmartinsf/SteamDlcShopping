@@ -51,7 +51,8 @@ namespace SteamDlcShopping.Views
             this.grbLibrary = new System.Windows.Forms.GroupBox();
             this.lnkTooManyDlc = new System.Windows.Forms.LinkLabel();
             this.lblTooManyDlc = new System.Windows.Forms.Label();
-            this.lblLibraryCost = new System.Windows.Forms.Label();
+            this.lblLibraryFullPrice = new System.Windows.Forms.Label();
+            this.lblLibraryCurrentPrice = new System.Windows.Forms.Label();
             this.chkHideDlcOwned = new System.Windows.Forms.CheckBox();
             this.chkHideDlcNotOnSale = new System.Windows.Forms.CheckBox();
             this.chkHideGamesNotOnSale = new System.Windows.Forms.CheckBox();
@@ -224,7 +225,8 @@ namespace SteamDlcShopping.Views
             // 
             this.grbLibrary.Controls.Add(this.lnkTooManyDlc);
             this.grbLibrary.Controls.Add(this.lblTooManyDlc);
-            this.grbLibrary.Controls.Add(this.lblLibraryCost);
+            this.grbLibrary.Controls.Add(this.lblLibraryFullPrice);
+            this.grbLibrary.Controls.Add(this.lblLibraryCurrentPrice);
             this.grbLibrary.Controls.Add(this.chkHideDlcOwned);
             this.grbLibrary.Controls.Add(this.chkHideDlcNotOnSale);
             this.grbLibrary.Controls.Add(this.chkHideGamesNotOnSale);
@@ -262,14 +264,23 @@ namespace SteamDlcShopping.Views
             this.lblTooManyDlc.TabIndex = 5;
             this.lblTooManyDlc.Text = "This game has over 200 DLC.  Check the full list here";
             // 
-            // lblLibraryCost
+            // lblLibraryFullPrice
             // 
-            this.lblLibraryCost.AutoSize = true;
-            this.lblLibraryCost.Location = new System.Drawing.Point(212, 298);
-            this.lblLibraryCost.Name = "lblLibraryCost";
-            this.lblLibraryCost.Size = new System.Drawing.Size(80, 15);
-            this.lblLibraryCost.TabIndex = 0;
-            this.lblLibraryCost.Text = "lblLibraryCost";
+            this.lblLibraryFullPrice.AutoSize = true;
+            this.lblLibraryFullPrice.Location = new System.Drawing.Point(355, 298);
+            this.lblLibraryFullPrice.Name = "lblLibraryFullPrice";
+            this.lblLibraryFullPrice.Size = new System.Drawing.Size(101, 15);
+            this.lblLibraryFullPrice.TabIndex = 0;
+            this.lblLibraryFullPrice.Text = "lblLibraryFullPrice";
+            // 
+            // lblLibraryCurrentPrice
+            // 
+            this.lblLibraryCurrentPrice.AutoSize = true;
+            this.lblLibraryCurrentPrice.Location = new System.Drawing.Point(212, 298);
+            this.lblLibraryCurrentPrice.Name = "lblLibraryCurrentPrice";
+            this.lblLibraryCurrentPrice.Size = new System.Drawing.Size(122, 15);
+            this.lblLibraryCurrentPrice.TabIndex = 0;
+            this.lblLibraryCurrentPrice.Text = "lblLibraryCurrentPrice";
             // 
             // chkHideDlcOwned
             // 
@@ -413,7 +424,7 @@ namespace SteamDlcShopping.Views
         private ColumnHeader colMaxDiscount;
         private GroupBox grbLibrary;
         private CheckBox chkHideGamesNotOnSale;
-        private Label lblLibraryCost;
+        private Label lblLibraryCurrentPrice;
         private Button btnBlacklist;
         private CheckBox chkHideDlcOwned;
         private TextBox txtDlcSearch;
@@ -426,5 +437,6 @@ namespace SteamDlcShopping.Views
         private MenuStrip mnuMenu;
         private CheckBox chkHideDlcNotOnSale;
         private ToolStripMenuItem smiAbout;
+        private Label lblLibraryFullPrice;
     }
 }
