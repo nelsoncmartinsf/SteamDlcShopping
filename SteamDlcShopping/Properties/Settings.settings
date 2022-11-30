@@ -24,9 +24,15 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="GameSortColumn" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">-1</Value>
     </Setting>
-    <Setting Name="GameSortOrder" Type="System.Boolean" Scope="User">
+    <Setting Name="GameSortDescending" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DlcSortColumn" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">-1</Value>
+    </Setting>
+    <Setting Name="DlcSortDescending" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

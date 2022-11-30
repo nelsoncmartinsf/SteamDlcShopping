@@ -408,12 +408,18 @@ namespace SteamDlcShopping.Views
 
             lsvDlc.EndUpdate();
 
-            if (lsvDlc.ListViewItemSorter is null)
+            if (lsvDlc._columnSorter is null)
             {
-                lsvDlc._columnSorter ??= new();
+                lsvDlc._columnSorter = new();
 
-                lsvDlc.ListViewItemSorter = lsvDlc._columnSorter;
+                if (Settings.Default.DlcSortColumn > -1)
+                {
+                    lsvDlc._columnSorter.Column = Settings.Default.DlcSortColumn;
+                    lsvDlc._columnSorter.Order = Settings.Default.DlcSortDescending ? SortOrder.Descending : SortOrder.Ascending;
+                }
             }
+
+            lsvDlc.ListViewItemSorter ??= lsvDlc._columnSorter;
         }
 
         private void lsvDlc_ColumnClick(object sender, ColumnClickEventArgs e)

@@ -108,7 +108,7 @@ namespace SteamDlcShopping.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
         public int GameSortColumn {
             get {
                 return ((int)(this["GameSortColumn"]));
@@ -127,6 +127,30 @@ namespace SteamDlcShopping.Properties {
             }
             set {
                 this["GameSortDescending"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public int DlcSortColumn {
+            get {
+                return ((int)(this["DlcSortColumn"]));
+            }
+            set {
+                this["DlcSortColumn"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DlcSortDescending {
+            get {
+                return ((bool)(this["DlcSortDescending"]));
+            }
+            set {
+                this["DlcSortDescending"] = value;
             }
         }
     }

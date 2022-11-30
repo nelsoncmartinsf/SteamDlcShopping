@@ -30,8 +30,8 @@ namespace SteamDlcShopping.Views
                 _ => Settings.Default.AutoBlacklistReminder
             };
 
-            int index = Settings.Default.GameSortColumn == -1 ? 0 : Settings.Default.GameSortColumn * 2 + 1 + Convert.ToInt32(Settings.Default.GameSortDescending);
-            ddlGameDefaultSort.SelectedIndex = index;
+            ddlGameSort.SelectedIndex = Settings.Default.GameSortColumn == -1 ? 0 : Settings.Default.GameSortColumn * 2 + 1 + Convert.ToInt32(Settings.Default.GameSortDescending);
+            ddlDlcSort.SelectedIndex = Settings.Default.DlcSortColumn == -1 ? 0 : Settings.Default.DlcSortColumn * 2 + 1 + Convert.ToInt32(Settings.Default.DlcSortDescending);
 
             chkUseMemeLoading.Checked = Settings.Default.UseMemeLoading;
 
@@ -99,8 +99,10 @@ namespace SteamDlcShopping.Views
             Settings.Default.SteamApiKey = txtSteamApiKey.Text;
             Settings.Default.AutoBlacklist = chkAutoBlacklist.Checked;
             Settings.Default.AutoBlacklistReminder = ddlReminder.SelectedIndex;
-            Settings.Default.GameSortColumn = ddlGameDefaultSort.SelectedIndex == 0 ? -1 : (ddlGameDefaultSort.SelectedIndex - 1) / 2;
-            Settings.Default.GameSortDescending = ddlGameDefaultSort.SelectedIndex % 2 == 0;
+            Settings.Default.GameSortColumn = ddlGameSort.SelectedIndex == 0 ? -1 : (ddlGameSort.SelectedIndex - 1) / 2;
+            Settings.Default.GameSortDescending = ddlGameSort.SelectedIndex % 2 == 0;
+            Settings.Default.DlcSortColumn = ddlDlcSort.SelectedIndex == 0 ? -1 : (ddlDlcSort.SelectedIndex - 1) / 2;
+            Settings.Default.DlcSortDescending = ddlDlcSort.SelectedIndex % 2 == 0;
             Settings.Default.UseMemeLoading = chkUseMemeLoading.Checked;
             Settings.Default.Save();
 
