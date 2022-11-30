@@ -40,6 +40,8 @@
             this.lblReminder = new System.Windows.Forms.Label();
             this.ddlReminder = new System.Windows.Forms.ComboBox();
             this.chkUseMemeLoading = new System.Windows.Forms.CheckBox();
+            this.ddlGameDefaultSort = new System.Windows.Forms.ComboBox();
+            this.lblGameDefaultSort = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbtSteamApiKey)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ptbSmartLoading)).BeginInit();
             this.SuspendLayout();
@@ -63,7 +65,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(232, 182);
+            this.btnSave.Location = new System.Drawing.Point(232, 226);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 5;
@@ -73,7 +75,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(313, 182);
+            this.btnCancel.Location = new System.Drawing.Point(313, 226);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 6;
@@ -158,7 +160,7 @@
             // 
             this.chkUseMemeLoading.AutoSize = true;
             this.chkUseMemeLoading.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkUseMemeLoading.Location = new System.Drawing.Point(28, 128);
+            this.chkUseMemeLoading.Location = new System.Drawing.Point(28, 166);
             this.chkUseMemeLoading.Name = "chkUseMemeLoading";
             this.chkUseMemeLoading.Size = new System.Drawing.Size(182, 19);
             this.chkUseMemeLoading.TabIndex = 3;
@@ -166,11 +168,40 @@
             this.chkUseMemeLoading.UseVisualStyleBackColor = true;
             this.chkUseMemeLoading.CheckedChanged += new System.EventHandler(this.chkAutoBlacklist_CheckedChanged);
             // 
+            // ddlGameDefaultSort
+            // 
+            this.ddlGameDefaultSort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ddlGameDefaultSort.Items.AddRange(new object[] {
+            "None",
+            "Game ▲",
+            "Game ▼",
+            "Total Cost ▲",
+            "Total Cost ▼",
+            "DLC Left ▲",
+            "DLC Left ▼",
+            "Highest % ▲",
+            "Highest % ▼"});
+            this.ddlGameDefaultSort.Location = new System.Drawing.Point(156, 128);
+            this.ddlGameDefaultSort.Name = "ddlGameDefaultSort";
+            this.ddlGameDefaultSort.Size = new System.Drawing.Size(100, 23);
+            this.ddlGameDefaultSort.TabIndex = 8;
+            // 
+            // lblGameDefaultSort
+            // 
+            this.lblGameDefaultSort.AutoSize = true;
+            this.lblGameDefaultSort.Location = new System.Drawing.Point(28, 131);
+            this.lblGameDefaultSort.Name = "lblGameDefaultSort";
+            this.lblGameDefaultSort.Size = new System.Drawing.Size(122, 15);
+            this.lblGameDefaultSort.TabIndex = 7;
+            this.lblGameDefaultSort.Text = "Games default sort by";
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 217);
+            this.ClientSize = new System.Drawing.Size(400, 261);
+            this.Controls.Add(this.ddlGameDefaultSort);
+            this.Controls.Add(this.lblGameDefaultSort);
             this.Controls.Add(this.ddlReminder);
             this.Controls.Add(this.lblReminder);
             this.Controls.Add(this.lnkGetSteamApiKey);
@@ -213,5 +244,7 @@
         private Label lblReminder;
         private ComboBox ddlReminder;
         private CheckBox chkUseMemeLoading;
+        private ComboBox ddlGameDefaultSort;
+        private Label lblGameDefaultSort;
     }
 }

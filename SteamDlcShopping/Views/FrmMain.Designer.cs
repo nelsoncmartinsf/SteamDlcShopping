@@ -387,6 +387,7 @@ namespace SteamDlcShopping.Views
             this.Controls.Add(this.ptbAvatar);
             this.Controls.Add(this.grbLibrary);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.mnuMenu;
             this.MaximizeBox = false;
             this.Name = "FrmMain";

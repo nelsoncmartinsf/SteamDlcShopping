@@ -20,7 +20,6 @@ namespace SteamDlcShopping.Views
             //Controls
             txtSteamApiKey.Text = Settings.Default.SteamApiKey;
             chkAutoBlacklist.Checked = Settings.Default.AutoBlacklist;
-            chkUseMemeLoading.Checked = Settings.Default.UseMemeLoading;
 
             lblReminder.Enabled = chkAutoBlacklist.Checked;
             ddlReminder.Enabled = chkAutoBlacklist.Checked;
@@ -28,8 +27,13 @@ namespace SteamDlcShopping.Views
             ddlReminder.SelectedIndex = Settings.Default.AutoBlacklistReminder switch
             {
                 -1 => 1,
-                _ => Settings.Default.AutoBlacklistReminder,
+                _ => Settings.Default.AutoBlacklistReminder
             };
+
+            int index = Settings.Default.GameSortColumn == -1 ? 0 : Settings.Default.GameSortColumn * 2 + 1 + Convert.ToInt32(Settings.Default.GameSortDescending);
+            ddlGameDefaultSort.SelectedIndex = index;
+
+            chkUseMemeLoading.Checked = Settings.Default.UseMemeLoading;
 
             //Errors
             _erpSteamApiKey.BlinkStyle = ErrorBlinkStyle.NeverBlink;
@@ -95,6 +99,8 @@ namespace SteamDlcShopping.Views
             Settings.Default.SteamApiKey = txtSteamApiKey.Text;
             Settings.Default.AutoBlacklist = chkAutoBlacklist.Checked;
             Settings.Default.AutoBlacklistReminder = ddlReminder.SelectedIndex;
+            Settings.Default.GameSortColumn = ddlGameDefaultSort.SelectedIndex == 0 ? -1 : (ddlGameDefaultSort.SelectedIndex - 1) / 2;
+            Settings.Default.GameSortDescending = ddlGameDefaultSort.SelectedIndex % 2 == 0;
             Settings.Default.UseMemeLoading = chkUseMemeLoading.Checked;
             Settings.Default.Save();
 

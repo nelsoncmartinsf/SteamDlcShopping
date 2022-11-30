@@ -207,6 +207,11 @@ namespace SteamDlcShopping.Views
 
             lsvGame_Load(library.Games);
 
+            if (lsvGame._columnSorter is not null)
+            {
+                lsvGame.SortList(lsvGame._columnSorter.Column, false);
+            }
+
             lsvGame.Enabled = true;
             txtGameSearch.Enabled = true;
             chkHideGamesNotOnSale.Enabled = true;
@@ -266,6 +271,13 @@ namespace SteamDlcShopping.Views
             if (lsvGame.ListViewItemSorter is null)
             {
                 lsvGame._columnSorter = new();
+
+                if (Settings.Default.GameSortColumn > -1)
+                {
+                    lsvGame._columnSorter.Column = Settings.Default.GameSortColumn;
+                    lsvGame._columnSorter.Order = Settings.Default.GameSortDescending ? SortOrder.Descending : SortOrder.Ascending;
+                }
+
                 lsvGame.ListViewItemSorter = lsvGame._columnSorter;
             }
         }
