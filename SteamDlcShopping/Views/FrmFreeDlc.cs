@@ -33,6 +33,11 @@ namespace SteamDlcShopping.Views
 
         private void lsbDlc_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            if (lsbDlc.SelectedItem is null)
+            {
+                return;
+            }
+
             KeyValuePair<int, string> item = (KeyValuePair<int, string>)lsbDlc.SelectedItems[0];
 
             Process process = new()

@@ -106,7 +106,7 @@ namespace SteamDlcShopping.Core.Models
                 string? salePercentage = priceNode.SelectSingleNode(".//div[@class='discount_pct']")?.InnerText?.Trim();
 
                 bool isFree = false;
-                bool isNotAvailable = false;
+                bool isAvailable = true;
                 Sale? sale = null;
 
                 long iPrice = 0;
@@ -117,7 +117,7 @@ namespace SteamDlcShopping.Core.Models
                         isFree = true;
                         break;
                     case "n/a":
-                        isNotAvailable = true;
+                        isAvailable = false;
                         break;
                     default:
                         //Dlc is currently on sale
@@ -136,7 +136,7 @@ namespace SteamDlcShopping.Core.Models
                         break;
                 }
 
-                Dlc dlc = new(Convert.ToInt32(appId), name, iPrice, sale, isFree, isNotAvailable);
+                Dlc dlc = new(Convert.ToInt32(appId), name, iPrice, sale, isAvailable, isFree);
                 DlcList.Add(dlc);
             }
         }

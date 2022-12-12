@@ -23,7 +23,7 @@ namespace SteamDlcShopping.Core.Controllers
                     return false;
                 }
 
-                return _library.Games.Any(x => x.DlcList.Any(y => !y.IsNotAvailable && !y.IsOwned && (y.IsFree || y.Price == 0 || y.Sale?.Percentage == 100)));
+                return _library.Games.Any(x => x.DlcList.Any(y => y.IsAvailable && !y.IsOwned && (y.IsFree || y.Price == 0 || y.Sale?.Percentage == 100)));
             }
         }
 
@@ -148,9 +148,9 @@ namespace SteamDlcShopping.Core.Controllers
                             continue;
                         }
 
-                        //Special rule to consider N/A dlc as owned
+                        //Special rule to skip N/A dlc
                         //This marks games that are only missing N/A dlc as completed
-                        if (dlc.IsNotAvailable)
+                        if (!dlc.IsAvailable)
                         {
                             continue;
                         }
@@ -290,15 +290,15 @@ namespace SteamDlcShopping.Core.Controllers
 
                     string price;
 
-                    if (dlc.IsFree)
+                    if (!dlc.IsAvailable)
                     {
-                        price = "Free";
+                        price = "N/A";
                     }
                     else
                     {
-                        if (dlc.IsNotAvailable)
+                        if (dlc.IsFree)
                         {
-                            price = "N/A";
+                            price = "Free";
                         }
                         else
                         {
@@ -347,7 +347,7 @@ namespace SteamDlcShopping.Core.Controllers
 
                 foreach (Game game in games)
                 {
-                    List<Dlc> dlcList = game.DlcList.Where(x => !x.IsNotAvailable && !x.IsOwned && (x.IsFree || x.Price == 0 || x.Sale?.Percentage == 100)).ToList();
+                    List<Dlc> dlcList = game.DlcList.Where(x => x.IsAvailable && !x.IsOwned && (x.IsFree || x.Price == 0 || x.Sale?.Percentage == 100)).ToList();
 
                     dlcList.ForEach(x => result.Add(x.AppId, $"{game.Name} - {x.Name}"));
                 }

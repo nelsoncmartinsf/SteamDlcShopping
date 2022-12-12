@@ -11,21 +11,21 @@
 
         internal Sale? Sale { get; }
 
-        internal bool IsFree { get; }
+        internal bool IsAvailable { get; }
 
-        internal bool IsNotAvailable { get; }
+        internal bool IsFree { get; }
 
         internal bool IsOwned { get; private set; }
 
         //Constructor
-        internal Dlc(int appId = default, string? name = default, long price = default, Sale? sale = default, bool isFree = default, bool isNotAvailable = default)
+        internal Dlc(int appId = default, string? name = default, long price = default, Sale? sale = default, bool isAvailable = default, bool isFree = default)
         {
             AppId = appId;
             Name = name;
             Price = price;
             Sale = sale;
             IsFree = isFree;
-            IsNotAvailable = isNotAvailable;
+            IsAvailable = isAvailable;
         }
 
         //Methods

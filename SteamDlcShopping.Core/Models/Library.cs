@@ -15,7 +15,7 @@ namespace SteamDlcShopping.Core.Models
         internal List<Game>? Games { get; private set; }
 
         internal long? TotalCurrentPrice => Games?.Sum(x => x.DlcTotalCurrentPrice);
-        
+
         internal long? TotalFullPrice => Games?.Sum(x => x.DlcTotalFullPrice);
 
         //Constructor
@@ -66,36 +66,7 @@ namespace SteamDlcShopping.Core.Models
                 return;
             }
 
-            //Load all dlc for all games
-            int threads = 10;
-            int size = Games.Count / threads;
-
-            using CountdownEvent countdownEvent = new(Games.Count % threads == 0 ? threads : threads + 1);
-
-            for (int count = 0; count * size < Games.Count; count++)
-            {
-                ThreadPool.QueueUserWorkItem(delegate (object? count)
-                {
-                    for (int? index = (count as int?) * size; index < ((count as int?) + 1) * size; index++)
-                    {
-                        if (index is null)
-                        {
-                            continue;
-                        }
-
-                        if (index == Games.Count)
-                        {
-                            break;
-                        }
-
-                        Games[index.Value].LoadDlc();
-                    }
-
-                    countdownEvent.Signal();
-                }, count);
-            }
-
-            countdownEvent.Wait();
+            Parallel.ForEach(Games, game => { game.LoadDlc(); });
         }
 
         internal void ApplyBlacklist(List<int> appIds)
