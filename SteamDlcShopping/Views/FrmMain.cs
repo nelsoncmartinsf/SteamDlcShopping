@@ -16,6 +16,8 @@ namespace SteamDlcShopping.Views
 
         //////////////////////////////////////// FORM ////////////////////////////////////////
 
+        private Timer? tmrFreeDlc;
+
         private void FrmMain_Load(object sender, EventArgs e)
         {
             ucLoad ucLoad = new()
@@ -37,6 +39,28 @@ namespace SteamDlcShopping.Views
             Controls["ucLoad"].Visible = false;
 
             AutoBlacklistReminder();
+        }
+
+        private void smiFreeDlc_EnabledChanged(object sender, EventArgs e)
+        {
+            if (((ToolStripMenuItem)sender).Enabled)
+            {
+                tmrFreeDlc = new(_ => tmrFreeDlc_Tick(), null, 500, 500);
+            }
+            else
+            {
+                tmrFreeDlc?.Dispose();
+            }
+        }
+
+        private void tmrFreeDlc_Tick()
+        {
+            Color color = smiFreeDlc.ForeColor == Color.Red ? Color.Blue : Color.Red;
+
+            Invoke(new Action(() =>
+            {
+                smiFreeDlc.ForeColor = color;
+            }));
         }
 
         private void tmrLibrary_Tick()

@@ -23,7 +23,7 @@ namespace SteamDlcShopping.Core.Controllers
                     return false;
                 }
 
-                return _library.Games.Any(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree));
+                return _library.Games.Any(x => x.DlcList.Any(y => !y.IsNotAvailable && !y.IsOwned && (y.IsFree || y.Price == 0 || y.Sale?.Percentage == 100)));
             }
         }
 
@@ -347,7 +347,7 @@ namespace SteamDlcShopping.Core.Controllers
 
                 foreach (Game game in games)
                 {
-                    List<Dlc> dlcList = game.DlcList.Where(x => !x.IsOwned && x.IsFree).ToList();
+                    List<Dlc> dlcList = game.DlcList.Where(x => !x.IsNotAvailable && !x.IsOwned && (x.IsFree || x.Price == 0 || x.Sale?.Percentage == 100)).ToList();
 
                     dlcList.ForEach(x => result.Add(x.AppId, $"{game.Name} - {x.Name}"));
                 }

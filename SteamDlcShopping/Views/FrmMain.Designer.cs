@@ -353,6 +353,7 @@ namespace SteamDlcShopping.Views
             this.smiFreeDlc.Size = new System.Drawing.Size(66, 20);
             this.smiFreeDlc.Text = "Free DLC";
             this.smiFreeDlc.Click += new System.EventHandler(this.smiFreeDlc_Click);
+            this.smiFreeDlc.EnabledChanged += new System.EventHandler(this.smiFreeDlc_EnabledChanged);
             // 
             // mnuMenu
             // 
