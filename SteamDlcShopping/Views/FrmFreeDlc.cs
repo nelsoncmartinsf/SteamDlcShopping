@@ -38,7 +38,7 @@ namespace SteamDlcShopping.Views
                 return;
             }
 
-            KeyValuePair<int, string> item = (KeyValuePair<int, string>)lsbDlc.SelectedItems[0];
+            KeyValuePair<int, string> item = (KeyValuePair<int, string>)lsbDlc.SelectedItem;
 
             Process process = new()
             {

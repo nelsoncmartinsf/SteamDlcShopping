@@ -36,7 +36,12 @@ namespace SteamDlcShopping.Views
             BlacklistController.Load();
             SetControlsState();
 
-            Controls["ucLoad"].Visible = false;
+            Control? ucLoad = Controls["ucLoad"];
+
+            if (ucLoad is not null)
+            {
+                ucLoad.Visible = false;
+            }
 
             AutoBlacklistReminder();
         }
@@ -111,7 +116,7 @@ namespace SteamDlcShopping.Views
                 smiFreeDlc.Enabled = LibraryController.FreeDlcExist;
                 btnLogout.Enabled = true;
                 btnCalculate.Enabled = true;
-                Controls["ucCalculate"].Dispose();
+                Controls["ucCalculate"]?.Dispose();
             }));
         }
 
@@ -157,12 +162,20 @@ namespace SteamDlcShopping.Views
             form.ShowDialog();
             form.Dispose();
 
-            Controls["ucLoad"].Visible = true;
+            Control? ucLoad = Controls["ucLoad"];
+
+            if (ucLoad is not null)
+            {
+                ucLoad.Visible = true;
+            }
 
             SteamProfileController.Login(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
             SetControlsState();
 
-            Controls["ucLoad"].Visible = false;
+            if (ucLoad is not null)
+            {
+                ucLoad.Visible = false;
+            }
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
