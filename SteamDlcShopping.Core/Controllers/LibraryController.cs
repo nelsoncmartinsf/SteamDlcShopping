@@ -343,7 +343,7 @@ namespace SteamDlcShopping.Core.Controllers
 
             try
             {
-                List<Game> games = _library.Games.Where(x => x.DlcList.Any(y => !y.IsOwned && y.IsFree)).ToList();
+                List<Game> games = _library.Games.Where(x => x.DlcList.Any(y => !y.IsOwned && (y.IsFree || y.Price == 0 || y.Sale?.Percentage == 100))).ToList();
 
                 foreach (Game game in games)
                 {
