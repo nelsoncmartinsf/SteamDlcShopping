@@ -63,6 +63,7 @@ namespace SteamDlcShopping.Views
             this.smiFreeDlc = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMenu = new System.Windows.Forms.MenuStrip();
             this.smiAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnRetryFailedGames = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
             this.grbLibrary.SuspendLayout();
             this.mnuMenu.SuspendLayout();
@@ -375,11 +376,22 @@ namespace SteamDlcShopping.Views
             this.smiAbout.Text = "About";
             this.smiAbout.Click += new System.EventHandler(this.smiAbout_Click);
             // 
+            // btnRetryFailedGames
+            // 
+            this.btnRetryFailedGames.Location = new System.Drawing.Point(555, 68);
+            this.btnRetryFailedGames.Name = "btnRetryFailedGames";
+            this.btnRetryFailedGames.Size = new System.Drawing.Size(150, 23);
+            this.btnRetryFailedGames.TabIndex = 5;
+            this.btnRetryFailedGames.Text = "btnRetryFailedGames";
+            this.btnRetryFailedGames.UseVisualStyleBackColor = true;
+            this.btnRetryFailedGames.Click += new System.EventHandler(this.btnRetryFailedGames_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(717, 751);
+            this.Controls.Add(this.btnRetryFailedGames);
             this.Controls.Add(this.mnuMenu);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.lblUsername);
@@ -440,5 +452,6 @@ namespace SteamDlcShopping.Views
         private CheckBox chkHideDlcNotOnSale;
         private ToolStripMenuItem smiAbout;
         private Label lblLibraryFullPrice;
+        private Button btnRetryFailedGames;
     }
 }

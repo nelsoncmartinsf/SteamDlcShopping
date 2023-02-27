@@ -21,6 +21,8 @@ namespace SteamDlcShopping.Core.Models
 
         internal bool HasTooManyDlc { get; set; }
 
+        internal bool FailedFetch { get; private set; }
+
         internal List<Dlc> DlcList { get; private set; }
 
         //Constructor
@@ -46,6 +48,14 @@ namespace SteamDlcShopping.Core.Models
             using HttpResponseMessage httpResponseMessage = httpClient.GetAsync($"{uri.OriginalString}/app/{AppId}").Result;
             using HttpContent content = httpResponseMessage.Content;
             response = content.ReadAsStringAsync().Result;
+
+            if (response.Contains("<H1>Access Denied</H1>"))
+            {
+                FailedFetch = true;
+                return;
+            }
+
+            FailedFetch = false;
 
             //The html dlc area was not found
             if (!response.Contains("gameAreaDLCSection"))

@@ -68,7 +68,7 @@ namespace SteamDlcShopping.Views
             }));
         }
 
-        private void tmrLibrary_Tick()
+        private void tmrCalculate_Tick()
         {
             Invoke(new Action(() =>
             {
@@ -77,6 +77,7 @@ namespace SteamDlcShopping.Views
                 smiFreeDlc.Enabled = false;
                 btnLogout.Enabled = false;
                 btnCalculate.Enabled = false;
+                btnRetryFailedGames.Visible = false;
 
                 _ignoreGameFilterEvents = true;
                 _ignoreDlcFilterEvents = true;
@@ -116,6 +117,77 @@ namespace SteamDlcShopping.Views
                 smiFreeDlc.Enabled = LibraryController.FreeDlcExist;
                 btnLogout.Enabled = true;
                 btnCalculate.Enabled = true;
+
+                int failedGames = LibraryController.FailedGames;
+
+                if (LibraryController.FailedGames > 0)
+                {
+                    btnRetryFailedGames.Visible = true;
+                    btnRetryFailedGames.Text = $"Retry {failedGames} failed games";
+                }
+
+                Controls["ucCalculate"]?.Dispose();
+            }));
+        }
+
+        private void tmrRetryFailedGames_Tick()
+        {
+            Invoke(new Action(() =>
+            {
+                smiSettings.Enabled = false;
+                smiBlacklist.Enabled = false;
+                smiFreeDlc.Enabled = false;
+                btnLogout.Enabled = false;
+                btnCalculate.Enabled = false;
+                btnRetryFailedGames.Visible = false;
+
+                _ignoreGameFilterEvents = true;
+                _ignoreDlcFilterEvents = true;
+
+                txtGameSearch.Text = null;
+                chkHideGamesNotOnSale.Checked = false;
+                txtDlcSearch.Text = null;
+                chkHideDlcNotOnSale.Checked = false;
+                chkHideDlcOwned.Checked = false;
+
+                _ignoreGameFilterEvents = false;
+                _ignoreDlcFilterEvents = false;
+
+                lsvGame._columnSorter = null;
+                lsvDlc._columnSorter = null;
+                UnloadGames();
+                UnloadDlc();
+
+                ucCalculate ucCalculate = new()
+                {
+                    Name = "ucCalculate",
+                    Location = grbLibrary.Location
+                };
+
+                Controls.Add(ucCalculate);
+                ucCalculate.BringToFront();
+            }));
+
+            LibraryController.RetryFailedGames(Settings.Default.AutoBlacklist);
+
+            Invoke(new Action(() =>
+            {
+                LoadGames();
+
+                smiSettings.Enabled = true;
+                smiBlacklist.Enabled = BlacklistController.HasGames;
+                smiFreeDlc.Enabled = LibraryController.FreeDlcExist;
+                btnLogout.Enabled = true;
+                btnCalculate.Enabled = true;
+
+                int failedGames = LibraryController.FailedGames;
+
+                if (LibraryController.FailedGames > 0)
+                {
+                    btnRetryFailedGames.Visible = true;
+                    btnRetryFailedGames.Text = $"Retry {failedGames} failed games";
+                }
+
                 Controls["ucCalculate"]?.Dispose();
             }));
         }
@@ -162,6 +234,12 @@ namespace SteamDlcShopping.Views
             form.ShowDialog();
             form.Dispose();
 
+            if (form.AccessDenied)
+            {
+                MessageBox.Show($"Steam is currently not accepting connections.{Environment.NewLine}Try again in a few moments.", "Connection to Steam", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             Control? ucLoad = Controls["ucLoad"];
 
             if (ucLoad is not null)
@@ -203,7 +281,13 @@ namespace SteamDlcShopping.Views
         private void btnCalculate_Click(object sender, EventArgs e)
         {
             //Set a timer worker thread
-            Timer tmrLibrary = new(_ => tmrLibrary_Tick(), null, 0, Timeout.Infinite);
+            Timer tmrCalculate = new(_ => tmrCalculate_Tick(), null, 0, Timeout.Infinite);
+        }
+
+        private void btnRetryFailedGames_Click(object sender, EventArgs e)
+        {
+            //Set a timer worker thread
+            Timer tmrRetryFailedGames = new(_ => tmrRetryFailedGames_Tick(), null, 0, Timeout.Infinite);
         }
 
         private void btnBlacklist_Click(object sender, EventArgs e)
@@ -529,6 +613,7 @@ namespace SteamDlcShopping.Views
             btnLogin.Visible = !session;
             btnLogout.Visible = session;
             btnCalculate.Enabled = session;
+            btnRetryFailedGames.Visible = false;
 
             UnloadGames();
             UnloadDlc();

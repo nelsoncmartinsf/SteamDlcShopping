@@ -38,7 +38,15 @@ namespace SteamDlcShopping.Core.Models
             HttpClient client = new(handler);
             response = client.GetAsync(uri).Result;
 
-            JObject jObject = JObject.Parse(response.Content.ReadAsStringAsync().Result);
+            string html = response.Content.ReadAsStringAsync().Result;
+
+            if (html.Contains("<H1>Access Denied</H1>"))
+            {
+                DynamicStore = null;
+                return;
+            }
+
+            JObject jObject = JObject.Parse(html);
             DynamicStore = JsonConvert.DeserializeObject<List<int>>($"{jObject["rgOwnedApps"]}");
         }
 
@@ -67,6 +75,16 @@ namespace SteamDlcShopping.Core.Models
             }
 
             Parallel.ForEach(Games, game => { game.LoadDlc(); });
+        }
+
+        internal void RetryFailedGames()
+        {
+            if (Games is null)
+            {
+                return;
+            }
+
+            Parallel.ForEach(Games.Where(x => x.FailedFetch), game => { game.LoadDlc(); });
         }
 
         internal void ApplyBlacklist(List<int> appIds)

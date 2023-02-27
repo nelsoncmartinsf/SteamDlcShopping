@@ -35,6 +35,11 @@ namespace SteamDlcShopping.Core
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(response);
 
+            if (htmlDoc.DocumentNode.OuterHtml.Contains("<H1>Access Denied</H1>"))
+            {
+                return;
+            }
+
             //The html parse failed
             if (htmlDoc.DocumentNode is null)
             {

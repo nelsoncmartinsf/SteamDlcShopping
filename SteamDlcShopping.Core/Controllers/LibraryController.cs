@@ -27,6 +27,24 @@ namespace SteamDlcShopping.Core.Controllers
             }
         }
 
+        public static int FailedGames
+        {
+            get
+            {
+                if (_library is null)
+                {
+                    return 0;
+                }
+
+                if (_library.Games is null)
+                {
+                    return 0;
+                }
+
+                return _library.Games.Count(x => x.FailedFetch);
+            }
+        }
+
         //Methods
         internal static void Login(string steamApiKey, string sessionId, string steamLoginSecure)
         {
@@ -126,14 +144,20 @@ namespace SteamDlcShopping.Core.Controllers
                     return;
                 }
 
-                List<int> gamesToRemove = new();
+                List<int> blacklist = new();
 
                 foreach (Game game in _library.Games)
                 {
+                    //Skip games that failed to fetch information
+                    if (game.FailedFetch)
+                    {
+                        continue;
+                    }
+
                     //Mark to remove games without dlc
                     if (game.DlcList is null || game.DlcList.Count == 0)
                     {
-                        gamesToRemove.Add(game.AppId);
+                        blacklist.Add(game.AppId);
                         continue;
                     }
 
@@ -161,18 +185,98 @@ namespace SteamDlcShopping.Core.Controllers
                     //Mark to remove games with all dlc owned
                     if (allOwned)
                     {
-                        gamesToRemove.Add(game.AppId);
+                        blacklist.Add(game.AppId);
                         continue;
                     }
                 }
 
                 if (autoBlacklist)
                 {
-                    BlacklistController.AddGames(gamesToRemove, true);
+                    BlacklistController.AddGames(blacklist, true);
                     BlacklistController.Save();
                 }
 
-                _library.ApplyBlacklist(gamesToRemove);
+                _library.ApplyBlacklist(blacklist);
+
+                _library.Games.ForEach(x => x.CalculateDlcMetrics());
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception);
+            }
+        }
+
+        public static void RetryFailedGames(bool autoBlacklist)
+        {
+            if (_library is null)
+            {
+                return;
+            }
+
+            try
+            {
+                if (_library.Games is null)
+                {
+                    return;
+                }
+
+                List<int> gamesToFetch = _library.Games.Where(x => x.FailedFetch).Select(x => x.AppId).ToList();
+
+                _library.RetryFailedGames();
+
+                List<int> blacklist = new();
+
+                foreach (Game game in _library.Games.Where(x => gamesToFetch.Contains(x.AppId)))
+                {
+                    //Skip games that failed to fetch information
+                    if (game.FailedFetch)
+                    {
+                        continue;
+                    }
+
+                    //Mark to remove games without dlc
+                    if (game.DlcList is null || game.DlcList.Count == 0)
+                    {
+                        blacklist.Add(game.AppId);
+                        continue;
+                    }
+
+                    bool allOwned = true;
+
+                    foreach (Dlc dlc in game.DlcList)
+                    {
+                        //Mark dlc as owned
+                        if (_library.DynamicStore is not null && _library.DynamicStore.Contains(dlc.AppId))
+                        {
+                            dlc.MarkAsOwned();
+                            continue;
+                        }
+
+                        //Special rule to skip N/A dlc
+                        //This marks games that are only missing N/A dlc as completed
+                        if (!dlc.IsAvailable)
+                        {
+                            continue;
+                        }
+
+                        allOwned = false;
+                    }
+
+                    //Mark to remove games with all dlc owned
+                    if (allOwned)
+                    {
+                        blacklist.Add(game.AppId);
+                        continue;
+                    }
+                }
+
+                if (autoBlacklist)
+                {
+                    BlacklistController.AddGames(blacklist, true);
+                    BlacklistController.Save();
+                }
+
+                _library.ApplyBlacklist(blacklist);
 
                 _library.Games.ForEach(x => x.CalculateDlcMetrics());
             }
@@ -214,6 +318,12 @@ namespace SteamDlcShopping.Core.Controllers
 
                     //Filter by games on sale
                     if (filterOnSale && game.DlcHighestPercentage == 0)
+                    {
+                        continue;
+                    }
+
+                    //Hide games that failed fetching data
+                    if (game.FailedFetch)
                     {
                         continue;
                     }

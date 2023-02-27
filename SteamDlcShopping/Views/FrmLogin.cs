@@ -1,11 +1,14 @@
 ﻿using Microsoft.Web.WebView2.Core;
 using SteamDlcShopping.Extensibility;
 using SteamDlcShopping.Properties;
+using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace SteamDlcShopping.Views
 {
     public partial class FrmLogin : Form
     {
+        public bool AccessDenied { get; set; }
+
         public FrmLogin()
         {
             InitializeComponent();
@@ -52,18 +55,28 @@ namespace SteamDlcShopping.Views
             }
         }
 
-        private void webLogin_CoreWebView2_DOMContentLoaded(object? sender, CoreWebView2DOMContentLoadedEventArgs e)
+        private async void webLogin_CoreWebView2_DOMContentLoaded(object? sender, CoreWebView2DOMContentLoadedEventArgs e)
         {
             if (webLogin.Source.AbsoluteUri == "https://store.steampowered.com/login")
             {
                 Thread.Sleep(1000);
 
-                webLogin.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('responsive_header')[0].remove();");
-                webLogin.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('login_bottom_row')[0].remove();");
-                webLogin.CoreWebView2.ExecuteScriptAsync("document.querySelectorAll('[class^=newlogindialog_UseMobileAppForQR]')[0].remove();");
-                webLogin.CoreWebView2.ExecuteScriptAsync("document.querySelector('[class^=newlogindialog_TextLink]').remove();");
-                webLogin.CoreWebView2.ExecuteScriptAsync("document.body.style.overflow = 'hidden';");
-                webLogin.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('page_content')[0].scrollIntoView({behavior: 'auto',block: 'center',inline: 'center'});");
+                await webLogin.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('responsive_header')[0].remove();");
+                await webLogin.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('login_bottom_row')[0].remove();");
+                await webLogin.CoreWebView2.ExecuteScriptAsync("document.querySelectorAll('[class^=newlogindialog_UseMobileAppForQR]')[0].remove();");
+                await webLogin.CoreWebView2.ExecuteScriptAsync("document.querySelector('[class^=newlogindialog_TextLink]').remove();");
+                await webLogin.CoreWebView2.ExecuteScriptAsync("document.body.style.overflow = 'hidden';");
+                await webLogin.CoreWebView2.ExecuteScriptAsync("document.getElementsByClassName('page_content')[0].scrollIntoView({behavior: 'auto',block: 'center',inline: 'center'});");
+
+                string html = await webLogin.ExecuteScriptAsync("document.documentElement.outerHTML");
+                HtmlDocument htmlDocument = new();
+                htmlDocument.LoadHtml(html);
+
+                if (htmlDocument.DocumentNode.OuterHtml.Contains("Access Denied"))
+                {
+                    AccessDenied = true;
+                    Close();
+                }
 
                 webLogin.Visible = true;
             }
