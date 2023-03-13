@@ -601,14 +601,15 @@ namespace SteamDlcShopping.Views
 
                 ptbAvatar.LoadAsync(steamProfile.AvatarUrl);
                 lblUsername.Text = steamProfile.Username;
+                smiBlacklist.Enabled = BlacklistController.HasGames;
             }
             else
             {
                 ptbAvatar.Image = ptbAvatar.InitialImage;
                 lblUsername.Text = null;
+                smiBlacklist.Enabled = false;
             }
 
-            smiBlacklist.Enabled = BlacklistController.HasGames;
             smiFreeDlc.Enabled = false;
             btnLogin.Visible = !session;
             btnLogout.Visible = session;

@@ -3,7 +3,7 @@ using SteamDlcShopping.Core.ViewModels;
 
 namespace SteamDlcShopping.Core.Controllers
 {
-    public class BlacklistController
+    public static class BlacklistController
     {
         //Fields
         private static Blacklist? _blacklist;
@@ -35,11 +35,11 @@ namespace SteamDlcShopping.Core.Controllers
 
         public static void Load()
         {
-            _blacklist ??= new Blacklist();
+            _blacklist ??= new();
 
             try
             {
-                _blacklist.Load();
+                _blacklist.Load(SteamProfileController.GetSteamId());
             }
             catch (Exception exception)
             {
@@ -56,7 +56,7 @@ namespace SteamDlcShopping.Core.Controllers
 
             try
             {
-                _blacklist.Save();
+                _blacklist.Save(SteamProfileController.GetSteamId());
             }
             catch (Exception exception)
             {
@@ -148,7 +148,7 @@ namespace SteamDlcShopping.Core.Controllers
             try
             {
                 appIds.ForEach(x => _blacklist.AddGame(x, LibraryController.GetGameName(x), autoBlacklist));
-                _blacklist.Save();
+                _blacklist.Save(SteamProfileController.GetSteamId());
 
                 if (_blacklist.Games is null)
                 {
@@ -172,8 +172,8 @@ namespace SteamDlcShopping.Core.Controllers
 
             try
             {
-                appIds.ForEach(x => _blacklist.RemoveGame(x));
-                _blacklist.Save();
+                appIds.ForEach(_blacklist.RemoveGame);
+                _blacklist.Save(SteamProfileController.GetSteamId());
             }
             catch (Exception exception)
             {
@@ -207,7 +207,7 @@ namespace SteamDlcShopping.Core.Controllers
                     _blacklist.RemoveGame(game.AppId);
                 }
 
-                _blacklist.Save();
+                _blacklist.Save(SteamProfileController.GetSteamId());
             }
             catch (Exception exception)
             {

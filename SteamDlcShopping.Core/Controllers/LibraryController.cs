@@ -3,7 +3,7 @@ using SteamDlcShopping.Core.ViewModels;
 
 namespace SteamDlcShopping.Core.Controllers
 {
-    public class LibraryController
+    public static class LibraryController
     {
         //Fields
         private static Library? _library;
