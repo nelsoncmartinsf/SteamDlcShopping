@@ -337,6 +337,10 @@ namespace SteamDlcShopping.Views
             txtGameSearch.Enabled = true;
             chkHideGamesNotOnSale.Enabled = true;
 
+            txtDlcSearch.Enabled = true;
+            chkHideDlcNotOnSale.Enabled = true;
+            chkHideDlcOwned.Enabled = true;
+
             lblGameCount.Text = $"Count: {lsvGame.Items.Count}";
             lblLibraryCurrentPrice.Text = $"Current Cost: {library.TotalCurrentPrice}";
             lblLibraryFullPrice.Text = $"Total Cost: {library.TotalFullPrice}";
@@ -346,10 +350,14 @@ namespace SteamDlcShopping.Views
         private void UnloadGames()
         {
             lsvGame.Unload(true);
-            lsvGame.Enabled = false;
 
+            lsvGame.Enabled = false;
             txtGameSearch.Enabled = false;
             chkHideGamesNotOnSale.Enabled = false;
+
+            txtDlcSearch.Enabled = false;
+            chkHideDlcNotOnSale.Enabled = false;
+            chkHideDlcOwned.Enabled = false;
 
             lblGameCount.Text = null;
             lblLibraryCurrentPrice.Text = null;
@@ -470,9 +478,6 @@ namespace SteamDlcShopping.Views
             }
 
             lsvDlc.Enabled = true;
-            txtDlcSearch.Enabled = true;
-            chkHideDlcNotOnSale.Enabled = true;
-            chkHideDlcOwned.Enabled = true;
 
             lblDlcCount.Text = $"Count: {lsvDlc.Items.Count}";
 
@@ -487,10 +492,6 @@ namespace SteamDlcShopping.Views
         {
             lsvDlc.Unload(resetHeaders);
             lsvDlc.Enabled = false;
-
-            txtDlcSearch.Enabled = false;
-            chkHideDlcNotOnSale.Enabled = false;
-            chkHideDlcOwned.Enabled = false;
 
             lblDlcCount.Text = null;
 
@@ -582,6 +583,11 @@ namespace SteamDlcShopping.Views
         private void LsvDlc_FilterChanged(object sender, EventArgs e)
         {
             if (_ignoreDlcFilterEvents)
+            {
+                return;
+            }
+
+            if (lsvGame.SelectedItems.Count == 0)
             {
                 return;
             }
