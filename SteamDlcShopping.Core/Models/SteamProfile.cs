@@ -8,14 +8,14 @@ namespace SteamDlcShopping.Core.Models
         //Properties
         private const string _url = "https://steamcommunity.com/profiles";
 
-        internal long Id { get; }
+        internal long Id { get; private set; }
 
-        internal string? Username { get; }
+        internal string? Username { get; private set; }
 
-        internal string? AvatarUrl { get; }
+        internal string? AvatarUrl { get; private set; }
 
         //Constructor
-        internal SteamProfile(string steamLoginSecure)
+        internal async Task LoadAsync(string steamLoginSecure)
         {
             if (string.IsNullOrWhiteSpace(steamLoginSecure))
             {
@@ -40,7 +40,7 @@ namespace SteamDlcShopping.Core.Models
 
             //Username
             httpClient = new();
-            xml = httpClient.GetStringAsync($"{_url}/{Id}/?xml=1").Result;
+            xml = await httpClient.GetStringAsync($"{_url}/{Id}/?xml=1");
 
             xmlDocument = new();
             xmlDocument.LoadXml(xml);
@@ -50,7 +50,7 @@ namespace SteamDlcShopping.Core.Models
 
             //AvatarUrl
             httpClient = new();
-            xml = httpClient.GetStringAsync($"{_url}/{Id}/?xml=1").Result;
+            xml = await httpClient.GetStringAsync($"{_url}/{Id}/?xml=1");
 
             xmlDocument = new();
             xmlDocument.LoadXml(xml);

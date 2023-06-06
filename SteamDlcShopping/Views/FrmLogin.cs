@@ -18,7 +18,7 @@ namespace SteamDlcShopping.Views
 
         private void FrmLogin_Load(object sender, EventArgs e)
         {
-            ucLoad ucLoad = new()
+            UcLoad ucLoad = new()
             {
                 Name = "ucLoad",
                 Location = new Point(0, 0)
@@ -35,14 +35,14 @@ namespace SteamDlcShopping.Views
 
         //////////////////////////////////////// WEBVIEW2 ////////////////////////////////////////
 
-        private void webLogin_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+        private void WebLogin_CoreWebView2InitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
             webLogin.CoreWebView2.CookieManager.DeleteAllCookies();
             webLogin.CoreWebView2.Settings.AreDevToolsEnabled = false;
-            webLogin.CoreWebView2.DOMContentLoaded += webLogin_CoreWebView2_DOMContentLoaded;
+            webLogin.CoreWebView2.DOMContentLoaded += WebLogin_CoreWebView2_DOMContentLoadedAsync;
         }
 
-        private void webLogin_NavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs e)
+        private void WebLogin_NavigationStarting(object sender, CoreWebView2NavigationStartingEventArgs e)
         {
             if (e.Uri.Contains("HelpWithLoginInfo"))
             {
@@ -55,7 +55,7 @@ namespace SteamDlcShopping.Views
             }
         }
 
-        private async void webLogin_CoreWebView2_DOMContentLoaded(object? sender, CoreWebView2DOMContentLoadedEventArgs e)
+        private async void WebLogin_CoreWebView2_DOMContentLoadedAsync(object? sender, CoreWebView2DOMContentLoadedEventArgs e)
         {
             if (webLogin.Source.AbsoluteUri == "https://store.steampowered.com/login")
             {
@@ -82,7 +82,7 @@ namespace SteamDlcShopping.Views
             }
         }
 
-        private async void webLogin_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        private async void WebLogin_NavigationCompletedAsync(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
             if (webLogin.Source.AbsoluteUri == "https://store.steampowered.com/")
             {

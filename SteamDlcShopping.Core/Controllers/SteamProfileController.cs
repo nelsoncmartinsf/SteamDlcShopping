@@ -30,18 +30,20 @@ namespace SteamDlcShopping.Core.Controllers
             return result;
         }
 
-        public static void Login(string steamApiKey, string sessionId, string steamLoginSecure)
+        public static async Task LogInAsync(string steamApiKey, string sessionId, string steamLoginSecure)
         {
             try
             {
-                _steamProfile = new(steamLoginSecure);
+                _steamProfile ??= new();
+
+                await _steamProfile.LoadAsync(steamLoginSecure);
 
                 if (_steamProfile.Id == 0)
                 {
                     return;
                 }
 
-                LibraryController.Login(steamApiKey, sessionId, steamLoginSecure);
+                await LibraryController.LogInAsync(steamApiKey, sessionId, steamLoginSecure);
             }
             catch (Exception exception)
             {
@@ -74,8 +76,8 @@ namespace SteamDlcShopping.Core.Controllers
 
             try
             {
-                result.Username = _steamProfile?.Username;
-                result.AvatarUrl = _steamProfile?.AvatarUrl;
+                result.Username = _steamProfile.Username;
+                result.AvatarUrl = _steamProfile.AvatarUrl;
             }
             catch (Exception exception)
             {

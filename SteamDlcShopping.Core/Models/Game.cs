@@ -34,7 +34,7 @@ namespace SteamDlcShopping.Core.Models
         }
 
         //Methods
-        internal void LoadDlc()
+        internal async Task LoadDlcAsync()
         {
             Uri uri = new("https://store.steampowered.com");
 
@@ -45,9 +45,9 @@ namespace SteamDlcShopping.Core.Models
             HttpClient httpClient = new(handler);
             string response;
 
-            using HttpResponseMessage httpResponseMessage = httpClient.GetAsync($"{uri.OriginalString}/app/{AppId}").Result;
+            using HttpResponseMessage httpResponseMessage = await httpClient.GetAsync($"{uri.OriginalString}/app/{AppId}");
             using HttpContent content = httpResponseMessage.Content;
-            response = content.ReadAsStringAsync().Result;
+            response = await content.ReadAsStringAsync();
 
             if (response.Contains("<H1>Access Denied</H1>"))
             {

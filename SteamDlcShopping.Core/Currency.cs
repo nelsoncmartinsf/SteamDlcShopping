@@ -22,15 +22,15 @@ namespace SteamDlcShopping.Core
         }
 
         //Methods
-        internal static void SetCurrency()
+        internal static async Task SetCurrencyAsync()
         {
             Uri uri = new("https://store.steampowered.com");
             HttpClient httpClient = new();
             string response;
 
-            using HttpResponseMessage httpResponseMessage = httpClient.GetAsync($"{uri.OriginalString}/bundle/232").Result;
+            using HttpResponseMessage httpResponseMessage = await httpClient.GetAsync($"{uri.OriginalString}/bundle/232");
             using HttpContent content = httpResponseMessage.Content;
-            response = content.ReadAsStringAsync().Result;
+            response = await content.ReadAsStringAsync();
 
             HtmlDocument htmlDoc = new();
             htmlDoc.LoadHtml(response);

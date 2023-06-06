@@ -95,7 +95,7 @@ namespace SteamDlcShopping.Views
             this.btnLogin.TabIndex = 1;
             this.btnLogin.Text = "Login";
             this.btnLogin.UseVisualStyleBackColor = true;
-            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
+            this.btnLogin.Click += new System.EventHandler(this.BtnLogin_Click);
             // 
             // btnCalculate
             // 
@@ -105,7 +105,7 @@ namespace SteamDlcShopping.Views
             this.btnCalculate.TabIndex = 2;
             this.btnCalculate.Text = "Calculate";
             this.btnCalculate.UseVisualStyleBackColor = true;
-            this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
+            this.btnCalculate.Click += new System.EventHandler(this.BtnCalculate_Click);
             // 
             // lsvGame
             // 
@@ -123,9 +123,9 @@ namespace SteamDlcShopping.Views
             this.lsvGame.TabIndex = 4;
             this.lsvGame.UseCompatibleStateImageBehavior = false;
             this.lsvGame.View = System.Windows.Forms.View.Details;
-            this.lsvGame.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvGame_ColumnClick);
-            this.lsvGame.SelectedIndexChanged += new System.EventHandler(this.lsvGame_SelectedIndexChanged);
-            this.lsvGame.DoubleClick += new System.EventHandler(this.lsvGame_DoubleClick);
+            this.lsvGame.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.LsvGame_ColumnClick);
+            this.lsvGame.SelectedIndexChanged += new System.EventHandler(this.LsvGame_SelectedIndexChanged);
+            this.lsvGame.DoubleClick += new System.EventHandler(this.LsvGame_DoubleClick);
             // 
             // colGame
             // 
@@ -166,8 +166,8 @@ namespace SteamDlcShopping.Views
             this.lsvDlc.TabIndex = 6;
             this.lsvDlc.UseCompatibleStateImageBehavior = false;
             this.lsvDlc.View = System.Windows.Forms.View.Details;
-            this.lsvDlc.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lsvDlc_ColumnClick);
-            this.lsvDlc.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsvDlc_MouseDoubleClick);
+            this.lsvDlc.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.LsvDlc_ColumnClick);
+            this.lsvDlc.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LsvDlc_MouseDoubleClick);
             // 
             // colDlc
             // 
@@ -212,7 +212,7 @@ namespace SteamDlcShopping.Views
             this.btnLogout.TabIndex = 3;
             this.btnLogout.Text = "Logout";
             this.btnLogout.UseVisualStyleBackColor = true;
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
+            this.btnLogout.Click += new System.EventHandler(this.BtnLogout_Click);
             // 
             // txtGameSearch
             // 
@@ -220,7 +220,7 @@ namespace SteamDlcShopping.Views
             this.txtGameSearch.Name = "txtGameSearch";
             this.txtGameSearch.Size = new System.Drawing.Size(200, 23);
             this.txtGameSearch.TabIndex = 1;
-            this.txtGameSearch.TextChanged += new System.EventHandler(this.lsvGame_FilterChanged);
+            this.txtGameSearch.TextChanged += new System.EventHandler(this.LsvGame_FilterChanged);
             // 
             // grbLibrary
             // 
@@ -254,7 +254,7 @@ namespace SteamDlcShopping.Views
             this.lnkTooManyDlc.TabIndex = 5;
             this.lnkTooManyDlc.TabStop = true;
             this.lnkTooManyDlc.Text = "here";
-            this.lnkTooManyDlc.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkTooManyDlc_LinkClicked);
+            this.lnkTooManyDlc.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LnkTooManyDlc_LinkClicked);
             // 
             // lblTooManyDlc
             // 
@@ -292,7 +292,7 @@ namespace SteamDlcShopping.Views
             this.chkHideDlcOwned.TabIndex = 2;
             this.chkHideDlcOwned.Text = "Hide DLC owned";
             this.chkHideDlcOwned.UseVisualStyleBackColor = true;
-            this.chkHideDlcOwned.CheckedChanged += new System.EventHandler(this.lsvDlc_FilterChanged);
+            this.chkHideDlcOwned.CheckedChanged += new System.EventHandler(this.LsvDlc_FilterChanged);
             // 
             // chkHideDlcNotOnSale
             // 
@@ -303,7 +303,7 @@ namespace SteamDlcShopping.Views
             this.chkHideDlcNotOnSale.TabIndex = 2;
             this.chkHideDlcNotOnSale.Text = "Hide DLC not on sale";
             this.chkHideDlcNotOnSale.UseVisualStyleBackColor = true;
-            this.chkHideDlcNotOnSale.CheckedChanged += new System.EventHandler(this.lsvDlc_FilterChanged);
+            this.chkHideDlcNotOnSale.CheckedChanged += new System.EventHandler(this.LsvDlc_FilterChanged);
             // 
             // chkHideGamesNotOnSale
             // 
@@ -314,7 +314,7 @@ namespace SteamDlcShopping.Views
             this.chkHideGamesNotOnSale.TabIndex = 2;
             this.chkHideGamesNotOnSale.Text = "Hide games not on sale";
             this.chkHideGamesNotOnSale.UseVisualStyleBackColor = true;
-            this.chkHideGamesNotOnSale.CheckedChanged += new System.EventHandler(this.lsvGame_FilterChanged);
+            this.chkHideGamesNotOnSale.CheckedChanged += new System.EventHandler(this.LsvGame_FilterChanged);
             // 
             // btnBlacklist
             // 
@@ -324,7 +324,7 @@ namespace SteamDlcShopping.Views
             this.btnBlacklist.TabIndex = 5;
             this.btnBlacklist.Text = "Add to Blacklist";
             this.btnBlacklist.UseVisualStyleBackColor = true;
-            this.btnBlacklist.Click += new System.EventHandler(this.btnBlacklist_Click);
+            this.btnBlacklist.Click += new System.EventHandler(this.BtnBlacklist_Click);
             // 
             // txtDlcSearch
             // 
@@ -332,29 +332,29 @@ namespace SteamDlcShopping.Views
             this.txtDlcSearch.Name = "txtDlcSearch";
             this.txtDlcSearch.Size = new System.Drawing.Size(200, 23);
             this.txtDlcSearch.TabIndex = 1;
-            this.txtDlcSearch.TextChanged += new System.EventHandler(this.lsvDlc_FilterChanged);
+            this.txtDlcSearch.TextChanged += new System.EventHandler(this.LsvDlc_FilterChanged);
             // 
             // smiSettings
             // 
             this.smiSettings.Name = "smiSettings";
             this.smiSettings.Size = new System.Drawing.Size(61, 20);
             this.smiSettings.Text = "Settings";
-            this.smiSettings.Click += new System.EventHandler(this.smiSettings_Click);
+            this.smiSettings.Click += new System.EventHandler(this.SmiSettings_Click);
             // 
             // smiBlacklist
             // 
             this.smiBlacklist.Name = "smiBlacklist";
             this.smiBlacklist.Size = new System.Drawing.Size(62, 20);
             this.smiBlacklist.Text = "Blacklist";
-            this.smiBlacklist.Click += new System.EventHandler(this.smiBlacklist_Click);
+            this.smiBlacklist.Click += new System.EventHandler(this.SmiBlacklist_Click);
             // 
             // smiFreeDlc
             // 
             this.smiFreeDlc.Name = "smiFreeDlc";
             this.smiFreeDlc.Size = new System.Drawing.Size(66, 20);
             this.smiFreeDlc.Text = "Free DLC";
-            this.smiFreeDlc.Click += new System.EventHandler(this.smiFreeDlc_Click);
-            this.smiFreeDlc.EnabledChanged += new System.EventHandler(this.smiFreeDlc_EnabledChanged);
+            this.smiFreeDlc.Click += new System.EventHandler(this.SmiFreeDlc_Click);
+            this.smiFreeDlc.EnabledChanged += new System.EventHandler(this.SmiFreeDlc_EnabledChanged);
             // 
             // mnuMenu
             // 
@@ -374,7 +374,7 @@ namespace SteamDlcShopping.Views
             this.smiAbout.Name = "smiAbout";
             this.smiAbout.Size = new System.Drawing.Size(52, 20);
             this.smiAbout.Text = "About";
-            this.smiAbout.Click += new System.EventHandler(this.smiAbout_Click);
+            this.smiAbout.Click += new System.EventHandler(this.SmiAbout_Click);
             // 
             // btnRetryFailedGames
             // 
@@ -384,7 +384,7 @@ namespace SteamDlcShopping.Views
             this.btnRetryFailedGames.TabIndex = 5;
             this.btnRetryFailedGames.Text = "btnRetryFailedGames";
             this.btnRetryFailedGames.UseVisualStyleBackColor = true;
-            this.btnRetryFailedGames.Click += new System.EventHandler(this.btnRetryFailedGames_Click);
+            this.btnRetryFailedGames.Click += new System.EventHandler(this.BtnRetryFailedGames_Click);
             // 
             // FrmMain
             // 

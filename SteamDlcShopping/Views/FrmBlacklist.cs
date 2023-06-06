@@ -14,11 +14,11 @@ namespace SteamDlcShopping.Views
 
         //////////////////////////////////////// FORM ////////////////////////////////////////
 
-        private void FrmBlacklist_Load(object sender, EventArgs e)
+        private async void FrmBlacklist_Load(object sender, EventArgs e)
         {
             lsbBlacklist.DisplayMember = "Name";
 
-            LoadBlacklist();
+            await LoadBlacklistAsync();
             LoadListbox();
             SetupFields();
         }
@@ -27,9 +27,9 @@ namespace SteamDlcShopping.Views
 
         public List<GameBlacklistView> _blacklist;
 
-        private void LoadBlacklist()
+        private async Task LoadBlacklistAsync()
         {
-            BlacklistController.Load();
+            await BlacklistController.LoadAsync();
             _blacklist = BlacklistController.GetView(txtBlacklistSearch.Text, chkHideAutoBlacklistedGames.Checked);
         }
 
@@ -54,30 +54,30 @@ namespace SteamDlcShopping.Views
             btnClearAutoBlacklisted.Enabled = _blacklist.Any(x => x.AutoBlacklisted);
         }
 
-        private void lsbBlacklist_SelectedIndexChanged(object sender, EventArgs e)
+        private void LsbBlacklist_SelectedIndexChanged(object sender, EventArgs e)
         {
             btnRemove.Enabled = lsbBlacklist.SelectedIndices.Count > 0;
         }
 
         //////////////////////////////////////// FILTERS ////////////////////////////////////////
 
-        private void txtBlacklistSearch_TextChanged(object sender, EventArgs e)
+        private async void TxtBlacklistSearch_TextChanged(object sender, EventArgs e)
         {
-            LoadBlacklist();
+            await LoadBlacklistAsync();
             LoadListbox();
             SetupFields();
         }
 
-        private void chkHideAutoBlacklistedGames_CheckedChanged(object sender, EventArgs e)
+        private async void ChkHideAutoBlacklistedGames_CheckedChanged(object sender, EventArgs e)
         {
-            LoadBlacklist();
+            await LoadBlacklistAsync();
             LoadListbox();
             SetupFields();
         }
 
         //////////////////////////////////////// BUTTONS ////////////////////////////////////////
 
-        private void btnRemove_Click(object sender, EventArgs e)
+        private async void BtnRemove_Click(object sender, EventArgs e)
         {
             List<int> unblacklist = new();
 
@@ -89,19 +89,19 @@ namespace SteamDlcShopping.Views
 
             if (unblacklist.Any())
             {
-                BlacklistController.RemoveGames(unblacklist);
+                await BlacklistController.RemoveGamesAsync(unblacklist);
 
-                LoadBlacklist();
+                await LoadBlacklistAsync();
                 LoadListbox();
                 SetupFields();
             }
         }
 
-        private void btnClearAutoBlacklisted_Click(object sender, EventArgs e)
+        private async void BtnClearAutoBlacklisted_Click(object sender, EventArgs e)
         {
-            BlacklistController.ClearAutoBlacklist();
+            await BlacklistController.ClearAutoBlacklistAsync();
 
-            LoadBlacklist();
+            await LoadBlacklistAsync();
             LoadListbox();
             SetupFields();
 

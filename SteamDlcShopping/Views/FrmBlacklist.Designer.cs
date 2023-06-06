@@ -51,7 +51,7 @@
             this.txtBlacklistSearch.Name = "txtBlacklistSearch";
             this.txtBlacklistSearch.Size = new System.Drawing.Size(200, 23);
             this.txtBlacklistSearch.TabIndex = 1;
-            this.txtBlacklistSearch.TextChanged += new System.EventHandler(this.txtBlacklistSearch_TextChanged);
+            this.txtBlacklistSearch.TextChanged += new System.EventHandler(this.TxtBlacklistSearch_TextChanged);
             // 
             // lsbBlacklist
             // 
@@ -63,7 +63,7 @@
             this.lsbBlacklist.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lsbBlacklist.Size = new System.Drawing.Size(610, 199);
             this.lsbBlacklist.TabIndex = 2;
-            this.lsbBlacklist.SelectedIndexChanged += new System.EventHandler(this.lsbBlacklist_SelectedIndexChanged);
+            this.lsbBlacklist.SelectedIndexChanged += new System.EventHandler(this.LsbBlacklist_SelectedIndexChanged);
             // 
             // btnRemove
             // 
@@ -73,7 +73,7 @@
             this.btnRemove.TabIndex = 3;
             this.btnRemove.Text = "Remove";
             this.btnRemove.UseVisualStyleBackColor = true;
-            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            this.btnRemove.Click += new System.EventHandler(this.BtnRemove_Click);
             // 
             // btnClearAutoBlacklisted
             // 
@@ -83,7 +83,7 @@
             this.btnClearAutoBlacklisted.TabIndex = 3;
             this.btnClearAutoBlacklisted.Text = "Clear Auto Blacklisted";
             this.btnClearAutoBlacklisted.UseVisualStyleBackColor = true;
-            this.btnClearAutoBlacklisted.Click += new System.EventHandler(this.btnClearAutoBlacklisted_Click);
+            this.btnClearAutoBlacklisted.Click += new System.EventHandler(this.BtnClearAutoBlacklisted_Click);
             // 
             // chkHideAutoBlacklistedGames
             // 
@@ -94,7 +94,7 @@
             this.chkHideAutoBlacklistedGames.TabIndex = 4;
             this.chkHideAutoBlacklistedGames.Text = "Hide Auto Blacklisted Games";
             this.chkHideAutoBlacklistedGames.UseVisualStyleBackColor = true;
-            this.chkHideAutoBlacklistedGames.CheckedChanged += new System.EventHandler(this.chkHideAutoBlacklistedGames_CheckedChanged);
+            this.chkHideAutoBlacklistedGames.CheckedChanged += new System.EventHandler(this.ChkHideAutoBlacklistedGames_CheckedChanged);
             // 
             // FrmBlacklist
             // 

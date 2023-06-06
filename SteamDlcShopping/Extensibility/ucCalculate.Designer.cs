@@ -1,6 +1,6 @@
 ﻿namespace SteamDlcShopping.Extensibility
 {
-    partial class ucCalculate
+    partial class UcCalculate
     {
         /// <summary> 
         /// Required designer variable.
@@ -48,7 +48,7 @@
             this.Controls.Add(this.ptbLoading);
             this.Name = "ucCalculate";
             this.Size = new System.Drawing.Size(767, 642);
-            this.Load += new System.EventHandler(this.ucLoading_Load);
+            this.Load += new System.EventHandler(this.UcLoading_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ptbLoading)).EndInit();
             this.ResumeLayout(false);
 

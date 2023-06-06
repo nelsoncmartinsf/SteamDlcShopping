@@ -20,7 +20,7 @@ namespace SteamDlcShopping.Views
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            ucLoad ucLoad = new()
+            UcLoad ucLoad = new()
             {
                 Name = "ucLoad",
                 Location = new Point(0, 0)
@@ -30,10 +30,10 @@ namespace SteamDlcShopping.Views
             ucLoad.BringToFront();
         }
 
-        private void FrmMain_Shown(object sender, EventArgs e)
+        private async void FrmMain_Shown(object sender, EventArgs e)
         {
-            SteamProfileController.Login(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
-            BlacklistController.Load();
+            await SteamProfileController.LogInAsync(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
+            await BlacklistController.LoadAsync();
             SetControlsState();
 
             Control? ucLoad = Controls["ucLoad"];
@@ -46,11 +46,11 @@ namespace SteamDlcShopping.Views
             AutoBlacklistReminder();
         }
 
-        private void smiFreeDlc_EnabledChanged(object sender, EventArgs e)
+        private void SmiFreeDlc_EnabledChanged(object sender, EventArgs e)
         {
             if (((ToolStripMenuItem)sender).Enabled)
             {
-                tmrFreeDlc = new(_ => tmrFreeDlc_Tick(), null, 500, 500);
+                tmrFreeDlc = new(_ => TmrFreeDlc_Tick(), null, 500, 500);
             }
             else
             {
@@ -58,7 +58,7 @@ namespace SteamDlcShopping.Views
             }
         }
 
-        private void tmrFreeDlc_Tick()
+        private void TmrFreeDlc_Tick()
         {
             Color color = smiFreeDlc.ForeColor == Color.Red ? Color.Blue : Color.Red;
 
@@ -68,7 +68,7 @@ namespace SteamDlcShopping.Views
             }));
         }
 
-        private void tmrCalculate_Tick()
+        private async void TmrCalculate_Tick()
         {
             Invoke(new Action(() =>
             {
@@ -96,7 +96,7 @@ namespace SteamDlcShopping.Views
                 UnloadGames();
                 UnloadDlc();
 
-                ucCalculate ucCalculate = new()
+                UcCalculate ucCalculate = new()
                 {
                     Name = "ucCalculate",
                     Location = grbLibrary.Location
@@ -106,7 +106,7 @@ namespace SteamDlcShopping.Views
                 ucCalculate.BringToFront();
             }));
 
-            LibraryController.Calculate(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure, Settings.Default.AutoBlacklist);
+            await LibraryController.CalculateAsync(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure, Settings.Default.AutoBlacklist);
 
             Invoke(new Action(() =>
             {
@@ -130,7 +130,7 @@ namespace SteamDlcShopping.Views
             }));
         }
 
-        private void tmrRetryFailedGames_Tick()
+        private async void TmrRetryFailedGames_Tick()
         {
             Invoke(new Action(() =>
             {
@@ -158,7 +158,7 @@ namespace SteamDlcShopping.Views
                 UnloadGames();
                 UnloadDlc();
 
-                ucCalculate ucCalculate = new()
+                UcCalculate ucCalculate = new()
                 {
                     Name = "ucCalculate",
                     Location = grbLibrary.Location
@@ -168,7 +168,7 @@ namespace SteamDlcShopping.Views
                 ucCalculate.BringToFront();
             }));
 
-            LibraryController.RetryFailedGames(Settings.Default.AutoBlacklist);
+            await LibraryController.RetryFailedGamesAsync(Settings.Default.AutoBlacklist);
 
             Invoke(new Action(() =>
             {
@@ -194,14 +194,14 @@ namespace SteamDlcShopping.Views
 
         //////////////////////////////////////// MENU BAR ////////////////////////////////////////
 
-        private void smiSettings_Click(object sender, EventArgs e)
+        private void SmiSettings_Click(object sender, EventArgs e)
         {
             FrmSettings form = new();
             form.ShowDialog();
             form.Dispose();
         }
 
-        private void smiBlacklist_Click(object sender, EventArgs e)
+        private void SmiBlacklist_Click(object sender, EventArgs e)
         {
             FrmBlacklist form = new();
             form.ShowDialog();
@@ -210,7 +210,7 @@ namespace SteamDlcShopping.Views
             smiBlacklist.Enabled = BlacklistController.HasGames;
         }
 
-        private void smiFreeDlc_Click(object sender, EventArgs e)
+        private void SmiFreeDlc_Click(object sender, EventArgs e)
         {
             FrmFreeDlc form = new();
             form.ShowDialog();
@@ -219,7 +219,7 @@ namespace SteamDlcShopping.Views
             smiFreeDlc.Enabled = LibraryController.FreeDlcExist;
         }
 
-        private void smiAbout_Click(object sender, EventArgs e)
+        private void SmiAbout_Click(object sender, EventArgs e)
         {
             FrmAbout form = new();
             form.ShowDialog();
@@ -228,7 +228,7 @@ namespace SteamDlcShopping.Views
 
         //////////////////////////////////////// BUTTONS ////////////////////////////////////////
 
-        private void btnLogin_Click(object sender, EventArgs e)
+        private async void BtnLogin_Click(object sender, EventArgs e)
         {
             FrmLogin form = new();
             form.ShowDialog();
@@ -247,7 +247,7 @@ namespace SteamDlcShopping.Views
                 ucLoad.Visible = true;
             }
 
-            SteamProfileController.Login(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
+            await SteamProfileController.LogInAsync(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
             SetControlsState();
 
             if (ucLoad is not null)
@@ -256,7 +256,7 @@ namespace SteamDlcShopping.Views
             }
         }
 
-        private void btnLogout_Click(object sender, EventArgs e)
+        private void BtnLogout_Click(object sender, EventArgs e)
         {
             _ignoreGameFilterEvents = true;
             _ignoreDlcFilterEvents = true;
@@ -278,19 +278,19 @@ namespace SteamDlcShopping.Views
             SetControlsState();
         }
 
-        private void btnCalculate_Click(object sender, EventArgs e)
+        private void BtnCalculate_Click(object sender, EventArgs e)
         {
             //Set a timer worker thread
-            Timer tmrCalculate = new(_ => tmrCalculate_Tick(), null, 0, Timeout.Infinite);
+            Timer tmrCalculate = new(_ => TmrCalculate_Tick(), null, 0, Timeout.Infinite);
         }
 
-        private void btnRetryFailedGames_Click(object sender, EventArgs e)
+        private void BtnRetryFailedGames_Click(object sender, EventArgs e)
         {
             //Set a timer worker thread
-            Timer tmrRetryFailedGames = new(_ => tmrRetryFailedGames_Tick(), null, 0, Timeout.Infinite);
+            Timer tmrRetryFailedGames = new(_ => TmrRetryFailedGames_Tick(), null, 0, Timeout.Infinite);
         }
 
-        private void btnBlacklist_Click(object sender, EventArgs e)
+        private async void BtnBlacklist_Click(object sender, EventArgs e)
         {
             List<int> appIds = new();
 
@@ -304,7 +304,7 @@ namespace SteamDlcShopping.Views
                 appIds.Add(appId);
             }
 
-            BlacklistController.AddGames(appIds, false);
+            await BlacklistController.AddGamesAsync(appIds, false);
             smiBlacklist.Enabled = true;
 
             LoadGames();
@@ -326,7 +326,7 @@ namespace SteamDlcShopping.Views
                 return;
             }
 
-            lsvGame_Load(library.Games);
+            LsvGame_Load(library.Games);
 
             if (lsvGame._columnSorter is not null)
             {
@@ -357,7 +357,7 @@ namespace SteamDlcShopping.Views
             btnBlacklist.Visible = false;
         }
 
-        private void lsvGame_Load(List<GameView> games)
+        private void LsvGame_Load(List<GameView> games)
         {
             lsvGame.Items.Clear();
 
@@ -403,7 +403,7 @@ namespace SteamDlcShopping.Views
             }
         }
 
-        private void lsvGame_SelectedIndexChanged(object sender, EventArgs e)
+        private void LsvGame_SelectedIndexChanged(object sender, EventArgs e)
         {
             //No selected game
             if (lsvGame.SelectedIndices.Count == 0)
@@ -441,7 +441,7 @@ namespace SteamDlcShopping.Views
             LoadDlc();
         }
 
-        private void lsvGame_ColumnClick(object sender, ColumnClickEventArgs e)
+        private void LsvGame_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             if (lsvGame._columnSorter is null)
             {
@@ -451,7 +451,7 @@ namespace SteamDlcShopping.Views
             lsvGame.SortList(e.Column);
         }
 
-        private void lsvGame_DoubleClick(object sender, EventArgs e)
+        private void LsvGame_DoubleClick(object sender, EventArgs e)
         {
             ClickLink($"https://store.steampowered.com/app/{lsvGame.SelectedItems[0].Tag}");
         }
@@ -462,7 +462,7 @@ namespace SteamDlcShopping.Views
         {
             List<DlcView> dlcList = LibraryController.GetDlc(_selectedGame, txtDlcSearch.Text, chkHideDlcNotOnSale.Checked, chkHideDlcOwned.Checked);
 
-            lsvDlc_Load(dlcList);
+            LsvDlc_Load(dlcList);
 
             if (lsvDlc._columnSorter is not null)
             {
@@ -500,7 +500,7 @@ namespace SteamDlcShopping.Views
             _selectedGame = 0;
         }
 
-        private void lsvDlc_Load(List<DlcView> dlcs)
+        private void LsvDlc_Load(List<DlcView> dlcs)
         {
             lsvDlc.Items.Clear();
 
@@ -543,7 +543,7 @@ namespace SteamDlcShopping.Views
             lsvDlc.ListViewItemSorter ??= lsvDlc._columnSorter;
         }
 
-        private void lsvDlc_ColumnClick(object sender, ColumnClickEventArgs e)
+        private void LsvDlc_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             if (lsvDlc._columnSorter is null)
             {
@@ -553,12 +553,12 @@ namespace SteamDlcShopping.Views
             lsvDlc.SortList(e.Column);
         }
 
-        private void lsvDlc_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void LsvDlc_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             ClickLink($"https://store.steampowered.com/app/{lsvDlc.SelectedItems[0].Tag}");
         }
 
-        private void lnkTooManyDlc_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LnkTooManyDlc_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             ClickLink($"https://store.steampowered.com/dlc/{_selectedGame}");
         }
@@ -568,7 +568,7 @@ namespace SteamDlcShopping.Views
         private bool _ignoreGameFilterEvents;
         private bool _ignoreDlcFilterEvents;
 
-        private void lsvGame_FilterChanged(object sender, EventArgs e)
+        private void LsvGame_FilterChanged(object sender, EventArgs e)
         {
             if (_ignoreGameFilterEvents)
             {
@@ -579,7 +579,7 @@ namespace SteamDlcShopping.Views
             UnloadDlc(false);
         }
 
-        private void lsvDlc_FilterChanged(object sender, EventArgs e)
+        private void LsvDlc_FilterChanged(object sender, EventArgs e)
         {
             if (_ignoreDlcFilterEvents)
             {
@@ -636,7 +636,7 @@ namespace SteamDlcShopping.Views
             process.Start();
         }
 
-        private static void AutoBlacklistReminder()
+        private static async void AutoBlacklistReminder()
         {
             if (!Settings.Default.AutoBlacklist)
             {
@@ -683,7 +683,7 @@ namespace SteamDlcShopping.Views
                 return;
             }
 
-            BlacklistController.ClearAutoBlacklist();
+            await BlacklistController.ClearAutoBlacklistAsync();
             Settings.Default.AutoBlacklistLastReminder = nextReminderDate;
             Settings.Default.Save();
         }

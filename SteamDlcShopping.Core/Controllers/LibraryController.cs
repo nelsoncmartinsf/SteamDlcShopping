@@ -46,16 +46,16 @@ namespace SteamDlcShopping.Core.Controllers
         }
 
         //Methods
-        internal static void Login(string steamApiKey, string sessionId, string steamLoginSecure)
+        internal static async Task LogInAsync(string steamApiKey, string sessionId, string steamLoginSecure)
         {
             try
             {
                 _library = new(SteamProfileController.GetSteamId());
-                _library.LoadDynamicStore(sessionId, steamLoginSecure);
-                _library.LoadGames(steamApiKey);
+                await _library.LoadDynamicStoreAsync(sessionId, steamLoginSecure);
+                await _library.LoadGamesAsync(steamApiKey);
 
-                Currency.SetCurrency();
-                BlacklistController.Load();
+                await Currency.SetCurrencyAsync();
+                await BlacklistController.LoadAsync();
 
                 _library.ApplyBlacklist(BlacklistController.Get());
             }
@@ -122,7 +122,7 @@ namespace SteamDlcShopping.Core.Controllers
             return result;
         }
 
-        public static void Calculate(string steamApiKey, string sessionId, string steamLoginSecure, bool autoBlacklist)
+        public static async Task CalculateAsync(string steamApiKey, string sessionId, string steamLoginSecure, bool autoBlacklist)
         {
             if (_library is null)
             {
@@ -131,13 +131,13 @@ namespace SteamDlcShopping.Core.Controllers
 
             try
             {
-                _library.LoadDynamicStore(sessionId, steamLoginSecure);
-                _library.LoadGames(steamApiKey);
-                BlacklistController.Load();
+                await _library.LoadDynamicStoreAsync(sessionId, steamLoginSecure);
+                await _library.LoadGamesAsync(steamApiKey);
+                await BlacklistController.LoadAsync();
 
                 _library.ApplyBlacklist(BlacklistController.Get());
 
-                _library.LoadGamesDlc();
+                await _library.LoadGamesDlcAsync();
 
                 if (_library.Games is null)
                 {
@@ -192,8 +192,8 @@ namespace SteamDlcShopping.Core.Controllers
 
                 if (autoBlacklist)
                 {
-                    BlacklistController.AddGames(blacklist, true);
-                    BlacklistController.Save();
+                    await BlacklistController.AddGamesAsync(blacklist, true);
+                    await BlacklistController.SaveAsync();
                 }
 
                 _library.ApplyBlacklist(blacklist);
@@ -206,7 +206,7 @@ namespace SteamDlcShopping.Core.Controllers
             }
         }
 
-        public static void RetryFailedGames(bool autoBlacklist)
+        public static async Task RetryFailedGamesAsync(bool autoBlacklist)
         {
             if (_library is null)
             {
@@ -222,7 +222,7 @@ namespace SteamDlcShopping.Core.Controllers
 
                 List<int> gamesToFetch = _library.Games.Where(x => x.FailedFetch).Select(x => x.AppId).ToList();
 
-                _library.RetryFailedGames();
+                await _library.RetryFailedGamesAsync();
 
                 List<int> blacklist = new();
 
@@ -272,8 +272,8 @@ namespace SteamDlcShopping.Core.Controllers
 
                 if (autoBlacklist)
                 {
-                    BlacklistController.AddGames(blacklist, true);
-                    BlacklistController.Save();
+                    await BlacklistController.AddGamesAsync(blacklist, true);
+                    await BlacklistController.SaveAsync();
                 }
 
                 _library.ApplyBlacklist(blacklist);

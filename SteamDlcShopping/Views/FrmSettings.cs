@@ -52,12 +52,12 @@ namespace SteamDlcShopping.Views
 
         //////////////////////////////////////// STEAM API KEY ////////////////////////////////////////
 
-        private void txtSteamApiKey_TextChanged(object sender, EventArgs e)
+        private void TxtSteamApiKey_TextChanged(object sender, EventArgs e)
         {
             _erpSteamApiKey.Clear();
         }
 
-        private void lnkGetSteamApiKey_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LnkGetSteamApiKey_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process process = new()
             {
@@ -75,7 +75,7 @@ namespace SteamDlcShopping.Views
 
         //////////////////////////////////////// AUTO BLACKLIST ////////////////////////////////////////
 
-        private void chkAutoBlacklist_CheckedChanged(object sender, EventArgs e)
+        private void ChkAutoBlacklist_CheckedChanged(object sender, EventArgs e)
         {
             lblReminder.Enabled = chkAutoBlacklist.Checked;
             ddlReminder.Enabled = chkAutoBlacklist.Checked;
@@ -83,7 +83,7 @@ namespace SteamDlcShopping.Views
 
         //////////////////////////////////////// BUTTONS ////////////////////////////////////////
 
-        private void btnSave_Click(object sender, EventArgs e)
+        private void BtnSave_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtSteamApiKey.Text))
             {
@@ -109,7 +109,7 @@ namespace SteamDlcShopping.Views
             Close();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void BtnCancel_Click(object sender, EventArgs e)
         {
             Close();
         }

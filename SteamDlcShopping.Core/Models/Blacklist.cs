@@ -8,18 +8,18 @@ namespace SteamDlcShopping.Core.Models
         internal List<GameBlacklist>? Games { get; private set; }
 
         //Methods
-        internal void Load(long steamId)
+        internal async Task LoadAsync(long steamId)
         {
             if (!File.Exists($"{steamId}.txt"))
             {
                 return;
             }
 
-            string content = File.ReadAllText($"{steamId}.txt");
+            string content = await File.ReadAllTextAsync($"{steamId}.txt");
             Games = JsonConvert.DeserializeObject<List<GameBlacklist>>(content);
         }
 
-        internal void Save(long steamId)
+        internal async Task SaveAsync(long steamId)
         {
             if (Games is null)
             {
@@ -27,7 +27,7 @@ namespace SteamDlcShopping.Core.Models
             }
 
             string content = JsonConvert.SerializeObject(Games);
-            File.WriteAllText($"{steamId}.txt", content);
+            await File.WriteAllTextAsync($"{steamId}.txt", content);
         }
 
         internal void AddGame(int appId, string name, bool autoBlacklisted = true)

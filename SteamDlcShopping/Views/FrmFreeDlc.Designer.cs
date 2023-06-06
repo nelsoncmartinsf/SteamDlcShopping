@@ -40,7 +40,7 @@
             this.lsbDlc.Name = "lsbDlc";
             this.lsbDlc.Size = new System.Drawing.Size(660, 199);
             this.lsbDlc.TabIndex = 1;
-            this.lsbDlc.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lsbDlc_MouseDoubleClick);
+            this.lsbDlc.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LsbDlc_MouseDoubleClick);
             // 
             // FrmFreeDlc
             // 

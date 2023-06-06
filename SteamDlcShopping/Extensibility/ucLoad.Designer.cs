@@ -1,6 +1,6 @@
 ﻿namespace SteamDlcShopping.Extensibility
 {
-    partial class ucLoad
+    partial class UcLoad
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,35 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ptbLoading = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbLoading)).BeginInit();
+            this.PtbLoading = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.PtbLoading)).BeginInit();
             this.SuspendLayout();
             // 
             // ptbLoading
             // 
-            this.ptbLoading.Image = global::SteamDlcShopping.Properties.Resources.defaultLoading;
-            this.ptbLoading.Location = new System.Drawing.Point(228, 184);
-            this.ptbLoading.Name = "ptbLoading";
-            this.ptbLoading.Size = new System.Drawing.Size(287, 141);
-            this.ptbLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.ptbLoading.TabIndex = 1;
-            this.ptbLoading.TabStop = false;
+            this.PtbLoading.Image = global::SteamDlcShopping.Properties.Resources.defaultLoading;
+            this.PtbLoading.Location = new System.Drawing.Point(228, 184);
+            this.PtbLoading.Name = "ptbLoading";
+            this.PtbLoading.Size = new System.Drawing.Size(287, 141);
+            this.PtbLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.PtbLoading.TabIndex = 1;
+            this.PtbLoading.TabStop = false;
             // 
             // ucLoad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.ptbLoading);
+            this.Controls.Add(this.PtbLoading);
             this.Name = "ucLoad";
             this.Size = new System.Drawing.Size(743, 509);
-            this.Load += new System.EventHandler(this.ucLoad_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.ptbLoading)).EndInit();
+            this.Load += new System.EventHandler(this.UcLoad_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.PtbLoading)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private PictureBox ptbLoading;
+        private PictureBox PtbLoading;
     }
 }

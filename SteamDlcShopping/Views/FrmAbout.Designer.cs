@@ -50,7 +50,7 @@
             this.lnkAbout.TabIndex = 1;
             this.lnkAbout.TabStop = true;
             this.lnkAbout.Text = "GitHub";
-            this.lnkAbout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkAbout_LinkClicked);
+            this.lnkAbout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LnkAbout_LinkClicked);
             // 
             // FrmAbout
             // 

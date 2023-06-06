@@ -9,7 +9,7 @@ namespace SteamDlcShopping.Views
             InitializeComponent();
         }
 
-        private void lnkAbout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LnkAbout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process process = new()
             {

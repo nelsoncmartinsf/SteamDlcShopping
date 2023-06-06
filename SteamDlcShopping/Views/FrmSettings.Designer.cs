@@ -63,7 +63,7 @@
             this.txtSteamApiKey.Name = "txtSteamApiKey";
             this.txtSteamApiKey.Size = new System.Drawing.Size(250, 23);
             this.txtSteamApiKey.TabIndex = 1;
-            this.txtSteamApiKey.TextChanged += new System.EventHandler(this.txtSteamApiKey_TextChanged);
+            this.txtSteamApiKey.TextChanged += new System.EventHandler(this.TxtSteamApiKey_TextChanged);
             // 
             // btnSave
             // 
@@ -73,7 +73,7 @@
             this.btnSave.TabIndex = 5;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
             // btnCancel
             // 
@@ -83,7 +83,7 @@
             this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // pbtSteamApiKey
             // 
@@ -112,7 +112,7 @@
             this.lnkGetSteamApiKey.TabIndex = 2;
             this.lnkGetSteamApiKey.TabStop = true;
             this.lnkGetSteamApiKey.Text = "here";
-            this.lnkGetSteamApiKey.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkGetSteamApiKey_LinkClicked);
+            this.lnkGetSteamApiKey.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LnkGetSteamApiKey_LinkClicked);
             // 
             // chkAutoBlacklist
             // 
@@ -124,7 +124,7 @@
             this.chkAutoBlacklist.TabIndex = 3;
             this.chkAutoBlacklist.Text = "Auto Blacklist (Recommended)";
             this.chkAutoBlacklist.UseVisualStyleBackColor = true;
-            this.chkAutoBlacklist.CheckedChanged += new System.EventHandler(this.chkAutoBlacklist_CheckedChanged);
+            this.chkAutoBlacklist.CheckedChanged += new System.EventHandler(this.ChkAutoBlacklist_CheckedChanged);
             // 
             // ptbSmartLoading
             // 
@@ -168,7 +168,7 @@
             this.chkUseMemeLoading.TabIndex = 3;
             this.chkUseMemeLoading.Text = "Use meme loading animation";
             this.chkUseMemeLoading.UseVisualStyleBackColor = true;
-            this.chkUseMemeLoading.CheckedChanged += new System.EventHandler(this.chkAutoBlacklist_CheckedChanged);
+            this.chkUseMemeLoading.CheckedChanged += new System.EventHandler(this.ChkAutoBlacklist_CheckedChanged);
             // 
             // ddlGameSort
             // 

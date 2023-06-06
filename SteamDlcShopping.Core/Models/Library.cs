@@ -25,7 +25,7 @@ namespace SteamDlcShopping.Core.Models
         }
 
         //Methods
-        internal void LoadDynamicStore(string sessionId, string steamLoginSecure)
+        internal async Task LoadDynamicStoreAsync(string sessionId, string steamLoginSecure)
         {
             HttpResponseMessage response;
             Uri uri = new("https://store.steampowered.com/dynamicstore/userdata/");
@@ -36,9 +36,9 @@ namespace SteamDlcShopping.Core.Models
             handler.CookieContainer.Add(uri, new Cookie("steamLoginSecure", steamLoginSecure));
 
             HttpClient client = new(handler);
-            response = client.GetAsync(uri).Result;
+            response = await client.GetAsync(uri);
 
-            string html = response.Content.ReadAsStringAsync().Result;
+            string html = await response.Content.ReadAsStringAsync();
 
             if (html.Contains("<H1>Access Denied</H1>"))
             {
@@ -50,41 +50,35 @@ namespace SteamDlcShopping.Core.Models
             DynamicStore = JsonConvert.DeserializeObject<List<int>>($"{jObject["rgOwnedApps"]}");
         }
 
-        internal void LoadGames(string steamApiKey)
+        internal async Task LoadGamesAsync(string steamApiKey)
         {
             HttpClient httpClient = new();
 
-            Task<string> response = httpClient.GetStringAsync($"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={steamApiKey}&steamid={_steamId}&include_appinfo=true");
-            response.Wait();
+            string response = await httpClient.GetStringAsync($"https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={steamApiKey}&steamid={_steamId}&include_appinfo=true");
 
-            if (!response.IsCompletedSuccessfully)
-            {
-                return;
-            }
-
-            JObject jObject = JObject.Parse(response.Result);
+            JObject jObject = JObject.Parse(response);
 
             Games = JsonConvert.DeserializeObject<List<Game>>($"{jObject["response"]?["games"]}");
         }
 
-        internal void LoadGamesDlc()
+        internal async Task LoadGamesDlcAsync()
         {
             if (Games is null)
             {
                 return;
             }
 
-            Parallel.ForEach(Games, game => { game.LoadDlc(); });
+            await Parallel.ForEachAsync(Games, async (game, _) => { await game.LoadDlcAsync(); });
         }
 
-        internal void RetryFailedGames()
+        internal async Task RetryFailedGamesAsync()
         {
             if (Games is null)
             {
                 return;
             }
 
-            Parallel.ForEach(Games.Where(x => x.FailedFetch), game => { game.LoadDlc(); });
+            await Parallel.ForEachAsync(Games.Where(x => x.FailedFetch), async (game, _) => { await game.LoadDlcAsync(); });
         }
 
         internal void ApplyBlacklist(List<int> appIds)

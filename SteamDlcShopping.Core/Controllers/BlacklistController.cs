@@ -33,13 +33,13 @@ namespace SteamDlcShopping.Core.Controllers
             _blacklist = null;
         }
 
-        public static void Load()
+        public static async Task LoadAsync()
         {
             _blacklist ??= new();
 
             try
             {
-                _blacklist.Load(SteamProfileController.GetSteamId());
+                await _blacklist.LoadAsync(SteamProfileController.GetSteamId());
             }
             catch (Exception exception)
             {
@@ -47,7 +47,7 @@ namespace SteamDlcShopping.Core.Controllers
             }
         }
 
-        internal static void Save()
+        internal static async Task SaveAsync()
         {
             if (_blacklist is null)
             {
@@ -56,7 +56,7 @@ namespace SteamDlcShopping.Core.Controllers
 
             try
             {
-                _blacklist.Save(SteamProfileController.GetSteamId());
+                await _blacklist.SaveAsync(SteamProfileController.GetSteamId());
             }
             catch (Exception exception)
             {
@@ -138,7 +138,7 @@ namespace SteamDlcShopping.Core.Controllers
             return result;
         }
 
-        public static void AddGames(List<int> appIds, bool autoBlacklist)
+        public static async Task AddGamesAsync(List<int> appIds, bool autoBlacklist)
         {
             if (_blacklist is null)
             {
@@ -148,7 +148,7 @@ namespace SteamDlcShopping.Core.Controllers
             try
             {
                 appIds.ForEach(x => _blacklist.AddGame(x, LibraryController.GetGameName(x), autoBlacklist));
-                _blacklist.Save(SteamProfileController.GetSteamId());
+                await _blacklist.SaveAsync(SteamProfileController.GetSteamId());
 
                 if (_blacklist.Games is null)
                 {
@@ -163,7 +163,7 @@ namespace SteamDlcShopping.Core.Controllers
             }
         }
 
-        public static void RemoveGames(List<int> appIds)
+        public static async Task RemoveGamesAsync(List<int> appIds)
         {
             if (_blacklist is null)
             {
@@ -173,7 +173,7 @@ namespace SteamDlcShopping.Core.Controllers
             try
             {
                 appIds.ForEach(_blacklist.RemoveGame);
-                _blacklist.Save(SteamProfileController.GetSteamId());
+                await _blacklist.SaveAsync(SteamProfileController.GetSteamId());
             }
             catch (Exception exception)
             {
@@ -181,7 +181,7 @@ namespace SteamDlcShopping.Core.Controllers
             }
         }
 
-        public static void ClearAutoBlacklist()
+        public static async Task ClearAutoBlacklistAsync()
         {
             if (_blacklist is null)
             {
@@ -207,7 +207,7 @@ namespace SteamDlcShopping.Core.Controllers
                     _blacklist.RemoveGame(game.AppId);
                 }
 
-                _blacklist.Save(SteamProfileController.GetSteamId());
+                await _blacklist.SaveAsync(SteamProfileController.GetSteamId());
             }
             catch (Exception exception)
             {

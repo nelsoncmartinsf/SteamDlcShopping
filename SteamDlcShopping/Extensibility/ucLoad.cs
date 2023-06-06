@@ -1,13 +1,13 @@
 ﻿namespace SteamDlcShopping.Extensibility
 {
-    public partial class ucLoad : UserControl
+    public partial class UcLoad : UserControl
     {
-        public ucLoad()
+        public UcLoad()
         {
             InitializeComponent();
         }
 
-        private void ucLoad_Load(object sender, EventArgs e)
+        private void UcLoad_Load(object sender, EventArgs e)
         {
             if (Parent is null)
             {
@@ -18,8 +18,8 @@
 
             Size = new Size(form.ClientSize.Width, form.ClientSize.Height);
 
-            ptbLoading.Left = (ClientSize.Width - ptbLoading.Width) / 2;
-            ptbLoading.Top = (ClientSize.Height - ptbLoading.Height) / 2;
+            PtbLoading.Left = (ClientSize.Width - PtbLoading.Width) / 2;
+            PtbLoading.Top = (ClientSize.Height - PtbLoading.Height) / 2;
         }
     }
 }

@@ -2,14 +2,14 @@
 
 namespace SteamDlcShopping.Extensibility
 {
-    public partial class ucCalculate : UserControl
+    public partial class UcCalculate : UserControl
     {
-        public ucCalculate()
+        public UcCalculate()
         {
             InitializeComponent();
         }
 
-        private void ucLoading_Load(object sender, EventArgs e)
+        private void UcLoading_Load(object sender, EventArgs e)
         {
             Control? control = Parent?.Controls["grbLibrary"];
 

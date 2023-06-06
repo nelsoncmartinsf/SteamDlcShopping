@@ -31,7 +31,7 @@ namespace SteamDlcShopping.Views
 
         //////////////////////////////////////// LISTBOX ////////////////////////////////////////
 
-        private void lsbDlc_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void LsbDlc_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (lsbDlc.SelectedItem is null)
             {
