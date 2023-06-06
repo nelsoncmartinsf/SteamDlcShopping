@@ -20,7 +20,7 @@ namespace SteamDlcShopping.Extensibility
 
             ptbLoading.Left = (ClientSize.Width - ptbLoading.Width) / 2;
             ptbLoading.Top = (ClientSize.Height - ptbLoading.Height) / 2;
-            ptbLoading.Image = Settings.Default.UseMemeLoading ? Resources.memeLoading : Resources.defaultLoading;
+            ptbLoading.Image = Settings.Default.UseMemeLoading ? Resources.loadingMeme : Resources.loadingDefault;
         }
     }
 }

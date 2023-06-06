@@ -61,11 +61,21 @@ namespace SteamDlcShopping.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon icon {
+            get {
+                object obj = ResourceManager.GetObject("icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap defaultLoading {
+        internal static System.Drawing.Bitmap loadingDefault {
             get {
-                object obj = ResourceManager.GetObject("defaultLoading", resourceCulture);
+                object obj = ResourceManager.GetObject("loadingDefault", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +83,9 @@ namespace SteamDlcShopping.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap memeLoading {
+        internal static System.Drawing.Bitmap loadingMeme {
             get {
-                object obj = ResourceManager.GetObject("memeLoading", resourceCulture);
+                object obj = ResourceManager.GetObject("loadingMeme", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
