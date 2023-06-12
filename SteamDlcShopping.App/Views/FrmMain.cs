@@ -1,11 +1,11 @@
 ﻿using SteamDlcShopping.Core.Controllers;
 using SteamDlcShopping.Core.ViewModels;
-using SteamDlcShopping.Extensibility;
-using SteamDlcShopping.Properties;
+using SteamDlcShopping.App.Extensibility;
+using SteamDlcShopping.App.Properties;
 using System.Diagnostics;
 using Timer = System.Threading.Timer;
 
-namespace SteamDlcShopping.Views
+namespace SteamDlcShopping.App.Views
 {
     public partial class FrmMain : Form
     {
@@ -32,7 +32,7 @@ namespace SteamDlcShopping.Views
 
         private async void FrmMain_Shown(object sender, EventArgs e)
         {
-            await SteamProfileController.LogInAsync(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
+            await SteamProfileController.LoginAsync(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
             await BlacklistController.LoadAsync();
             SetControlsState();
 
@@ -247,7 +247,7 @@ namespace SteamDlcShopping.Views
                 ucLoad.Visible = true;
             }
 
-            await SteamProfileController.LogInAsync(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
+            await SteamProfileController.LoginAsync(Settings.Default.SteamApiKey, Settings.Default.SessionId, Settings.Default.SteamLoginSecure);
             SetControlsState();
 
             if (ucLoad is not null)

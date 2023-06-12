@@ -46,7 +46,7 @@ namespace SteamDlcShopping.Core.Controllers
         }
 
         //Methods
-        internal static async Task LogInAsync(string steamApiKey, string sessionId, string steamLoginSecure)
+        internal static async Task LoginAsync(string steamApiKey, string sessionId, string steamLoginSecure)
         {
             try
             {

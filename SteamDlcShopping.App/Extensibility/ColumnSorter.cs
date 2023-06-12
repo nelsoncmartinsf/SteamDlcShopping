@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace SteamDlcShopping.Extensibility
+namespace SteamDlcShopping.App.Extensibility
 {
     public class ColumnSorter : IComparer
     {

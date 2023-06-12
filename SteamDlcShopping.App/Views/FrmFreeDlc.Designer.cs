@@ -1,4 +1,4 @@
-﻿namespace SteamDlcShopping.Views
+﻿namespace SteamDlcShopping.App.Views
 {
     partial class FrmFreeDlc
     {

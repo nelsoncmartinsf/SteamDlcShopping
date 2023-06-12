@@ -1,6 +1,6 @@
-﻿using SteamDlcShopping.Extensibility;
+﻿using SteamDlcShopping.App.Extensibility;
 
-namespace SteamDlcShopping.Views
+namespace SteamDlcShopping.App.Views
 {
     partial class FrmMain
     {
@@ -35,12 +35,12 @@ namespace SteamDlcShopping.Views
             this.ptbAvatar = new System.Windows.Forms.PictureBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.btnCalculate = new System.Windows.Forms.Button();
-            this.lsvGame = new SteamDlcShopping.Extensibility.ListViewPlus();
+            this.lsvGame = new SteamDlcShopping.App.Extensibility.ListViewPlus();
             this.colGame = new System.Windows.Forms.ColumnHeader();
             this.ColCost = new System.Windows.Forms.ColumnHeader();
             this.colDlcLeft = new System.Windows.Forms.ColumnHeader();
             this.colMaxDiscount = new System.Windows.Forms.ColumnHeader();
-            this.lsvDlc = new SteamDlcShopping.Extensibility.ListViewPlus();
+            this.lsvDlc = new SteamDlcShopping.App.Extensibility.ListViewPlus();
             this.colDlc = new System.Windows.Forms.ColumnHeader();
             this.colPrice = new System.Windows.Forms.ColumnHeader();
             this.colDiscount = new System.Windows.Forms.ColumnHeader();

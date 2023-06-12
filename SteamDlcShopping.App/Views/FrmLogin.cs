@@ -1,9 +1,9 @@
 ﻿using Microsoft.Web.WebView2.Core;
-using SteamDlcShopping.Extensibility;
-using SteamDlcShopping.Properties;
+using SteamDlcShopping.App.Extensibility;
+using SteamDlcShopping.App.Properties;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
-namespace SteamDlcShopping.Views
+namespace SteamDlcShopping.App.Views
 {
     public partial class FrmLogin : Form
     {

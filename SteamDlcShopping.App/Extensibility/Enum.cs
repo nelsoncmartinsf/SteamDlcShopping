@@ -1,4 +1,4 @@
-﻿namespace SteamDlcShopping.Extensibility
+﻿namespace SteamDlcShopping.App.Extensibility
 {
     internal enum Types
     {

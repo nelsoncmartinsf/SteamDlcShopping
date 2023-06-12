@@ -1,7 +1,7 @@
-﻿using SteamDlcShopping.Properties;
+﻿using SteamDlcShopping.App.Properties;
 using System.Diagnostics;
 
-namespace SteamDlcShopping.Views
+namespace SteamDlcShopping.App.Views
 {
     public partial class FrmSettings : Form
     {

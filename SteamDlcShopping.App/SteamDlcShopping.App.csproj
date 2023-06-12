@@ -8,6 +8,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <NeutralLanguage>en</NeutralLanguage>
     <ApplicationIcon>Media\icon.ico</ApplicationIcon>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <AssemblyName>SteamDlcShopping</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

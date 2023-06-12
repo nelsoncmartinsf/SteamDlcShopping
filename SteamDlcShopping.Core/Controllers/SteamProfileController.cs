@@ -30,7 +30,7 @@ namespace SteamDlcShopping.Core.Controllers
             return result;
         }
 
-        public static async Task LogInAsync(string steamApiKey, string sessionId, string steamLoginSecure)
+        public static async Task LoginAsync(string steamApiKey, string sessionId, string steamLoginSecure)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace SteamDlcShopping.Core.Controllers
                     return;
                 }
 
-                await LibraryController.LogInAsync(steamApiKey, sessionId, steamLoginSecure);
+                await LibraryController.LoginAsync(steamApiKey, sessionId, steamLoginSecure);
             }
             catch (Exception exception)
             {

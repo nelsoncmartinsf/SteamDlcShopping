@@ -1,4 +1,4 @@
-﻿namespace SteamDlcShopping.Extensibility
+﻿namespace SteamDlcShopping.App.Extensibility
 {
     partial class UcLoad
     {
@@ -34,7 +34,7 @@
             // 
             // ptbLoading
             // 
-            this.PtbLoading.Image = global::SteamDlcShopping.Properties.Resources.loadingDefault;
+            this.PtbLoading.Image = global::SteamDlcShopping.App.Properties.Resources.loadingDefault;
             this.PtbLoading.Location = new System.Drawing.Point(228, 184);
             this.PtbLoading.Name = "ptbLoading";
             this.PtbLoading.Size = new System.Drawing.Size(287, 141);
