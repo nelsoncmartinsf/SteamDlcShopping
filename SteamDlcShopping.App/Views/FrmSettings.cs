@@ -11,7 +11,7 @@ namespace SteamDlcShopping.App.Views
         {
             InitializeComponent();
             _erpSteamApiKey = new();
-        }
+        } 
 
         //////////////////////////////////////// FORM ////////////////////////////////////////
 
@@ -104,8 +104,8 @@ namespace SteamDlcShopping.App.Views
             Settings.Default.GameSortDescending = ddlGameSort.SelectedIndex % 2 == 0;
             Settings.Default.DlcSortColumn = ddlDlcSort.SelectedIndex == 0 ? -1 : (ddlDlcSort.SelectedIndex - 1) / 2;
             Settings.Default.DlcSortDescending = ddlDlcSort.SelectedIndex % 2 == 0;
-			Settings.Default.OpenPageWithSteam = ddlPageOpener.SelectedIndex == 1;
-			Settings.Default.UseMemeLoading = chkUseMemeLoading.Checked;
+            Settings.Default.OpenPageWithSteam = ddlPageOpener.SelectedIndex == 1;
+            Settings.Default.UseMemeLoading = chkUseMemeLoading.Checked;
             Settings.Default.Save();
 
             Close();
