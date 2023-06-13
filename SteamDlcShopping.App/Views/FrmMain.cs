@@ -1,7 +1,7 @@
-﻿using SteamDlcShopping.Core.Controllers;
-using SteamDlcShopping.Core.ViewModels;
-using SteamDlcShopping.App.Extensibility;
+﻿using SteamDlcShopping.App.Extensibility;
 using SteamDlcShopping.App.Properties;
+using SteamDlcShopping.Core.Controllers;
+using SteamDlcShopping.Core.ViewModels;
 using System.Diagnostics;
 using Timer = System.Threading.Timer;
 

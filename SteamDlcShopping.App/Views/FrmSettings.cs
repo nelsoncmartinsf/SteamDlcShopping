@@ -15,7 +15,8 @@ namespace SteamDlcShopping.App.Views
 
         //////////////////////////////////////// FORM ////////////////////////////////////////
 
-        private void FrmSettings_Load(object sender, EventArgs e) {
+        private void FrmSettings_Load(object sender, EventArgs e)
+        {
             //Controls
             txtSteamApiKey.Text = Settings.Default.SteamApiKey;
             chkAutoBlacklist.Checked = Settings.Default.AutoBlacklist;

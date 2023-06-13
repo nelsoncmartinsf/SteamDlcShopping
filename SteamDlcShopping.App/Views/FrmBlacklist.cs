@@ -1,6 +1,6 @@
-﻿using SteamDlcShopping.Core.Controllers;
+﻿using SteamDlcShopping.App.Properties;
+using SteamDlcShopping.Core.Controllers;
 using SteamDlcShopping.Core.ViewModels;
-using SteamDlcShopping.App.Properties;
 
 namespace SteamDlcShopping.App.Views
 {
