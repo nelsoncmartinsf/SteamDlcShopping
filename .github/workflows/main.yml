@@ -1,2 +1,13 @@
-- name: EditorConfig-Action
-  uses: zbeekman/EditorConfig-Action@v1.1.1
+name: EditorConfig Action
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  editorconfig:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: EditorConfig-Action
+        uses: zbeekman/EditorConfig-Action@v1.1.1
