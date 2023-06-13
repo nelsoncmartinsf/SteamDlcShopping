@@ -1,9 +1,6 @@
-name: EditorConfig Action
+name: EditorConfig Validation
 
-on:
-  pull_request:
-    branches:
-      - master
+on: [push, pull_request]
 
 jobs:
   editorconfig:
