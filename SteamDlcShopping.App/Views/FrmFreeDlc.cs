@@ -46,7 +46,7 @@ namespace SteamDlcShopping.App.Views
             if (Settings.Default.OpenPageWithSteam)
             {
                 argumentUrl = $"steam://openurl/{argumentUrl}";
-			}
+            }
 
             Process process = new()
             {
@@ -61,5 +61,7 @@ namespace SteamDlcShopping.App.Views
 
             process.Start();
         }
+
+        // Testing github actions
     }
 }
