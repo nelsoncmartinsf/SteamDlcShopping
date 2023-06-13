@@ -153,5 +153,17 @@ namespace SteamDlcShopping.App.Properties {
                 this["DlcSortDescending"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool OpenPageWithSteam {
+            get {
+                return ((bool)(this["OpenPageWithSteam"]));
+            }
+            set {
+                this["OpenPageWithSteam"] = value;
+            }
+        }
     }
 }

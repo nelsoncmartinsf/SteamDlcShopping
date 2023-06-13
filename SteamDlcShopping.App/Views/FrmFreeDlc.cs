@@ -1,4 +1,5 @@
-﻿using SteamDlcShopping.Core.Controllers;
+﻿using SteamDlcShopping.App.Properties;
+using SteamDlcShopping.Core.Controllers;
 using System.Diagnostics;
 
 namespace SteamDlcShopping.App.Views
@@ -40,6 +41,13 @@ namespace SteamDlcShopping.App.Views
 
             KeyValuePair<int, string> item = (KeyValuePair<int, string>)lsbDlc.SelectedItem;
 
+            String argumentUrl = $"https://store.steampowered.com/app/{item.Key}";
+
+            if (Settings.Default.OpenPageWithSteam)
+            {
+                argumentUrl = $"steam://openurl/{argumentUrl}";
+			}
+
             Process process = new()
             {
                 StartInfo = new()
@@ -47,7 +55,7 @@ namespace SteamDlcShopping.App.Views
                     CreateNoWindow = true,
                     UseShellExecute = false,
                     FileName = "cmd.exe",
-                    Arguments = $"/c start https://store.steampowered.com/app/{item.Key}"
+                    Arguments = $"/c start {argumentUrl}"
                 }
             };
 

@@ -32,8 +32,9 @@ namespace SteamDlcShopping.App.Views
 
             ddlGameSort.SelectedIndex = Settings.Default.GameSortColumn == -1 ? 0 : Settings.Default.GameSortColumn * 2 + 1 + Convert.ToInt32(Settings.Default.GameSortDescending);
             ddlDlcSort.SelectedIndex = Settings.Default.DlcSortColumn == -1 ? 0 : Settings.Default.DlcSortColumn * 2 + 1 + Convert.ToInt32(Settings.Default.DlcSortDescending);
+			ddlPageOpener.SelectedIndex = Settings.Default.OpenPageWithSteam ? 1 : 0;
 
-            chkUseMemeLoading.Checked = Settings.Default.UseMemeLoading;
+			chkUseMemeLoading.Checked = Settings.Default.UseMemeLoading;
 
             //Errors
             _erpSteamApiKey.BlinkStyle = ErrorBlinkStyle.NeverBlink;
@@ -103,7 +104,8 @@ namespace SteamDlcShopping.App.Views
             Settings.Default.GameSortDescending = ddlGameSort.SelectedIndex % 2 == 0;
             Settings.Default.DlcSortColumn = ddlDlcSort.SelectedIndex == 0 ? -1 : (ddlDlcSort.SelectedIndex - 1) / 2;
             Settings.Default.DlcSortDescending = ddlDlcSort.SelectedIndex % 2 == 0;
-            Settings.Default.UseMemeLoading = chkUseMemeLoading.Checked;
+			Settings.Default.OpenPageWithSteam = ddlPageOpener.SelectedIndex == 1;
+			Settings.Default.UseMemeLoading = chkUseMemeLoading.Checked;
             Settings.Default.Save();
 
             Close();
