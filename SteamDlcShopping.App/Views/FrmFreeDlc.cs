@@ -61,5 +61,7 @@ namespace SteamDlcShopping.App.Views
 
             process.Start();
         }
+
+        // Testing github actions
     }
 }
