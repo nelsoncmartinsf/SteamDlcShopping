@@ -2,9 +2,6 @@ name: dotnet format
 
 on:
   pull_request:
-    paths:
-      - "**.cs"
-      - ".editorconfig"
   push:
     paths:
       - "**.cs"
