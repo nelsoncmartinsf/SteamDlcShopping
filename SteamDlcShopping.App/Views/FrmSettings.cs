@@ -11,7 +11,7 @@ namespace SteamDlcShopping.App.Views
         {
             InitializeComponent();
             _erpSteamApiKey = new();
-        } 
+        }
 
         //////////////////////////////////////// FORM ////////////////////////////////////////
 
@@ -32,9 +32,9 @@ namespace SteamDlcShopping.App.Views
 
             ddlGameSort.SelectedIndex = Settings.Default.GameSortColumn == -1 ? 0 : Settings.Default.GameSortColumn * 2 + 1 + Convert.ToInt32(Settings.Default.GameSortDescending);
             ddlDlcSort.SelectedIndex = Settings.Default.DlcSortColumn == -1 ? 0 : Settings.Default.DlcSortColumn * 2 + 1 + Convert.ToInt32(Settings.Default.DlcSortDescending);
-			ddlPageOpener.SelectedIndex = Settings.Default.OpenPageWithSteam ? 1 : 0;
+            ddlPageOpener.SelectedIndex = Settings.Default.OpenPageWithSteam ? 1 : 0;
 
-			chkUseMemeLoading.Checked = Settings.Default.UseMemeLoading;
+            chkUseMemeLoading.Checked = Settings.Default.UseMemeLoading;
 
             //Errors
             _erpSteamApiKey.BlinkStyle = ErrorBlinkStyle.NeverBlink;
