@@ -1,6 +1,7 @@
 name: dotnet format
 
 on:
+  pull_request:
   push:
     paths:
       - "**.cs"
