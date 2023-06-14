@@ -611,7 +611,7 @@ public partial class FrmMain : Form
             url = $"steam://openurl/{url}";
         }
 
-        LibraryController.OpenLink(url);
+        CoreController.OpenLink(url);
     }
 
     private static async void AutoBlacklistReminder()

@@ -41,6 +41,6 @@ public partial class FrmFreeDlc : Form
             url = $"steam://openurl/{url}";
         }
 
-        LibraryController.OpenLink(url);
+        CoreController.OpenLink(url);
     }
 }
