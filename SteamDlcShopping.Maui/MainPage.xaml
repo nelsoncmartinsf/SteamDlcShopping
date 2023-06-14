@@ -3,6 +3,16 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 x:Class="SteamDlcShopping.Maui.MainPage">
 
+	<ContentPage.Background>
+		<LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+			<GradientStop Color="#171A21" Offset="0.00"/>
+			<GradientStop Color="#1b2838" Offset="0.20"/>
+			<GradientStop Color="#2a476e" Offset="0.40"/>
+			<GradientStop Color="#06c0f4" Offset="0.70"/>
+			<GradientStop Color="#a7d6e9" Offset="0.95"/>
+		</LinearGradientBrush>
+	</ContentPage.Background>
+
 	<ScrollView>
 		<VerticalStackLayout
             Spacing="25"
