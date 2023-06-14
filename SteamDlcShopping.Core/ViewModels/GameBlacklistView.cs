@@ -1,12 +1,11 @@
-﻿namespace SteamDlcShopping.Core.ViewModels
+﻿namespace SteamDlcShopping.Core.ViewModels;
+
+public class GameBlacklistView
 {
-    public class GameBlacklistView
-    {
-        //Properties
-        public int AppId { get; set; }
+    //Properties
+    public int AppId { get; set; }
 
-        public string? Name { get; set; }
+    public string? Name { get; set; }
 
-        public bool AutoBlacklisted { get; set; }
-    }
+    public bool AutoBlacklisted { get; set; }
 }

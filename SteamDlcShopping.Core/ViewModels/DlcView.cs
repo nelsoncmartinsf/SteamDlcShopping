@@ -1,16 +1,15 @@
-﻿namespace SteamDlcShopping.Core.ViewModels
+﻿namespace SteamDlcShopping.Core.ViewModels;
+
+public class DlcView
 {
-    public class DlcView
-    {
-        //Properties
-        public int AppId { get; set; }
+    //Properties
+    public int AppId { get; set; }
 
-        public string? Name { get; set; }
+    public string? Name { get; set; }
 
-        public string? Price { get; set; }
+    public string? Price { get; set; }
 
-        public string? Discount { get; set; }
+    public string? Discount { get; set; }
 
-        public bool IsOwned { get; set; }
-    }
+    public bool IsOwned { get; set; }
 }

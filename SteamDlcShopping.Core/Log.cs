@@ -1,25 +1,15 @@
-﻿using Serilog;
-using Serilog.Core;
+﻿namespace SteamDlcShopping.Core;
 
-namespace SteamDlcShopping.Core
+internal static class Log
 {
-    internal static class Log
-    {
-        //Fields
-        private static readonly Logger _logger;
+    //Fields
+    private static readonly Logger _logger;
 
-        //Constructor
-        static Log()
-        {
-            _logger = new LoggerConfiguration()
-                        .WriteTo.File("log.txt")
-                        .CreateLogger();
-        }
+    //Constructor
+    static Log() => _logger = new LoggerConfiguration()
+                    .WriteTo.File("log.txt")
+                    .CreateLogger();
 
-        //Methods
-        internal static void Fatal(Exception exception)
-        {
-            _logger.Fatal(exception, "exception");
-        }
-    }
+    //Methods
+    internal static void Fatal(Exception exception) => _logger.Fatal(exception, "exception");
 }

@@ -1,8 +1,7 @@
-﻿namespace SteamDlcShopping.App.Extensibility
+﻿namespace SteamDlcShopping.App.Extensibility;
+
+internal enum Types
 {
-    internal enum Types
-    {
-        String = 1,
-        Decimal = 2
-    }
+    String = 1,
+    Decimal = 2
 }

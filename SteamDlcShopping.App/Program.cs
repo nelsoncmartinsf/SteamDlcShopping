@@ -1,31 +1,27 @@
-using SteamDlcShopping.App.Properties;
-using SteamDlcShopping.App.Views;
+namespace SteamDlcShopping.App;
 
-namespace SteamDlcShopping.App
+internal static class Program
 {
-    internal static class Program
+    /// <summary>
+    ///  The main entry point for the application.
+    /// </summary>
+    [STAThread]
+    static void Main()
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        // To customize application configuration such as set high DPI settings or default font,
+        // see https://aka.ms/applicationconfiguration.
+        ApplicationConfiguration.Initialize();
+
+        if (string.IsNullOrWhiteSpace(Settings.Default.SteamApiKey))
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
-
-            if (string.IsNullOrWhiteSpace(Settings.Default.SteamApiKey))
-            {
-                Application.Run(new FrmSettings());
-            }
-
-            if (!string.IsNullOrWhiteSpace(Settings.Default.SteamApiKey))
-            {
-                Application.Run(new FrmMain());
-            }
-
-            Application.Exit();
+            Application.Run(new FrmSettings());
         }
+
+        if (!string.IsNullOrWhiteSpace(Settings.Default.SteamApiKey))
+        {
+            Application.Run(new FrmMain());
+        }
+
+        Application.Exit();
     }
 }

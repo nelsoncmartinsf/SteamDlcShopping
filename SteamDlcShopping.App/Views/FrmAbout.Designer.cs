@@ -28,53 +28,64 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblAbout = new System.Windows.Forms.Label();
-            this.lnkAbout = new System.Windows.Forms.LinkLabel();
-            this.SuspendLayout();
+            lblAbout = new Label();
+            lnkAbout = new LinkLabel();
+            lblVersion = new Label();
+            SuspendLayout();
             // 
             // lblAbout
             // 
-            this.lblAbout.AutoSize = true;
-            this.lblAbout.Location = new System.Drawing.Point(12, 9);
-            this.lblAbout.Name = "lblAbout";
-            this.lblAbout.Size = new System.Drawing.Size(207, 15);
-            this.lblAbout.TabIndex = 0;
-            this.lblAbout.Text = "Originally developed by DiogoABDias.";
+            lblAbout.AutoSize = true;
+            lblAbout.Location = new Point(12, 9);
+            lblAbout.Name = "lblAbout";
+            lblAbout.Size = new Size(207, 15);
+            lblAbout.TabIndex = 0;
+            lblAbout.Text = "Originally developed by DiogoABDias.";
             // 
             // lnkAbout
             // 
-            this.lnkAbout.AutoSize = true;
-            this.lnkAbout.Location = new System.Drawing.Point(12, 33);
-            this.lnkAbout.Name = "lnkAbout";
-            this.lnkAbout.Size = new System.Drawing.Size(45, 15);
-            this.lnkAbout.TabIndex = 1;
-            this.lnkAbout.TabStop = true;
-            this.lnkAbout.Text = "GitHub";
-            this.lnkAbout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LnkAbout_LinkClicked);
+            lnkAbout.AutoSize = true;
+            lnkAbout.Location = new Point(174, 37);
+            lnkAbout.Name = "lnkAbout";
+            lnkAbout.Size = new Size(45, 15);
+            lnkAbout.TabIndex = 1;
+            lnkAbout.TabStop = true;
+            lnkAbout.Text = "GitHub";
+            lnkAbout.LinkClicked += LnkAbout_LinkClicked;
+            // 
+            // lblVersion
+            // 
+            lblVersion.AutoSize = true;
+            lblVersion.Location = new Point(12, 37);
+            lblVersion.Name = "lblVersion";
+            lblVersion.Size = new Size(37, 15);
+            lblVersion.TabIndex = 2;
+            lblVersion.Text = "v1.2.1";
             // 
             // FrmAbout
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(234, 61);
-            this.Controls.Add(this.lnkAbout);
-            this.Controls.Add(this.lblAbout);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "FrmAbout";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "About";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(234, 61);
+            Controls.Add(lblVersion);
+            Controls.Add(lnkAbout);
+            Controls.Add(lblAbout);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "FrmAbout";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "About";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private Label lblAbout;
         private LinkLabel lnkAbout;
+        private Label lblVersion;
     }
 }

@@ -1,218 +1,211 @@
-﻿using SteamDlcShopping.Core.Models;
-using SteamDlcShopping.Core.ViewModels;
+﻿namespace SteamDlcShopping.Core.Controllers;
 
-namespace SteamDlcShopping.Core.Controllers
+public static class BlacklistController
 {
-    public static class BlacklistController
+    //Fields
+    private static Blacklist? _blacklist;
+
+    //Properties
+    public static bool HasGames
     {
-        //Fields
-        private static Blacklist? _blacklist;
-
-        //Properties
-        public static bool HasGames
-        {
-            get
-            {
-                if (_blacklist is null)
-                {
-                    return false;
-                };
-
-                if (_blacklist.Games is null)
-                {
-                    return false;
-                };
-
-                return _blacklist.Games.Any();
-            }
-        }
-
-        //Methods
-        internal static void Reset()
-        {
-            _blacklist = null;
-        }
-
-        public static async Task LoadAsync()
-        {
-            _blacklist ??= new();
-
-            try
-            {
-                await _blacklist.LoadAsync(SteamProfileController.GetSteamId());
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
-            }
-        }
-
-        internal static async Task SaveAsync()
+        get
         {
             if (_blacklist is null)
             {
-                return;
+                return false;
             }
-
-            try
-            {
-                await _blacklist.SaveAsync(SteamProfileController.GetSteamId());
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
-            }
-        }
-
-        internal static List<int> Get()
-        {
-            List<int> result = new();
-
-            if (_blacklist is null)
-            {
-                return result;
-            };
 
             if (_blacklist.Games is null)
             {
-                return result;
-            };
-
-            try
-            {
-                _blacklist.Games.ForEach(x => result.Add(x.AppId));
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
+                return false;
             }
 
+            return _blacklist.Games.Any();
+        }
+    }
+
+    //Methods
+    internal static void Reset() => _blacklist = null;
+
+    public static async Task LoadAsync()
+    {
+        _blacklist ??= new();
+
+        try
+        {
+            await _blacklist.LoadAsync(SteamProfileController.GetSteamId());
+        }
+        catch (Exception exception)
+        {
+            Log.Fatal(exception);
+        }
+    }
+
+    internal static async Task SaveAsync()
+    {
+        if (_blacklist is null)
+        {
+            return;
+        }
+
+        try
+        {
+            await _blacklist.SaveAsync(SteamProfileController.GetSteamId());
+        }
+        catch (Exception exception)
+        {
+            Log.Fatal(exception);
+        }
+    }
+
+    internal static List<int> Get()
+    {
+        List<int> result = new();
+
+        if (_blacklist is null)
+        {
             return result;
         }
 
-        public static List<GameBlacklistView> GetView(string? filterName = null, bool _filterAutoBlacklisted = false)
+        if (_blacklist.Games is null)
         {
-            List<GameBlacklistView> result = new();
-
-            if (_blacklist is null)
-            {
-                return result;
-            }
-
-            if (_blacklist.Games is null)
-            {
-                return result;
-            }
-
-            try
-            {
-                foreach (GameBlacklist game in _blacklist.Games)
-                {
-                    //Filter by name search
-                    if (!string.IsNullOrWhiteSpace(game.Name) && !game.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        continue;
-                    }
-
-                    //Filter by games not auto blacklisted
-                    if (_filterAutoBlacklisted && game.AutoBlacklisted)
-                    {
-                        continue;
-                    }
-
-                    GameBlacklistView gameBlacklist = new()
-                    {
-                        AppId = game.AppId,
-                        Name = game.AutoBlacklisted ? $"{game.Name} (Auto Blacklist)" : game.Name,
-                        AutoBlacklisted = game.AutoBlacklisted
-                    };
-
-                    result.Add(gameBlacklist);
-                }
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
-            }
-
             return result;
         }
 
-        public static async Task AddGamesAsync(List<int> appIds, bool autoBlacklist)
+        try
         {
-            if (_blacklist is null)
-            {
-                return;
-            }
+            _blacklist.Games.ForEach(x => result.Add(x.AppId));
+        }
+        catch (Exception exception)
+        {
+            Log.Fatal(exception);
+        }
 
-            try
-            {
-                appIds.ForEach(x => _blacklist.AddGame(x, LibraryController.GetGameName(x), autoBlacklist));
-                await _blacklist.SaveAsync(SteamProfileController.GetSteamId());
+        return result;
+    }
 
-                if (_blacklist.Games is null)
+    public static List<GameBlacklistView> GetView(string? filterName = null, bool _filterAutoBlacklisted = false)
+    {
+        List<GameBlacklistView> result = new();
+
+        if (_blacklist is null)
+        {
+            return result;
+        }
+
+        if (_blacklist.Games is null)
+        {
+            return result;
+        }
+
+        try
+        {
+            foreach (GameBlacklist game in _blacklist.Games)
+            {
+                //Filter by name search
+                if (!string.IsNullOrWhiteSpace(game.Name) && !game.Name.Contains(filterName ?? string.Empty, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return;
+                    continue;
                 }
 
-                LibraryController.ApplyBlacklist(appIds);
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
+                //Filter by games not auto blacklisted
+                if (_filterAutoBlacklisted && game.AutoBlacklisted)
+                {
+                    continue;
+                }
+
+                GameBlacklistView gameBlacklist = new()
+                {
+                    AppId = game.AppId,
+                    Name = game.AutoBlacklisted ? $"{game.Name} (Auto Blacklist)" : game.Name,
+                    AutoBlacklisted = game.AutoBlacklisted
+                };
+
+                result.Add(gameBlacklist);
             }
         }
-
-        public static async Task RemoveGamesAsync(List<int> appIds)
+        catch (Exception exception)
         {
-            if (_blacklist is null)
-            {
-                return;
-            }
-
-            try
-            {
-                appIds.ForEach(_blacklist.RemoveGame);
-                await _blacklist.SaveAsync(SteamProfileController.GetSteamId());
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
-            }
+            Log.Fatal(exception);
         }
 
-        public static async Task ClearAutoBlacklistAsync()
+        return result;
+    }
+
+    public static async Task AddGamesAsync(List<int> appIds, bool autoBlacklist)
+    {
+        if (_blacklist is null)
         {
-            if (_blacklist is null)
-            {
-                return;
-            }
+            return;
+        }
+
+        try
+        {
+            appIds.ForEach(x => _blacklist.AddGame(x, LibraryController.GetGameName(x), autoBlacklist));
+            await _blacklist.SaveAsync(SteamProfileController.GetSteamId());
 
             if (_blacklist.Games is null)
             {
                 return;
             }
 
-            try
+            LibraryController.ApplyBlacklist(appIds);
+        }
+        catch (Exception exception)
+        {
+            Log.Fatal(exception);
+        }
+    }
+
+    public static async Task RemoveGamesAsync(List<int> appIds)
+    {
+        if (_blacklist is null)
+        {
+            return;
+        }
+
+        try
+        {
+            appIds.ForEach(_blacklist.RemoveGame);
+            await _blacklist.SaveAsync(SteamProfileController.GetSteamId());
+        }
+        catch (Exception exception)
+        {
+            Log.Fatal(exception);
+        }
+    }
+
+    public static async Task ClearAutoBlacklistAsync()
+    {
+        if (_blacklist is null)
+        {
+            return;
+        }
+
+        if (_blacklist.Games is null)
+        {
+            return;
+        }
+
+        try
+        {
+            for (int index = _blacklist.Games.Count - 1; index >= 0; index--)
             {
-                for (int index = _blacklist.Games.Count - 1; index >= 0; index--)
+                GameBlacklist game = _blacklist.Games[index];
+
+                if (!game.AutoBlacklisted)
                 {
-                    GameBlacklist game = _blacklist.Games[index];
-
-                    if (!game.AutoBlacklisted)
-                    {
-                        continue;
-                    }
-
-                    _blacklist.RemoveGame(game.AppId);
+                    continue;
                 }
 
-                await _blacklist.SaveAsync(SteamProfileController.GetSteamId());
+                _blacklist.RemoveGame(game.AppId);
             }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
-            }
+
+            await _blacklist.SaveAsync(SteamProfileController.GetSteamId());
+        }
+        catch (Exception exception)
+        {
+            Log.Fatal(exception);
         }
     }
 }

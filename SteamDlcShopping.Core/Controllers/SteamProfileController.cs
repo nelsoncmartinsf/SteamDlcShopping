@@ -1,111 +1,107 @@
-﻿using SteamDlcShopping.Core.Models;
-using SteamDlcShopping.Core.ViewModels;
+﻿namespace SteamDlcShopping.Core.Controllers;
 
-namespace SteamDlcShopping.Core.Controllers
+public static class SteamProfileController
 {
-    public static class SteamProfileController
+    //Fields
+    private static SteamProfile? _steamProfile;
+
+    //Methods
+    public static bool IsSessionActive()
     {
-        //Fields
-        private static SteamProfile? _steamProfile;
+        bool result = false;
 
-        //Methods
-        public static bool IsSessionActive()
+        try
         {
-            bool result = false;
-
-            try
-            {
-                if (_steamProfile is null)
-                {
-                    return result;
-                }
-
-                result = LibraryController.DynamicStoreIsFilled() && LibraryController.GamesIsFilled();
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
-            }
-
-            return result;
-        }
-
-        public static async Task LoginAsync(string steamApiKey, string sessionId, string steamLoginSecure)
-        {
-            try
-            {
-                _steamProfile ??= new();
-
-                await _steamProfile.LoadAsync(steamLoginSecure);
-
-                if (_steamProfile.Id == 0)
-                {
-                    return;
-                }
-
-                await LibraryController.LoginAsync(steamApiKey, sessionId, steamLoginSecure);
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
-            }
-        }
-
-        public static void Logout()
-        {
-            try
-            {
-                _steamProfile = null;
-                LibraryController.Logout();
-                BlacklistController.Reset();
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
-            }
-        }
-
-        public static SteamProfileView GetSteamProfile()
-        {
-            SteamProfileView result = new();
-
             if (_steamProfile is null)
             {
                 return result;
             }
 
-            try
-            {
-                result.Username = _steamProfile.Username;
-                result.AvatarUrl = _steamProfile.AvatarUrl;
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
-            }
-
-            return result;
+            result = LibraryController.DynamicStoreIsFilled() && LibraryController.GamesIsFilled();
         }
-
-        internal static long GetSteamId()
+        catch (Exception exception)
         {
-            long result = 0;
+            Log.Fatal(exception);
+        }
 
-            if (_steamProfile is null)
+        return result;
+    }
+
+    public static async Task LoginAsync(string steamApiKey, string sessionId, string steamLoginSecure)
+    {
+        try
+        {
+            _steamProfile ??= new();
+
+            await _steamProfile.LoadAsync(steamLoginSecure);
+
+            if (_steamProfile.Id == 0)
             {
-                return result;
+                return;
             }
 
-            try
-            {
-                result = _steamProfile.Id;
-            }
-            catch (Exception exception)
-            {
-                Log.Fatal(exception);
-            }
+            await LibraryController.LoginAsync(steamApiKey, sessionId, steamLoginSecure);
+        }
+        catch (Exception exception)
+        {
+            Log.Fatal(exception);
+        }
+    }
 
+    public static void Logout()
+    {
+        try
+        {
+            _steamProfile = null;
+            LibraryController.Logout();
+            BlacklistController.Reset();
+        }
+        catch (Exception exception)
+        {
+            Log.Fatal(exception);
+        }
+    }
+
+    public static SteamProfileView GetSteamProfile()
+    {
+        SteamProfileView result = new();
+
+        if (_steamProfile is null)
+        {
             return result;
         }
+
+        try
+        {
+            result.Username = _steamProfile.Username;
+            result.AvatarUrl = _steamProfile.AvatarUrl;
+        }
+        catch (Exception exception)
+        {
+            Log.Fatal(exception);
+        }
+
+        return result;
+    }
+
+    internal static long GetSteamId()
+    {
+        long result = 0;
+
+        if (_steamProfile is null)
+        {
+            return result;
+        }
+
+        try
+        {
+            result = _steamProfile.Id;
+        }
+        catch (Exception exception)
+        {
+            Log.Fatal(exception);
+        }
+
+        return result;
     }
 }
