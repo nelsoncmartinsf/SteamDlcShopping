@@ -61,7 +61,7 @@ public partial class FrmSettings : Form
             url = $"steam://openurl/{url}";
         }
 
-        LibraryController.OpenLink(url);
+        CoreController.OpenLink(url);
     }
 
     //////////////////////////////////////// AUTO BLACKLIST ////////////////////////////////////////

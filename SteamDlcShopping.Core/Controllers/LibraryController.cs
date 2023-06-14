@@ -448,22 +448,6 @@ public static class LibraryController
         return result;
     }
 
-    public static void OpenLink(string url)
-    {
-        Process process = new()
-        {
-            StartInfo = new()
-            {
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                FileName = "cmd.exe",
-                Arguments = $"/c start {url}"
-            }
-        };
-
-        process.Start();
-    }
-
     public static bool GameHasTooManyDlcs(int appId)
     {
         bool result = false;
