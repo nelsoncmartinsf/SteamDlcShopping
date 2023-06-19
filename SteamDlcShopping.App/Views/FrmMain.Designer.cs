@@ -31,391 +31,379 @@ namespace SteamDlcShopping.App.Views
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
-            this.lblUsername = new System.Windows.Forms.Label();
-            this.ptbAvatar = new System.Windows.Forms.PictureBox();
-            this.btnLogin = new System.Windows.Forms.Button();
-            this.btnCalculate = new System.Windows.Forms.Button();
-            this.lsvGame = new SteamDlcShopping.App.Extensibility.ListViewPlus();
-            this.colGame = new System.Windows.Forms.ColumnHeader();
-            this.ColCost = new System.Windows.Forms.ColumnHeader();
-            this.colDlcLeft = new System.Windows.Forms.ColumnHeader();
-            this.colMaxDiscount = new System.Windows.Forms.ColumnHeader();
-            this.lsvDlc = new SteamDlcShopping.App.Extensibility.ListViewPlus();
-            this.colDlc = new System.Windows.Forms.ColumnHeader();
-            this.colPrice = new System.Windows.Forms.ColumnHeader();
-            this.colDiscount = new System.Windows.Forms.ColumnHeader();
-            this.lblGameCount = new System.Windows.Forms.Label();
-            this.lblDlcCount = new System.Windows.Forms.Label();
-            this.btnLogout = new System.Windows.Forms.Button();
-            this.txtGameSearch = new System.Windows.Forms.TextBox();
-            this.grbLibrary = new System.Windows.Forms.GroupBox();
-            this.lnkTooManyDlc = new System.Windows.Forms.LinkLabel();
-            this.lblTooManyDlc = new System.Windows.Forms.Label();
-            this.lblLibraryFullPrice = new System.Windows.Forms.Label();
-            this.lblLibraryCurrentPrice = new System.Windows.Forms.Label();
-            this.chkHideDlcOwned = new System.Windows.Forms.CheckBox();
-            this.chkHideDlcNotOnSale = new System.Windows.Forms.CheckBox();
-            this.chkHideGamesNotOnSale = new System.Windows.Forms.CheckBox();
-            this.btnBlacklist = new System.Windows.Forms.Button();
-            this.txtDlcSearch = new System.Windows.Forms.TextBox();
-            this.smiSettings = new System.Windows.Forms.ToolStripMenuItem();
-            this.smiBlacklist = new System.Windows.Forms.ToolStripMenuItem();
-            this.smiFreeDlc = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuMenu = new System.Windows.Forms.MenuStrip();
-            this.smiAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnRetryFailedGames = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
-            this.grbLibrary.SuspendLayout();
-            this.mnuMenu.SuspendLayout();
-            this.SuspendLayout();
+            lblUsername = new Label();
+            ptbAvatar = new PictureBox();
+            btnLogin = new Button();
+            btnCalculate = new Button();
+            lsvGame = new ListViewPlus();
+            colGame = new ColumnHeader();
+            ColCost = new ColumnHeader();
+            colDlcLeft = new ColumnHeader();
+            colMaxDiscount = new ColumnHeader();
+            lsvDlc = new ListViewPlus();
+            colDlc = new ColumnHeader();
+            colPrice = new ColumnHeader();
+            colDiscount = new ColumnHeader();
+            lblGameCount = new Label();
+            lblDlcCount = new Label();
+            btnLogout = new Button();
+            txtGameSearch = new TextBox();
+            grbLibrary = new GroupBox();
+            lnkTooManyDlc = new LinkLabel();
+            lblTooManyDlc = new Label();
+            lblLibraryFullPrice = new Label();
+            lblLibraryCurrentPrice = new Label();
+            chkHideDlcOwned = new CheckBox();
+            chkHideDlcNotOnSale = new CheckBox();
+            chkHideGamesNotOnSale = new CheckBox();
+            btnBlacklist = new Button();
+            txtDlcSearch = new TextBox();
+            smiSettings = new ToolStripMenuItem();
+            smiBlacklist = new ToolStripMenuItem();
+            smiFreeDlc = new ToolStripMenuItem();
+            mnuMenu = new MenuStrip();
+            smiAbout = new ToolStripMenuItem();
+            btnRetryFailedGames = new Button();
+            ((System.ComponentModel.ISupportInitialize)ptbAvatar).BeginInit();
+            grbLibrary.SuspendLayout();
+            mnuMenu.SuspendLayout();
+            SuspendLayout();
             // 
             // lblUsername
             // 
-            this.lblUsername.AutoSize = true;
-            this.lblUsername.Location = new System.Drawing.Point(82, 24);
-            this.lblUsername.Name = "lblUsername";
-            this.lblUsername.Size = new System.Drawing.Size(73, 15);
-            this.lblUsername.TabIndex = 0;
-            this.lblUsername.Text = "lblUsername";
+            lblUsername.AutoSize = true;
+            lblUsername.Location = new Point(82, 24);
+            lblUsername.Name = "lblUsername";
+            lblUsername.Size = new Size(73, 15);
+            lblUsername.TabIndex = 0;
+            lblUsername.Text = "lblUsername";
             // 
             // ptbAvatar
             // 
-            this.ptbAvatar.InitialImage = ((System.Drawing.Image)(resources.GetObject("ptbAvatar.InitialImage")));
-            this.ptbAvatar.Location = new System.Drawing.Point(12, 27);
-            this.ptbAvatar.Name = "ptbAvatar";
-            this.ptbAvatar.Size = new System.Drawing.Size(64, 64);
-            this.ptbAvatar.TabIndex = 1;
-            this.ptbAvatar.TabStop = false;
+            ptbAvatar.InitialImage = (Image)resources.GetObject("ptbAvatar.InitialImage");
+            ptbAvatar.Location = new Point(12, 27);
+            ptbAvatar.Name = "ptbAvatar";
+            ptbAvatar.Size = new Size(64, 64);
+            ptbAvatar.TabIndex = 1;
+            ptbAvatar.TabStop = false;
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(82, 42);
-            this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(75, 23);
-            this.btnLogin.TabIndex = 1;
-            this.btnLogin.Text = "Login";
-            this.btnLogin.UseVisualStyleBackColor = true;
-            this.btnLogin.Click += new System.EventHandler(this.BtnLogin_Click);
+            btnLogin.Location = new Point(82, 42);
+            btnLogin.Name = "btnLogin";
+            btnLogin.Size = new Size(75, 23);
+            btnLogin.TabIndex = 1;
+            btnLogin.Text = "Login";
+            btnLogin.UseVisualStyleBackColor = true;
+            btnLogin.Click += BtnLogin_Click;
             // 
             // btnCalculate
             // 
-            this.btnCalculate.Location = new System.Drawing.Point(82, 68);
-            this.btnCalculate.Name = "btnCalculate";
-            this.btnCalculate.Size = new System.Drawing.Size(75, 23);
-            this.btnCalculate.TabIndex = 2;
-            this.btnCalculate.Text = "Calculate";
-            this.btnCalculate.UseVisualStyleBackColor = true;
-            this.btnCalculate.Click += new System.EventHandler(this.BtnCalculate_Click);
+            btnCalculate.Location = new Point(82, 68);
+            btnCalculate.Name = "btnCalculate";
+            btnCalculate.Size = new Size(75, 23);
+            btnCalculate.TabIndex = 2;
+            btnCalculate.Text = "Calculate";
+            btnCalculate.UseVisualStyleBackColor = true;
+            btnCalculate.Click += BtnCalculate_Click;
             // 
             // lsvGame
             // 
-            this.lsvGame.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colGame,
-            this.ColCost,
-            this.colDlcLeft,
-            this.colMaxDiscount});
-            this.lsvGame.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lsvGame.FullRowSelect = true;
-            this.lsvGame.GridLines = true;
-            this.lsvGame.Location = new System.Drawing.Point(6, 51);
-            this.lsvGame.Name = "lsvGame";
-            this.lsvGame.Size = new System.Drawing.Size(681, 237);
-            this.lsvGame.TabIndex = 4;
-            this.lsvGame.UseCompatibleStateImageBehavior = false;
-            this.lsvGame.View = System.Windows.Forms.View.Details;
-            this.lsvGame.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.LsvGame_ColumnClick);
-            this.lsvGame.SelectedIndexChanged += new System.EventHandler(this.LsvGame_SelectedIndexChanged);
-            this.lsvGame.DoubleClick += new System.EventHandler(this.LsvGame_DoubleClick);
+            lsvGame.Columns.AddRange(new ColumnHeader[] { colGame, ColCost, colDlcLeft, colMaxDiscount });
+            lsvGame.Cursor = Cursors.Hand;
+            lsvGame.FullRowSelect = true;
+            lsvGame.GridLines = true;
+            lsvGame.Location = new Point(6, 51);
+            lsvGame.Name = "lsvGame";
+            lsvGame.Size = new Size(681, 237);
+            lsvGame.TabIndex = 3;
+            lsvGame.UseCompatibleStateImageBehavior = false;
+            lsvGame.View = View.Details;
+            lsvGame.ColumnClick += LsvGame_ColumnClick;
+            lsvGame.SelectedIndexChanged += LsvGame_SelectedIndexChanged;
+            lsvGame.DoubleClick += LsvGame_DoubleClick;
             // 
             // colGame
             // 
-            this.colGame.Text = "Game";
-            this.colGame.Width = 420;
+            colGame.Text = "Game";
+            colGame.Width = 420;
             // 
             // ColCost
             // 
-            this.ColCost.Text = "Total Cost";
-            this.ColCost.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.ColCost.Width = 90;
+            ColCost.Text = "Total Cost";
+            ColCost.TextAlign = HorizontalAlignment.Right;
+            ColCost.Width = 90;
             // 
             // colDlcLeft
             // 
-            this.colDlcLeft.Text = "DLC Left";
-            this.colDlcLeft.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.colDlcLeft.Width = 70;
+            colDlcLeft.Text = "DLC Left";
+            colDlcLeft.TextAlign = HorizontalAlignment.Right;
+            colDlcLeft.Width = 70;
             // 
             // colMaxDiscount
             // 
-            this.colMaxDiscount.Text = "Highest %";
-            this.colMaxDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.colMaxDiscount.Width = 80;
+            colMaxDiscount.Text = "Highest %";
+            colMaxDiscount.TextAlign = HorizontalAlignment.Right;
+            colMaxDiscount.Width = 80;
             // 
             // lsvDlc
             // 
-            this.lsvDlc.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colDlc,
-            this.colPrice,
-            this.colDiscount});
-            this.lsvDlc.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lsvDlc.FullRowSelect = true;
-            this.lsvDlc.GridLines = true;
-            this.lsvDlc.Location = new System.Drawing.Point(6, 374);
-            this.lsvDlc.MultiSelect = false;
-            this.lsvDlc.Name = "lsvDlc";
-            this.lsvDlc.Size = new System.Drawing.Size(681, 237);
-            this.lsvDlc.TabIndex = 6;
-            this.lsvDlc.UseCompatibleStateImageBehavior = false;
-            this.lsvDlc.View = System.Windows.Forms.View.Details;
-            this.lsvDlc.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.LsvDlc_ColumnClick);
-            this.lsvDlc.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LsvDlc_MouseDoubleClick);
+            lsvDlc.Columns.AddRange(new ColumnHeader[] { colDlc, colPrice, colDiscount });
+            lsvDlc.Cursor = Cursors.Hand;
+            lsvDlc.FullRowSelect = true;
+            lsvDlc.GridLines = true;
+            lsvDlc.Location = new Point(6, 374);
+            lsvDlc.MultiSelect = false;
+            lsvDlc.Name = "lsvDlc";
+            lsvDlc.Size = new Size(681, 237);
+            lsvDlc.TabIndex = 8;
+            lsvDlc.UseCompatibleStateImageBehavior = false;
+            lsvDlc.View = View.Details;
+            lsvDlc.ColumnClick += LsvDlc_ColumnClick;
+            lsvDlc.MouseDoubleClick += LsvDlc_MouseDoubleClick;
             // 
             // colDlc
             // 
-            this.colDlc.Text = "DLC";
-            this.colDlc.Width = 490;
+            colDlc.Text = "DLC";
+            colDlc.Width = 490;
             // 
             // colPrice
             // 
-            this.colPrice.Text = "Price";
-            this.colPrice.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.colPrice.Width = 90;
+            colPrice.Text = "Price";
+            colPrice.TextAlign = HorizontalAlignment.Right;
+            colPrice.Width = 90;
             // 
             // colDiscount
             // 
-            this.colDiscount.Text = "Discount";
-            this.colDiscount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.colDiscount.Width = 80;
+            colDiscount.Text = "Discount";
+            colDiscount.TextAlign = HorizontalAlignment.Right;
+            colDiscount.Width = 80;
             // 
             // lblGameCount
             // 
-            this.lblGameCount.AutoSize = true;
-            this.lblGameCount.Location = new System.Drawing.Point(6, 298);
-            this.lblGameCount.Name = "lblGameCount";
-            this.lblGameCount.Size = new System.Drawing.Size(84, 15);
-            this.lblGameCount.TabIndex = 0;
-            this.lblGameCount.Text = "lblGameCount";
+            lblGameCount.AutoSize = true;
+            lblGameCount.Location = new Point(6, 298);
+            lblGameCount.Name = "lblGameCount";
+            lblGameCount.Size = new Size(84, 15);
+            lblGameCount.TabIndex = 0;
+            lblGameCount.Text = "lblGameCount";
             // 
             // lblDlcCount
             // 
-            this.lblDlcCount.AutoSize = true;
-            this.lblDlcCount.Location = new System.Drawing.Point(6, 621);
-            this.lblDlcCount.Name = "lblDlcCount";
-            this.lblDlcCount.Size = new System.Drawing.Size(70, 15);
-            this.lblDlcCount.TabIndex = 0;
-            this.lblDlcCount.Text = "lblDlcCount";
+            lblDlcCount.AutoSize = true;
+            lblDlcCount.Location = new Point(6, 621);
+            lblDlcCount.Name = "lblDlcCount";
+            lblDlcCount.Size = new Size(70, 15);
+            lblDlcCount.TabIndex = 0;
+            lblDlcCount.Text = "lblDlcCount";
             // 
             // btnLogout
             // 
-            this.btnLogout.Location = new System.Drawing.Point(82, 42);
-            this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(75, 23);
-            this.btnLogout.TabIndex = 3;
-            this.btnLogout.Text = "Logout";
-            this.btnLogout.UseVisualStyleBackColor = true;
-            this.btnLogout.Click += new System.EventHandler(this.BtnLogout_Click);
+            btnLogout.Location = new Point(82, 42);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new Size(75, 23);
+            btnLogout.TabIndex = 3;
+            btnLogout.Text = "Logout";
+            btnLogout.UseVisualStyleBackColor = true;
+            btnLogout.Click += BtnLogout_Click;
             // 
             // txtGameSearch
             // 
-            this.txtGameSearch.Location = new System.Drawing.Point(6, 22);
-            this.txtGameSearch.Name = "txtGameSearch";
-            this.txtGameSearch.Size = new System.Drawing.Size(200, 23);
-            this.txtGameSearch.TabIndex = 1;
-            this.txtGameSearch.TextChanged += new System.EventHandler(this.LsvGame_FilterChanged);
+            txtGameSearch.Location = new Point(6, 22);
+            txtGameSearch.Name = "txtGameSearch";
+            txtGameSearch.Size = new Size(200, 23);
+            txtGameSearch.TabIndex = 1;
+            txtGameSearch.TextChanged += LsvGame_FilterChanged;
             // 
             // grbLibrary
             // 
-            this.grbLibrary.Controls.Add(this.lnkTooManyDlc);
-            this.grbLibrary.Controls.Add(this.lblTooManyDlc);
-            this.grbLibrary.Controls.Add(this.lblLibraryFullPrice);
-            this.grbLibrary.Controls.Add(this.lblLibraryCurrentPrice);
-            this.grbLibrary.Controls.Add(this.chkHideDlcOwned);
-            this.grbLibrary.Controls.Add(this.chkHideDlcNotOnSale);
-            this.grbLibrary.Controls.Add(this.chkHideGamesNotOnSale);
-            this.grbLibrary.Controls.Add(this.btnBlacklist);
-            this.grbLibrary.Controls.Add(this.txtDlcSearch);
-            this.grbLibrary.Controls.Add(this.txtGameSearch);
-            this.grbLibrary.Controls.Add(this.lblGameCount);
-            this.grbLibrary.Controls.Add(this.lblDlcCount);
-            this.grbLibrary.Controls.Add(this.lsvGame);
-            this.grbLibrary.Controls.Add(this.lsvDlc);
-            this.grbLibrary.Location = new System.Drawing.Point(12, 97);
-            this.grbLibrary.Name = "grbLibrary";
-            this.grbLibrary.Size = new System.Drawing.Size(693, 642);
-            this.grbLibrary.TabIndex = 4;
-            this.grbLibrary.TabStop = false;
-            this.grbLibrary.Text = "Library";
+            grbLibrary.Controls.Add(lnkTooManyDlc);
+            grbLibrary.Controls.Add(lblTooManyDlc);
+            grbLibrary.Controls.Add(lblLibraryFullPrice);
+            grbLibrary.Controls.Add(lblLibraryCurrentPrice);
+            grbLibrary.Controls.Add(chkHideDlcOwned);
+            grbLibrary.Controls.Add(chkHideDlcNotOnSale);
+            grbLibrary.Controls.Add(chkHideGamesNotOnSale);
+            grbLibrary.Controls.Add(btnBlacklist);
+            grbLibrary.Controls.Add(txtDlcSearch);
+            grbLibrary.Controls.Add(txtGameSearch);
+            grbLibrary.Controls.Add(lblGameCount);
+            grbLibrary.Controls.Add(lblDlcCount);
+            grbLibrary.Controls.Add(lsvGame);
+            grbLibrary.Controls.Add(lsvDlc);
+            grbLibrary.Location = new Point(12, 97);
+            grbLibrary.Name = "grbLibrary";
+            grbLibrary.Size = new Size(693, 642);
+            grbLibrary.TabIndex = 4;
+            grbLibrary.TabStop = false;
+            grbLibrary.Text = "Library";
             // 
             // lnkTooManyDlc
             // 
-            this.lnkTooManyDlc.AutoSize = true;
-            this.lnkTooManyDlc.Location = new System.Drawing.Point(641, 621);
-            this.lnkTooManyDlc.Name = "lnkTooManyDlc";
-            this.lnkTooManyDlc.Size = new System.Drawing.Size(30, 15);
-            this.lnkTooManyDlc.TabIndex = 5;
-            this.lnkTooManyDlc.TabStop = true;
-            this.lnkTooManyDlc.Text = "here";
-            this.lnkTooManyDlc.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LnkTooManyDlc_LinkClicked);
+            lnkTooManyDlc.AutoSize = true;
+            lnkTooManyDlc.Location = new Point(641, 621);
+            lnkTooManyDlc.Name = "lnkTooManyDlc";
+            lnkTooManyDlc.Size = new Size(30, 15);
+            lnkTooManyDlc.TabIndex = 8;
+            lnkTooManyDlc.TabStop = true;
+            lnkTooManyDlc.Text = "here";
+            lnkTooManyDlc.LinkClicked += LnkTooManyDlc_LinkClicked;
             // 
             // lblTooManyDlc
             // 
-            this.lblTooManyDlc.AutoSize = true;
-            this.lblTooManyDlc.Location = new System.Drawing.Point(391, 621);
-            this.lblTooManyDlc.Name = "lblTooManyDlc";
-            this.lblTooManyDlc.Size = new System.Drawing.Size(280, 15);
-            this.lblTooManyDlc.TabIndex = 5;
-            this.lblTooManyDlc.Text = "This game has over 200 DLC.  Check the full list here";
+            lblTooManyDlc.AutoSize = true;
+            lblTooManyDlc.Location = new Point(391, 621);
+            lblTooManyDlc.Name = "lblTooManyDlc";
+            lblTooManyDlc.Size = new Size(280, 15);
+            lblTooManyDlc.TabIndex = 0;
+            lblTooManyDlc.Text = "This game has over 200 DLC.  Check the full list here";
             // 
             // lblLibraryFullPrice
             // 
-            this.lblLibraryFullPrice.AutoSize = true;
-            this.lblLibraryFullPrice.Location = new System.Drawing.Point(355, 298);
-            this.lblLibraryFullPrice.Name = "lblLibraryFullPrice";
-            this.lblLibraryFullPrice.Size = new System.Drawing.Size(101, 15);
-            this.lblLibraryFullPrice.TabIndex = 0;
-            this.lblLibraryFullPrice.Text = "lblLibraryFullPrice";
+            lblLibraryFullPrice.AutoSize = true;
+            lblLibraryFullPrice.Location = new Point(355, 298);
+            lblLibraryFullPrice.Name = "lblLibraryFullPrice";
+            lblLibraryFullPrice.Size = new Size(101, 15);
+            lblLibraryFullPrice.TabIndex = 0;
+            lblLibraryFullPrice.Text = "lblLibraryFullPrice";
             // 
             // lblLibraryCurrentPrice
             // 
-            this.lblLibraryCurrentPrice.AutoSize = true;
-            this.lblLibraryCurrentPrice.Location = new System.Drawing.Point(212, 298);
-            this.lblLibraryCurrentPrice.Name = "lblLibraryCurrentPrice";
-            this.lblLibraryCurrentPrice.Size = new System.Drawing.Size(122, 15);
-            this.lblLibraryCurrentPrice.TabIndex = 0;
-            this.lblLibraryCurrentPrice.Text = "lblLibraryCurrentPrice";
+            lblLibraryCurrentPrice.AutoSize = true;
+            lblLibraryCurrentPrice.Location = new Point(212, 298);
+            lblLibraryCurrentPrice.Name = "lblLibraryCurrentPrice";
+            lblLibraryCurrentPrice.Size = new Size(122, 15);
+            lblLibraryCurrentPrice.TabIndex = 0;
+            lblLibraryCurrentPrice.Text = "lblLibraryCurrentPrice";
             // 
             // chkHideDlcOwned
             // 
-            this.chkHideDlcOwned.AutoSize = true;
-            this.chkHideDlcOwned.Location = new System.Drawing.Point(355, 347);
-            this.chkHideDlcOwned.Name = "chkHideDlcOwned";
-            this.chkHideDlcOwned.Size = new System.Drawing.Size(115, 19);
-            this.chkHideDlcOwned.TabIndex = 2;
-            this.chkHideDlcOwned.Text = "Hide DLC owned";
-            this.chkHideDlcOwned.UseVisualStyleBackColor = true;
-            this.chkHideDlcOwned.CheckedChanged += new System.EventHandler(this.LsvDlc_FilterChanged);
+            chkHideDlcOwned.AutoSize = true;
+            chkHideDlcOwned.Location = new Point(355, 347);
+            chkHideDlcOwned.Name = "chkHideDlcOwned";
+            chkHideDlcOwned.Size = new Size(115, 19);
+            chkHideDlcOwned.TabIndex = 7;
+            chkHideDlcOwned.Text = "Hide DLC owned";
+            chkHideDlcOwned.UseVisualStyleBackColor = true;
+            chkHideDlcOwned.CheckedChanged += LsvDlc_FilterChanged;
             // 
             // chkHideDlcNotOnSale
             // 
-            this.chkHideDlcNotOnSale.AutoSize = true;
-            this.chkHideDlcNotOnSale.Location = new System.Drawing.Point(212, 347);
-            this.chkHideDlcNotOnSale.Name = "chkHideDlcNotOnSale";
-            this.chkHideDlcNotOnSale.Size = new System.Drawing.Size(137, 19);
-            this.chkHideDlcNotOnSale.TabIndex = 2;
-            this.chkHideDlcNotOnSale.Text = "Hide DLC not on sale";
-            this.chkHideDlcNotOnSale.UseVisualStyleBackColor = true;
-            this.chkHideDlcNotOnSale.CheckedChanged += new System.EventHandler(this.LsvDlc_FilterChanged);
+            chkHideDlcNotOnSale.AutoSize = true;
+            chkHideDlcNotOnSale.Location = new Point(212, 347);
+            chkHideDlcNotOnSale.Name = "chkHideDlcNotOnSale";
+            chkHideDlcNotOnSale.Size = new Size(137, 19);
+            chkHideDlcNotOnSale.TabIndex = 6;
+            chkHideDlcNotOnSale.Text = "Hide DLC not on sale";
+            chkHideDlcNotOnSale.UseVisualStyleBackColor = true;
+            chkHideDlcNotOnSale.CheckedChanged += LsvDlc_FilterChanged;
             // 
             // chkHideGamesNotOnSale
             // 
-            this.chkHideGamesNotOnSale.AutoSize = true;
-            this.chkHideGamesNotOnSale.Location = new System.Drawing.Point(212, 24);
-            this.chkHideGamesNotOnSale.Name = "chkHideGamesNotOnSale";
-            this.chkHideGamesNotOnSale.Size = new System.Drawing.Size(150, 19);
-            this.chkHideGamesNotOnSale.TabIndex = 2;
-            this.chkHideGamesNotOnSale.Text = "Hide games not on sale";
-            this.chkHideGamesNotOnSale.UseVisualStyleBackColor = true;
-            this.chkHideGamesNotOnSale.CheckedChanged += new System.EventHandler(this.LsvGame_FilterChanged);
+            chkHideGamesNotOnSale.AutoSize = true;
+            chkHideGamesNotOnSale.Location = new Point(212, 24);
+            chkHideGamesNotOnSale.Name = "chkHideGamesNotOnSale";
+            chkHideGamesNotOnSale.Size = new Size(150, 19);
+            chkHideGamesNotOnSale.TabIndex = 2;
+            chkHideGamesNotOnSale.Text = "Hide games not on sale";
+            chkHideGamesNotOnSale.UseVisualStyleBackColor = true;
+            chkHideGamesNotOnSale.CheckedChanged += LsvGame_FilterChanged;
             // 
             // btnBlacklist
             // 
-            this.btnBlacklist.Location = new System.Drawing.Point(587, 294);
-            this.btnBlacklist.Name = "btnBlacklist";
-            this.btnBlacklist.Size = new System.Drawing.Size(100, 23);
-            this.btnBlacklist.TabIndex = 5;
-            this.btnBlacklist.Text = "Add to Blacklist";
-            this.btnBlacklist.UseVisualStyleBackColor = true;
-            this.btnBlacklist.Click += new System.EventHandler(this.BtnBlacklist_Click);
+            btnBlacklist.Location = new Point(587, 294);
+            btnBlacklist.Name = "btnBlacklist";
+            btnBlacklist.Size = new Size(100, 23);
+            btnBlacklist.TabIndex = 4;
+            btnBlacklist.Text = "Add to Blacklist";
+            btnBlacklist.UseVisualStyleBackColor = true;
+            btnBlacklist.Click += BtnBlacklist_Click;
             // 
             // txtDlcSearch
             // 
-            this.txtDlcSearch.Location = new System.Drawing.Point(6, 345);
-            this.txtDlcSearch.Name = "txtDlcSearch";
-            this.txtDlcSearch.Size = new System.Drawing.Size(200, 23);
-            this.txtDlcSearch.TabIndex = 1;
-            this.txtDlcSearch.TextChanged += new System.EventHandler(this.LsvDlc_FilterChanged);
+            txtDlcSearch.Location = new Point(6, 345);
+            txtDlcSearch.Name = "txtDlcSearch";
+            txtDlcSearch.Size = new Size(200, 23);
+            txtDlcSearch.TabIndex = 5;
+            txtDlcSearch.TextChanged += LsvDlc_FilterChanged;
             // 
             // smiSettings
             // 
-            this.smiSettings.Name = "smiSettings";
-            this.smiSettings.Size = new System.Drawing.Size(61, 20);
-            this.smiSettings.Text = "Settings";
-            this.smiSettings.Click += new System.EventHandler(this.SmiSettings_Click);
+            smiSettings.Name = "smiSettings";
+            smiSettings.Size = new Size(61, 20);
+            smiSettings.Text = "Settings";
+            smiSettings.Click += SmiSettings_Click;
             // 
             // smiBlacklist
             // 
-            this.smiBlacklist.Name = "smiBlacklist";
-            this.smiBlacklist.Size = new System.Drawing.Size(62, 20);
-            this.smiBlacklist.Text = "Blacklist";
-            this.smiBlacklist.Click += new System.EventHandler(this.SmiBlacklist_Click);
+            smiBlacklist.Name = "smiBlacklist";
+            smiBlacklist.Size = new Size(62, 20);
+            smiBlacklist.Text = "Blacklist";
+            smiBlacklist.Click += SmiBlacklist_Click;
             // 
             // smiFreeDlc
             // 
-            this.smiFreeDlc.Name = "smiFreeDlc";
-            this.smiFreeDlc.Size = new System.Drawing.Size(66, 20);
-            this.smiFreeDlc.Text = "Free DLC";
-            this.smiFreeDlc.Click += new System.EventHandler(this.SmiFreeDlc_Click);
-            this.smiFreeDlc.EnabledChanged += new System.EventHandler(this.SmiFreeDlc_EnabledChanged);
+            smiFreeDlc.Name = "smiFreeDlc";
+            smiFreeDlc.Size = new Size(66, 20);
+            smiFreeDlc.Text = "Free DLC";
+            smiFreeDlc.Click += SmiFreeDlc_Click;
+            smiFreeDlc.EnabledChanged += SmiFreeDlc_EnabledChanged;
             // 
             // mnuMenu
             // 
-            this.mnuMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.smiSettings,
-            this.smiBlacklist,
-            this.smiFreeDlc,
-            this.smiAbout});
-            this.mnuMenu.Location = new System.Drawing.Point(0, 0);
-            this.mnuMenu.Name = "mnuMenu";
-            this.mnuMenu.Size = new System.Drawing.Size(717, 24);
-            this.mnuMenu.TabIndex = 0;
-            this.mnuMenu.Text = "menuStrip1";
+            mnuMenu.Items.AddRange(new ToolStripItem[] { smiSettings, smiBlacklist, smiFreeDlc, smiAbout });
+            mnuMenu.Location = new Point(0, 0);
+            mnuMenu.Name = "mnuMenu";
+            mnuMenu.Size = new Size(717, 24);
+            mnuMenu.TabIndex = 0;
+            mnuMenu.Text = "menuStrip1";
             // 
             // smiAbout
             // 
-            this.smiAbout.Name = "smiAbout";
-            this.smiAbout.Size = new System.Drawing.Size(52, 20);
-            this.smiAbout.Text = "About";
-            this.smiAbout.Click += new System.EventHandler(this.SmiAbout_Click);
+            smiAbout.Name = "smiAbout";
+            smiAbout.Size = new Size(52, 20);
+            smiAbout.Text = "About";
+            smiAbout.Click += SmiAbout_Click;
             // 
             // btnRetryFailedGames
             // 
-            this.btnRetryFailedGames.Location = new System.Drawing.Point(555, 68);
-            this.btnRetryFailedGames.Name = "btnRetryFailedGames";
-            this.btnRetryFailedGames.Size = new System.Drawing.Size(150, 23);
-            this.btnRetryFailedGames.TabIndex = 5;
-            this.btnRetryFailedGames.Text = "btnRetryFailedGames";
-            this.btnRetryFailedGames.UseVisualStyleBackColor = true;
-            this.btnRetryFailedGames.Click += new System.EventHandler(this.BtnRetryFailedGames_Click);
+            btnRetryFailedGames.Location = new Point(555, 68);
+            btnRetryFailedGames.Name = "btnRetryFailedGames";
+            btnRetryFailedGames.Size = new Size(150, 23);
+            btnRetryFailedGames.TabIndex = 3;
+            btnRetryFailedGames.Text = "btnRetryFailedGames";
+            btnRetryFailedGames.UseVisualStyleBackColor = true;
+            btnRetryFailedGames.Click += BtnRetryFailedGames_Click;
             // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(717, 751);
-            this.Controls.Add(this.btnRetryFailedGames);
-            this.Controls.Add(this.mnuMenu);
-            this.Controls.Add(this.btnLogin);
-            this.Controls.Add(this.lblUsername);
-            this.Controls.Add(this.btnLogout);
-            this.Controls.Add(this.btnCalculate);
-            this.Controls.Add(this.ptbAvatar);
-            this.Controls.Add(this.grbLibrary);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.mnuMenu;
-            this.MaximizeBox = false;
-            this.Name = "FrmMain";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Steam DLC Shopping";
-            this.Load += new System.EventHandler(this.FrmMain_Load);
-            this.Shown += new System.EventHandler(this.FrmMain_Shown);
-            ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).EndInit();
-            this.grbLibrary.ResumeLayout(false);
-            this.grbLibrary.PerformLayout();
-            this.mnuMenu.ResumeLayout(false);
-            this.mnuMenu.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(717, 751);
+            Controls.Add(btnRetryFailedGames);
+            Controls.Add(mnuMenu);
+            Controls.Add(btnLogin);
+            Controls.Add(lblUsername);
+            Controls.Add(btnLogout);
+            Controls.Add(btnCalculate);
+            Controls.Add(ptbAvatar);
+            Controls.Add(grbLibrary);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MainMenuStrip = mnuMenu;
+            MaximizeBox = false;
+            Name = "FrmMain";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Steam DLC Shopping";
+            Load += FrmMain_Load;
+            Shown += FrmMain_Shown;
+            ((System.ComponentModel.ISupportInitialize)ptbAvatar).EndInit();
+            grbLibrary.ResumeLayout(false);
+            grbLibrary.PerformLayout();
+            mnuMenu.ResumeLayout(false);
+            mnuMenu.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

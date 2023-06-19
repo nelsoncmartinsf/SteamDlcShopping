@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	<Version>1.2.0</Version>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
@@ -10,6 +11,19 @@
     <ApplicationIcon>Media\icon.ico</ApplicationIcon>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
     <AssemblyName>SteamDlcShopping</AssemblyName>
+    <StartupObject>SteamDlcShopping.App.Program</StartupObject>
+    <PackageProjectUrl></PackageProjectUrl>
+    <Authors>DiogoABDias</Authors>
+    <Company>$(Authors)</Company>
+    <RepositoryUrl>https://github.com/DiogoABDias/SteamDlcShopping</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>

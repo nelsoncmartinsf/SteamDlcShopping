@@ -4,19 +4,24 @@ namespace SteamDlcShopping.Core.Controllers;
 
 public static class CoreController
 {
-    public static async Task<string?> GetLatestVersionName()
+    public static async Task<string?> GetLatestVersionName(string currentVersion)
     {
-        //Get latest release from GitHub
-        //Source: https://octokitnet.readthedocs.io/en/latest/getting-started/
-
         GitHubClient client = new(new ProductHeaderValue("SteamDlcShopping"));
         Release release = await client.Repository.Release.GetLatest("DiogoABDias", "SteamDlcShopping");
 
-        Version latestGitHubVersion = new(release.TagName.Replace("v", ""));
-        Version localVersion = new("1.1.0");
+        Version latestGitHubVersion = new(release.TagName[1..]);
+        Version localVersion = new(currentVersion);
         int versionComparison = localVersion.CompareTo(latestGitHubVersion);
 
         return versionComparison < 0 ? release.Name : null;
+    }
+
+    public static async Task<string> GetLatestVersionUrl()
+    {
+        GitHubClient client = new(new ProductHeaderValue("SteamDlcShopping"));
+        Release release = await client.Repository.Release.GetLatest("DiogoABDias", "SteamDlcShopping");
+
+        return release.Assets[0].BrowserDownloadUrl;
     }
 
     public static void OpenLink(string url)
@@ -34,4 +39,6 @@ public static class CoreController
 
         process.Start();
     }
+
+    public static void LogException(Exception exception) => Log.Fatal(exception);
 }
