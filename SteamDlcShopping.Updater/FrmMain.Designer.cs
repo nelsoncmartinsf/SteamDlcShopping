@@ -51,6 +51,7 @@ partial class FrmMain
         Name = "FrmMain";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Auto Update";
+        FormClosing += FrmMain_FormClosing;
         Shown += FrmMain_Shown;
         ResumeLayout(false);
     }

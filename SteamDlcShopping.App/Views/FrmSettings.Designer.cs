@@ -190,9 +190,9 @@
             lblDlcSort.AutoSize = true;
             lblDlcSort.Location = new Point(28, 169);
             lblDlcSort.Name = "lblDlcSort";
-            lblDlcSort.Size = new Size(122, 15);
+            lblDlcSort.Size = new Size(108, 15);
             lblDlcSort.TabIndex = 0;
-            lblDlcSort.Text = "Games default sort by";
+            lblDlcSort.Text = "DLC default sort by";
             // 
             // chkUseMemeLoading
             // 

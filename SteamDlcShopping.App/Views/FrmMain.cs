@@ -1,4 +1,6 @@
-﻿namespace SteamDlcShopping.App.Views;
+﻿using System.Diagnostics;
+
+namespace SteamDlcShopping.App.Views;
 
 public partial class FrmMain : Form
 {
@@ -616,7 +618,7 @@ public partial class FrmMain : Form
         CoreController.OpenLink(url);
     }
 
-    private async Task NewVersionAvailable()
+    private static async Task NewVersionAvailable()
     {
         if (Settings.Default.UpdateIgnored)
         {
@@ -630,15 +632,18 @@ public partial class FrmMain : Form
             return;
         }
 
-        DialogResult result = MessageBox.Show($"Version {latestVersion} is out! Would you like to update now?", "Update", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+        DialogResult result = MessageBox.Show($"Version {latestVersion} is out! Would you like to update now?", "Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-        if (result != DialogResult.OK)
+        if (result != DialogResult.Yes)
         {
             Settings.Default.UpdateIgnored = true;
             Settings.Default.Save();
+
+            return;
         }
 
-        Close();
+        Process.Start("Updater.exe");
+        Application.Exit();
     }
 
     private static async void AutoBlacklistReminder()

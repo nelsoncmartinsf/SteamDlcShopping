@@ -61,7 +61,7 @@
             lblVersion.Name = "lblVersion";
             lblVersion.Size = new Size(37, 15);
             lblVersion.TabIndex = 0;
-            lblVersion.Text = "v1.2.1";
+            lblVersion.Text = "v1.0.0";
             // 
             // lnkNewVersion
             // 

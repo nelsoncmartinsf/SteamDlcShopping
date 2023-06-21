@@ -1,4 +1,6 @@
-﻿namespace SteamDlcShopping.App.Views;
+﻿using System.Diagnostics;
+
+namespace SteamDlcShopping.App.Views;
 
 public partial class FrmAbout : Form
 {
@@ -8,6 +10,7 @@ public partial class FrmAbout : Form
 
     private async void FrmAbout_Load(object sender, EventArgs e)
     {
+        lblVersion.Text = Application.ProductVersion;
         _latestVersion = await CoreController.GetLatestVersionName(Application.ProductVersion);
 
         if (_latestVersion is null)
@@ -21,11 +24,11 @@ public partial class FrmAbout : Form
 
     private void LnkNewVersion_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-        //CoreController.OpenLink($"https://github.com/DiogoABDias/SteamDlcShopping/releases/tag/{_latestVersion}");
-
         Settings.Default.UpdateIgnored = false;
         Settings.Default.Save();
-        Close();
+
+        Process.Start("Updater.exe");
+        Application.Exit();
     }
 
     private void LnkAbout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => CoreController.OpenLink("https://github.com/DiogoABDias/SteamDlcShopping");
