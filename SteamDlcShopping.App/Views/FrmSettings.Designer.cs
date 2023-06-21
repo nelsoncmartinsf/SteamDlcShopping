@@ -73,7 +73,7 @@
             btnSave.Location = new Point(211, 278);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
-            btnSave.TabIndex = 5;
+            btnSave.TabIndex = 9;
             btnSave.Text = "Save";
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += BtnSave_Click;
@@ -84,7 +84,7 @@
             btnCancel.Location = new Point(292, 278);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
-            btnCancel.TabIndex = 6;
+            btnCancel.TabIndex = 10;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += BtnCancel_Click;
@@ -165,7 +165,7 @@
             ddlGameSort.Location = new Point(156, 128);
             ddlGameSort.Name = "ddlGameSort";
             ddlGameSort.Size = new Size(100, 23);
-            ddlGameSort.TabIndex = 8;
+            ddlGameSort.TabIndex = 5;
             // 
             // lblGameSort
             // 
@@ -173,7 +173,7 @@
             lblGameSort.Location = new Point(28, 131);
             lblGameSort.Name = "lblGameSort";
             lblGameSort.Size = new Size(122, 15);
-            lblGameSort.TabIndex = 7;
+            lblGameSort.TabIndex = 0;
             lblGameSort.Text = "Games default sort by";
             // 
             // ddlDlcSort
@@ -183,16 +183,16 @@
             ddlDlcSort.Location = new Point(156, 166);
             ddlDlcSort.Name = "ddlDlcSort";
             ddlDlcSort.Size = new Size(100, 23);
-            ddlDlcSort.TabIndex = 10;
+            ddlDlcSort.TabIndex = 6;
             // 
             // lblDlcSort
             // 
             lblDlcSort.AutoSize = true;
             lblDlcSort.Location = new Point(28, 169);
             lblDlcSort.Name = "lblDlcSort";
-            lblDlcSort.Size = new Size(122, 15);
-            lblDlcSort.TabIndex = 9;
-            lblDlcSort.Text = "Games default sort by";
+            lblDlcSort.Size = new Size(108, 15);
+            lblDlcSort.TabIndex = 0;
+            lblDlcSort.Text = "DLC default sort by";
             // 
             // chkUseMemeLoading
             // 
@@ -201,7 +201,7 @@
             chkUseMemeLoading.Location = new Point(28, 243);
             chkUseMemeLoading.Name = "chkUseMemeLoading";
             chkUseMemeLoading.Size = new Size(182, 19);
-            chkUseMemeLoading.TabIndex = 3;
+            chkUseMemeLoading.TabIndex = 8;
             chkUseMemeLoading.Text = "Use meme loading animation";
             chkUseMemeLoading.UseVisualStyleBackColor = true;
             chkUseMemeLoading.CheckedChanged += ChkAutoBlacklist_CheckedChanged;
@@ -213,7 +213,7 @@
             ddlPageOpener.Location = new Point(156, 205);
             ddlPageOpener.Name = "ddlPageOpener";
             ddlPageOpener.Size = new Size(100, 23);
-            ddlPageOpener.TabIndex = 12;
+            ddlPageOpener.TabIndex = 7;
             // 
             // lblPageOpener
             // 
@@ -221,7 +221,7 @@
             lblPageOpener.Location = new Point(28, 208);
             lblPageOpener.Name = "lblPageOpener";
             lblPageOpener.Size = new Size(96, 15);
-            lblPageOpener.TabIndex = 11;
+            lblPageOpener.TabIndex = 0;
             lblPageOpener.Text = "Open pages with";
             // 
             // FrmSettings

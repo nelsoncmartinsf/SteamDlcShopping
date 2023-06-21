@@ -31,6 +31,7 @@
             lblAbout = new Label();
             lnkAbout = new LinkLabel();
             lblVersion = new Label();
+            lnkNewVersion = new LinkLabel();
             SuspendLayout();
             // 
             // lblAbout
@@ -48,7 +49,7 @@
             lnkAbout.Location = new Point(174, 37);
             lnkAbout.Name = "lnkAbout";
             lnkAbout.Size = new Size(45, 15);
-            lnkAbout.TabIndex = 1;
+            lnkAbout.TabIndex = 2;
             lnkAbout.TabStop = true;
             lnkAbout.Text = "GitHub";
             lnkAbout.LinkClicked += LnkAbout_LinkClicked;
@@ -59,14 +60,27 @@
             lblVersion.Location = new Point(12, 37);
             lblVersion.Name = "lblVersion";
             lblVersion.Size = new Size(37, 15);
-            lblVersion.TabIndex = 2;
-            lblVersion.Text = "v1.2.1";
+            lblVersion.TabIndex = 0;
+            lblVersion.Text = "v1.0.0";
+            // 
+            // lnkNewVersion
+            // 
+            lnkNewVersion.AutoSize = true;
+            lnkNewVersion.Location = new Point(55, 37);
+            lnkNewVersion.Name = "lnkNewVersion";
+            lnkNewVersion.Size = new Size(78, 15);
+            lnkNewVersion.TabIndex = 1;
+            lnkNewVersion.TabStop = true;
+            lnkNewVersion.Text = "New version!!";
+            lnkNewVersion.Visible = false;
+            lnkNewVersion.LinkClicked += LnkNewVersion_LinkClicked;
             // 
             // FrmAbout
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(234, 61);
+            Controls.Add(lnkNewVersion);
             Controls.Add(lblVersion);
             Controls.Add(lnkAbout);
             Controls.Add(lblAbout);
@@ -78,6 +92,7 @@
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "About";
+            Load += FrmAbout_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -87,5 +102,6 @@
         private Label lblAbout;
         private LinkLabel lnkAbout;
         private Label lblVersion;
+        private LinkLabel lnkNewVersion;
     }
 }

@@ -28,45 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.webLogin = new Microsoft.Web.WebView2.WinForms.WebView2();
-            ((System.ComponentModel.ISupportInitialize)(this.webLogin)).BeginInit();
-            this.SuspendLayout();
+            webLogin = new Microsoft.Web.WebView2.WinForms.WebView2();
+            ((System.ComponentModel.ISupportInitialize)webLogin).BeginInit();
+            SuspendLayout();
             // 
             // webLogin
             // 
-            this.webLogin.AllowExternalDrop = true;
-            this.webLogin.CreationProperties = null;
-            this.webLogin.DefaultBackgroundColor = System.Drawing.Color.White;
-            this.webLogin.Location = new System.Drawing.Point(0, 0);
-            this.webLogin.Name = "webLogin";
-            this.webLogin.Size = new System.Drawing.Size(784, 495);
-            this.webLogin.Source = new System.Uri("https://store.steampowered.com/login", System.UriKind.Absolute);
-            this.webLogin.TabIndex = 0;
-            this.webLogin.Visible = false;
-            this.webLogin.ZoomFactor = 1D;
-            this.webLogin.CoreWebView2InitializationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs>(this.WebLogin_CoreWebView2InitializationCompleted);
-            this.webLogin.NavigationStarting += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs>(this.WebLogin_NavigationStarting);
-            this.webLogin.NavigationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs>(this.WebLogin_NavigationCompletedAsync);
+            webLogin.AllowExternalDrop = true;
+            webLogin.CreationProperties = null;
+            webLogin.DefaultBackgroundColor = Color.White;
+            webLogin.Location = new Point(0, 0);
+            webLogin.Name = "webLogin";
+            webLogin.Size = new Size(784, 495);
+            webLogin.Source = new Uri("https://store.steampowered.com/login", UriKind.Absolute);
+            webLogin.TabIndex = 1;
+            webLogin.Visible = false;
+            webLogin.ZoomFactor = 1D;
+            webLogin.CoreWebView2InitializationCompleted += WebLogin_CoreWebView2InitializationCompleted;
+            webLogin.NavigationStarting += WebLogin_NavigationStarting;
+            webLogin.NavigationCompleted += WebLogin_NavigationCompletedAsync;
             // 
             // FrmLogin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 495);
-            this.Controls.Add(this.webLogin);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "FrmLogin";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Login to Steam";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmLogin_FormClosing);
-            this.Load += new System.EventHandler(this.FrmLogin_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.webLogin)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(784, 495);
+            Controls.Add(webLogin);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "FrmLogin";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Login to Steam";
+            FormClosing += FrmLogin_FormClosing;
+            Load += FrmLogin_Load;
+            ((System.ComponentModel.ISupportInitialize)webLogin).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion

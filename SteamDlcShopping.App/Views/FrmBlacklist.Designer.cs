@@ -28,97 +28,96 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblGameCount = new System.Windows.Forms.Label();
-            this.txtBlacklistSearch = new System.Windows.Forms.TextBox();
-            this.lsbBlacklist = new System.Windows.Forms.ListBox();
-            this.btnRemove = new System.Windows.Forms.Button();
-            this.btnClearAutoBlacklisted = new System.Windows.Forms.Button();
-            this.chkHideAutoBlacklistedGames = new System.Windows.Forms.CheckBox();
-            this.SuspendLayout();
+            lblGameCount = new Label();
+            txtBlacklistSearch = new TextBox();
+            lsbBlacklist = new ListBox();
+            btnRemove = new Button();
+            btnClearAutoBlacklisted = new Button();
+            chkHideAutoBlacklistedGames = new CheckBox();
+            SuspendLayout();
             // 
             // lblGameCount
             // 
-            this.lblGameCount.AutoSize = true;
-            this.lblGameCount.Location = new System.Drawing.Point(12, 243);
-            this.lblGameCount.Name = "lblGameCount";
-            this.lblGameCount.Size = new System.Drawing.Size(84, 15);
-            this.lblGameCount.TabIndex = 0;
-            this.lblGameCount.Text = "lblGameCount";
+            lblGameCount.AutoSize = true;
+            lblGameCount.Location = new Point(12, 243);
+            lblGameCount.Name = "lblGameCount";
+            lblGameCount.Size = new Size(84, 15);
+            lblGameCount.TabIndex = 0;
+            lblGameCount.Text = "lblGameCount";
             // 
             // txtBlacklistSearch
             // 
-            this.txtBlacklistSearch.Location = new System.Drawing.Point(12, 12);
-            this.txtBlacklistSearch.Name = "txtBlacklistSearch";
-            this.txtBlacklistSearch.Size = new System.Drawing.Size(200, 23);
-            this.txtBlacklistSearch.TabIndex = 1;
-            this.txtBlacklistSearch.TextChanged += new System.EventHandler(this.TxtBlacklistSearch_TextChanged);
+            txtBlacklistSearch.Location = new Point(12, 12);
+            txtBlacklistSearch.Name = "txtBlacklistSearch";
+            txtBlacklistSearch.Size = new Size(200, 23);
+            txtBlacklistSearch.TabIndex = 1;
+            txtBlacklistSearch.TextChanged += TxtBlacklistSearch_TextChanged;
             // 
             // lsbBlacklist
             // 
-            this.lsbBlacklist.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.lsbBlacklist.FormattingEnabled = true;
-            this.lsbBlacklist.ItemHeight = 15;
-            this.lsbBlacklist.Location = new System.Drawing.Point(12, 41);
-            this.lsbBlacklist.Name = "lsbBlacklist";
-            this.lsbBlacklist.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lsbBlacklist.Size = new System.Drawing.Size(610, 199);
-            this.lsbBlacklist.TabIndex = 2;
-            this.lsbBlacklist.SelectedIndexChanged += new System.EventHandler(this.LsbBlacklist_SelectedIndexChanged);
+            lsbBlacklist.Cursor = Cursors.Hand;
+            lsbBlacklist.FormattingEnabled = true;
+            lsbBlacklist.ItemHeight = 15;
+            lsbBlacklist.Location = new Point(12, 41);
+            lsbBlacklist.Name = "lsbBlacklist";
+            lsbBlacklist.SelectionMode = SelectionMode.MultiExtended;
+            lsbBlacklist.Size = new Size(610, 199);
+            lsbBlacklist.TabIndex = 3;
+            lsbBlacklist.SelectedIndexChanged += LsbBlacklist_SelectedIndexChanged;
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(411, 246);
-            this.btnRemove.Name = "btnRemove";
-            this.btnRemove.Size = new System.Drawing.Size(75, 23);
-            this.btnRemove.TabIndex = 3;
-            this.btnRemove.Text = "Remove";
-            this.btnRemove.UseVisualStyleBackColor = true;
-            this.btnRemove.Click += new System.EventHandler(this.BtnRemove_Click);
+            btnRemove.Location = new Point(411, 246);
+            btnRemove.Name = "btnRemove";
+            btnRemove.Size = new Size(75, 23);
+            btnRemove.TabIndex = 4;
+            btnRemove.Text = "Remove";
+            btnRemove.UseVisualStyleBackColor = true;
+            btnRemove.Click += BtnRemove_Click;
             // 
             // btnClearAutoBlacklisted
             // 
-            this.btnClearAutoBlacklisted.Location = new System.Drawing.Point(492, 246);
-            this.btnClearAutoBlacklisted.Name = "btnClearAutoBlacklisted";
-            this.btnClearAutoBlacklisted.Size = new System.Drawing.Size(130, 23);
-            this.btnClearAutoBlacklisted.TabIndex = 3;
-            this.btnClearAutoBlacklisted.Text = "Clear Auto Blacklisted";
-            this.btnClearAutoBlacklisted.UseVisualStyleBackColor = true;
-            this.btnClearAutoBlacklisted.Click += new System.EventHandler(this.BtnClearAutoBlacklisted_Click);
+            btnClearAutoBlacklisted.Location = new Point(492, 246);
+            btnClearAutoBlacklisted.Name = "btnClearAutoBlacklisted";
+            btnClearAutoBlacklisted.Size = new Size(130, 23);
+            btnClearAutoBlacklisted.TabIndex = 5;
+            btnClearAutoBlacklisted.Text = "Clear Auto Blacklisted";
+            btnClearAutoBlacklisted.UseVisualStyleBackColor = true;
+            btnClearAutoBlacklisted.Click += BtnClearAutoBlacklisted_Click;
             // 
             // chkHideAutoBlacklistedGames
             // 
-            this.chkHideAutoBlacklistedGames.AutoSize = true;
-            this.chkHideAutoBlacklistedGames.Location = new System.Drawing.Point(218, 16);
-            this.chkHideAutoBlacklistedGames.Name = "chkHideAutoBlacklistedGames";
-            this.chkHideAutoBlacklistedGames.Size = new System.Drawing.Size(178, 19);
-            this.chkHideAutoBlacklistedGames.TabIndex = 4;
-            this.chkHideAutoBlacklistedGames.Text = "Hide Auto Blacklisted Games";
-            this.chkHideAutoBlacklistedGames.UseVisualStyleBackColor = true;
-            this.chkHideAutoBlacklistedGames.CheckedChanged += new System.EventHandler(this.ChkHideAutoBlacklistedGames_CheckedChanged);
+            chkHideAutoBlacklistedGames.AutoSize = true;
+            chkHideAutoBlacklistedGames.Location = new Point(218, 16);
+            chkHideAutoBlacklistedGames.Name = "chkHideAutoBlacklistedGames";
+            chkHideAutoBlacklistedGames.Size = new Size(178, 19);
+            chkHideAutoBlacklistedGames.TabIndex = 2;
+            chkHideAutoBlacklistedGames.Text = "Hide Auto Blacklisted Games";
+            chkHideAutoBlacklistedGames.UseVisualStyleBackColor = true;
+            chkHideAutoBlacklistedGames.CheckedChanged += ChkHideAutoBlacklistedGames_CheckedChanged;
             // 
             // FrmBlacklist
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(634, 281);
-            this.Controls.Add(this.chkHideAutoBlacklistedGames);
-            this.Controls.Add(this.lblGameCount);
-            this.Controls.Add(this.txtBlacklistSearch);
-            this.Controls.Add(this.lsbBlacklist);
-            this.Controls.Add(this.btnClearAutoBlacklisted);
-            this.Controls.Add(this.btnRemove);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "FrmBlacklist";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Blacklist";
-            this.Load += new System.EventHandler(this.FrmBlacklist_Load);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(634, 281);
+            Controls.Add(chkHideAutoBlacklistedGames);
+            Controls.Add(lblGameCount);
+            Controls.Add(txtBlacklistSearch);
+            Controls.Add(lsbBlacklist);
+            Controls.Add(btnClearAutoBlacklisted);
+            Controls.Add(btnRemove);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "FrmBlacklist";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Blacklist";
+            Load += FrmBlacklist_Load;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

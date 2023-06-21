@@ -165,5 +165,17 @@ namespace SteamDlcShopping.App.Properties {
                 this["OpenPageWithSteam"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UpdateIgnored {
+            get {
+                return ((bool)(this["UpdateIgnored"]));
+            }
+            set {
+                this["UpdateIgnored"] = value;
+            }
+        }
     }
 }
