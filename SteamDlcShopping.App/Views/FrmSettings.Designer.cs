@@ -70,7 +70,7 @@
             // btnSave
             // 
             btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnSave.Location = new Point(211, 278);
+            btnSave.Location = new Point(236, 278);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(75, 23);
             btnSave.TabIndex = 9;
@@ -81,7 +81,7 @@
             // btnCancel
             // 
             btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            btnCancel.Location = new Point(292, 278);
+            btnCancel.Location = new Point(317, 278);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(75, 23);
             btnCancel.TabIndex = 10;
@@ -228,7 +228,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(379, 313);
+            ClientSize = new Size(404, 313);
             Controls.Add(ddlPageOpener);
             Controls.Add(lblPageOpener);
             Controls.Add(ddlDlcSort);
