@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SteamDlcShopping.Maui.Views.SettingsView"
+			 HorizontalOptions="Center"
+			 VerticalOptions="Center"
+			 Background="#7F171A21">
+
+	<Border StrokeThickness="0" Padding="32">
+		<Border.StrokeShape>
+			<RoundRectangle CornerRadius="4"/>
+		</Border.StrokeShape>
+		<Border.Background>
+			<SolidColorBrush Color="#AF171A21"/>
+		</Border.Background>
+
+		<VerticalStackLayout Spacing="32">
+			<Label HorizontalOptions="Center" Text="Settings" FontSize="Medium" />
+
+			<Grid ColumnSpacing="16" RowSpacing="8">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+				</Grid.RowDefinitions>
+
+				<Label Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Text="Steam API key"/>
+				<Entry Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalTextAlignment="Center" IsPassword="True" Placeholder="Steam API key" ToolTipProperties.Text="The Steam API key is required to retrieve and list your games and DLCs." x:Name="SteamApiKeyEntry" WidthRequest="280"/>
+				<!--TODO: Figure out how to make it 'tappable'.-->
+				<!--<Label Grid.Row="1" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="End" FontSize="Caption">
+					<Label.FormattedText>
+						<FormattedString>
+							<Span Text="Get your Steam API key " />
+							<Span Text="here" TextColor="Blue">
+								<Span.GestureRecognizers>
+									<TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+								</Span.GestureRecognizers>
+							</Span>
+							<Span Text="." />
+						</FormattedString>
+					</Label.FormattedText>
+				</Label>-->
+
+				<Label Grid.Row="2" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Text="Auto Blacklist"/>
+				<CheckBox Grid.Row="2" Grid.Column="1" ToolTipProperties.Text="Automatically blacklists games that have no DLCs, improving load times." x:Name="AutoBlacklistCheckBox"/>
+
+				<Label Grid.Row="3" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="End" Text="Auto Blacklist reminder"/>
+				<Picker Grid.Row="3" Grid.Column="1" HorizontalOptions="EndAndExpand" WidthRequest="280">
+					<Picker.ItemsSource>
+						<x:Array Type="{x:Type x:String}">
+							<x:String>Every week</x:String>
+							<x:String>Every month</x:String>
+							<x:String>Every year</x:String>
+							<x:String>Next Big Bang, not the Theory</x:String>
+						</x:Array>
+					</Picker.ItemsSource>
+				</Picker>
+			</Grid>
+
+			<HorizontalStackLayout HorizontalOptions="End" Spacing="8">
+				<Button Text="Save changes" StyleClass="Primary" Clicked="SaveChangesButton_ClickedEvent"/>
+				<Button Text="Discard changes" Clicked="DiscardChangesButton_ClickedEvent"/>
+			</HorizontalStackLayout>
+		</VerticalStackLayout>
+
+	</Border>
+</ContentView>

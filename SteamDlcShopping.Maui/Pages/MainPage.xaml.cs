@@ -18,7 +18,7 @@ public partial class MainPage : ContentPage
 
     private void SignInButton_ClickedEvent(object sender, EventArgs e)
     {
-
+        SteamLogInView.OpenSteamLogIn();
     }
     private void SignOutButton_ClickedEvent(object sender, EventArgs e)
     {
@@ -27,6 +27,8 @@ public partial class MainPage : ContentPage
 
     private void SettingsButton_ClickedEvent(object sender, EventArgs e)
     {
+        SettingsView.OpenSettingsView();
+
         //Window settingsWindow = new Window(new SettingsPage()) {
         //    Width = 800,
         //    Height = 600,

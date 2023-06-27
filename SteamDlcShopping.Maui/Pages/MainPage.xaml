@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:views="clr-namespace:SteamDlcShopping.Maui.Views"
              x:Class="SteamDlcShopping.Maui.Pages.MainPage"
 			 Loaded="ContentPage_LoadedEvent">
 	<ContentPage.Background>
@@ -98,5 +99,11 @@
 			</Border>
 
 		</StackLayout>
+
+		<!-- Overlay elements -->
+		<Grid Grid.RowSpan="2" Grid.ColumnSpan="3" Margin="-8">
+			<views:SettingsView x:Name="SettingsView" IsVisible="False" />
+			<views:SteamLogInView x:Name="SteamLogInView" IsVisible="False" />
+		</Grid>
 	</Grid>
 </ContentPage>
