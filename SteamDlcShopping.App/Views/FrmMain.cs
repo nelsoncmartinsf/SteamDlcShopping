@@ -642,6 +642,10 @@ public partial class FrmMain : Form
             return;
         }
 
+        File.Delete("Updater.exe");
+        await File.WriteAllBytesAsync($"{Environment.CurrentDirectory}\\Updater.exe", Resources.Updater);
+        File.SetAttributes("Updater.exe", FileAttributes.Hidden);
+
         Process.Start("Updater.exe");
         Application.Exit();
     }

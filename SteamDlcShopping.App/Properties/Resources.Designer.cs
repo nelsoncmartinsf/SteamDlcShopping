@@ -89,5 +89,25 @@ namespace SteamDlcShopping.App.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Updater {
+            get {
+                object obj = ResourceManager.GetObject("Updater", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] WebView2Loader {
+            get {
+                object obj = ResourceManager.GetObject("WebView2Loader", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

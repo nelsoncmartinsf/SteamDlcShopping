@@ -19,6 +19,9 @@ internal static class Program
 
         if (!string.IsNullOrWhiteSpace(Settings.Default.SteamApiKey))
         {
+            File.WriteAllBytes($"{Environment.CurrentDirectory}\\WebView2Loader.dll", Resources.WebView2Loader);
+            File.Delete("Updater.exe");
+
             Application.Run(new FrmMain());
         }
 
