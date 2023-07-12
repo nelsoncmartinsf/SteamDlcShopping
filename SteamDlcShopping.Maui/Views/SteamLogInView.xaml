@@ -14,8 +14,7 @@
 			<SolidColorBrush Color="#AF171A21"/>
 		</Border.Background>
 
-		<WebView x:Name="SteamLogInWebView" Navigating="SteamLogInWebView_Navigating" Navigated="SteamLogInWebView_Navigated"
-				 Loaded="SteamLogInWebView_Loaded" />
+		<WebView x:Name="SteamLogInWebView" Navigating="SteamLogInWebView_Navigating" Navigated="SteamLogInWebView_Navigated" />
 
 	</Border>
 </ContentView>

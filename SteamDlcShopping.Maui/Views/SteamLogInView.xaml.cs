@@ -1,10 +1,10 @@
-//using CoreWebView2 = Microsoft.Web.WebView2.Core.CoreWebView2;
-//using MauiWebView = Microsoft.Maui.Platform.MauiWebView;
+﻿using Microsoft.Web.WebView2.Core;
 
 namespace SteamDlcShopping.Maui.Views;
 
 public partial class SteamLogInView : ContentView
 {
+    public event EventHandler<EventArgs> LoggedIn;
     public SteamLogInView()
     {
         InitializeComponent();
@@ -12,48 +12,65 @@ public partial class SteamLogInView : ContentView
 
     public void OpenSteamLogIn()
     {
-        this.IsVisible = true;
+        RedirectToSteamLogin();
 
-        SteamLogInWebView.Cookies = new System.Net.CookieContainer();
-        SteamLogInWebView.Source = new UrlWebViewSource()
-        {
-            Url = "https://store.steampowered.com/login",
-        };
+        this.IsVisible = true;
     }
     public void CloseSteamLogIn()
     {
         this.IsVisible = false;
     }
 
+    private void RedirectToSteamLogin()
+    {
+        SteamLogInWebView.Source = new UrlWebViewSource()
+        {
+            Url = "https://store.steampowered.com/login",
+        };
+    }
+    private async void GetCookies()
+    {
+        if (SteamLogInWebView.Handler.PlatformView is Microsoft.Maui.Platform.MauiWebView mauiWebView)
+        {
+            IReadOnlyList<CoreWebView2Cookie> cookies = await mauiWebView.CoreWebView2.CookieManager.GetCookiesAsync(null);
+
+            // TODO: Since the web views automagically retains the cookies, should we retrieve directly from there instead?
+            CoreWebView2Cookie sessionCookie = cookies.FirstOrDefault(q => q.Name.Equals("sessionid", StringComparison.InvariantCultureIgnoreCase));
+            CoreWebView2Cookie loginCookie = cookies.FirstOrDefault(q => q.Name.Equals("steamloginsecure", StringComparison.InvariantCultureIgnoreCase));
+            //1722447882.17095
+            if (sessionCookie != null && loginCookie != null)
+            {
+                Utils.Settings.SessionId = sessionCookie.Value;
+                Utils.Settings.SteamLoginSecure = loginCookie.Value;
+
+                LoggedIn?.Invoke(this, EventArgs.Empty);
+            }
+        }
+    }
     private void SteamLogInWebView_Navigating(object sender, WebNavigatingEventArgs e)
     {
-        var a = e.Url;
-    }
-
-    private void SteamLogInWebView_Navigated(object sender, WebNavigatedEventArgs e)
-    {
-        var a = e.Url;
-
-        var kujihl = SteamLogInWebView.Handler.PlatformView;
-
-        if(SteamLogInWebView.Handler.PlatformView is Microsoft.Maui.Platform.MauiWebView mauiWebView)
+        if (e.Url.Equals("https://store.steampowered.com/login"))
         {
-
-            //if(mauiWebView.)
+            return;
+        }
+        if (e.Url.Equals("https://store.steampowered.com/"))
+        {
+            e.Cancel = true;
+            GetCookies();
+            return;
         }
 
-        
+        if (SteamLogInWebView.Handler.PlatformView is Microsoft.Maui.Platform.MauiWebView mauiWebView)
+        {
+            mauiWebView.CoreWebView2.CookieManager.DeleteAllCookies();
+        }
 
-        //MauiWebView mauiWebView = SteamLogInWebView.Handler.PlatformView as MauiWebView;
-        //CoreWebView2 f = mauiWebView.CoreWebView2 as CoreWebView2;//.CookieManager.GetCookiesAsync();
-        //var asd = f.CookieManager.GetCookiesAsync(null).Result;
-
-        var bv = SteamLogInWebView.Handler.PlatformView;
+        RedirectToSteamLogin();
     }
-
-    private void SteamLogInWebView_Loaded(object sender, EventArgs e)
+    private void SteamLogInWebView_Navigated(object sender, WebNavigatedEventArgs e)
     {
-        var a = e;
+        //GetCookies();
 
+        base.OnHandlerChanged();
     }
 }
