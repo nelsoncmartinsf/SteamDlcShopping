@@ -34,11 +34,12 @@
 			</Border.Background>
 
 			<StackLayout Orientation="Horizontal">
-				<Image WidthRequest="96" HeightRequest="96" Background="pink"/>
+				<Image x:Name="SteamProfileImage" WidthRequest="96" HeightRequest="96"/>
 
 				<StackLayout Margin="16, 8" Orientation="Vertical">
-					<Label VerticalOptions="StartAndExpand" Text="auhmaan"></Label>
-					<Button Text="Sign in" Clicked="SignInButton_ClickedEvent"/>
+					<Label x:Name="SteamProfileLabel" VerticalOptions="StartAndExpand"></Label>
+					<Button x:Name="SignInButton" Text="Sign in" Clicked="SignInButton_ClickedEvent"/>
+					<Button x:Name="SignOutButton" Text="Sign out" Clicked="SignOutButton_ClickedEvent" IsVisible="False"/>
 				</StackLayout>
 
 				<StackLayout Margin="8" HorizontalOptions="EndAndExpand" VerticalOptions="End" Orientation="Horizontal" Spacing="8">
@@ -52,13 +53,12 @@
 		<StackLayout Grid.Row="1" Grid.Column="0" Margin="8" Orientation="Vertical">
 			<StackLayout Margin="0, 0, 0, 8" Orientation="Horizontal">
 				<Button Text="Load games" Clicked="LoadGamesButton_ClickedEvent"/>
-				<CheckBox Margin="16, 0, 0, 0" CheckedChanged="HideGamesNotOnSaleCheckbox_CheckedChangedEvent"/>
+				<CheckBox Margin="16, 0, 0, 0" CheckedChanged="HideGamesNotOnSaleCheckbox_CheckedChangedEvent" x:Name="HideGamesNotOnSaleCheckbox"/>
 				<Label VerticalOptions="Center" Text="Hide games without DLCs on sale"/>
 			</StackLayout>
-			<SearchBar Margin="0, 0, 0, 8" Placeholder="Filter games" PlaceholderColor="#7FFFFFFF" TextChanged="GameSearchBar_TextChangedEvent"/>
+			<SearchBar Margin="0, 0, 0, 8" Placeholder="Filter games" PlaceholderColor="#7FFFFFFF" TextChanged="GameSearchBar_TextChangedEvent" x:Name="GameSearchBar"/>
 
-			<Border VerticalOptions="FillAndExpand" 
-				StrokeThickness="0">
+			<Border VerticalOptions="FillAndExpand" StrokeThickness="0">
 				<Border.StrokeShape>
 					<RoundRectangle CornerRadius="4"/>
 				</Border.StrokeShape>
@@ -66,9 +66,18 @@
 					<SolidColorBrush Color="#3F171A21"/>
 				</Border.Background>
 
-				<ScrollView>
-
-				</ScrollView>
+				<ListView x:Name="GamesListView" ItemSelected="GamesListView_ItemSelected">
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<ViewCell>
+								<StackLayout Margin="8" Orientation="Horizontal" Spacing="8">
+									<Image WidthRequest="144" HeightRequest="54" Source="{Binding Banner}"/>
+									<Label VerticalOptions="Center" Text="{Binding Name}"/>
+								</StackLayout>
+							</ViewCell>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
 			</Border>
 
 		</StackLayout>
@@ -83,9 +92,7 @@
 			</StackLayout>
 			<SearchBar Margin="0, 0, 0, 8" Placeholder="Filter game DLC's" PlaceholderColor="#7FFFFFFF" TextChanged="GameDlcSearchBar_TextChangedEvent"/>
 
-			<Border
-				VerticalOptions="FillAndExpand"
-				StrokeThickness="0">
+			<Border VerticalOptions="FillAndExpand" StrokeThickness="0">
 				<Border.StrokeShape>
 					<RoundRectangle CornerRadius="4"/>
 				</Border.StrokeShape>
@@ -93,9 +100,18 @@
 					<SolidColorBrush Color="#3F171A21"/>
 				</Border.Background>
 
-				<ScrollView>
-
-				</ScrollView>
+				<ListView x:Name="DlcListView">
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<ViewCell>
+								<StackLayout Margin="8" Orientation="Horizontal" Spacing="8">
+									<Image WidthRequest="144" HeightRequest="54" Source="{Binding Banner}"/>
+									<Label VerticalOptions="Center" Text="{Binding Name}"/>
+								</StackLayout>
+							</ViewCell>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
 			</Border>
 
 		</StackLayout>
@@ -103,7 +119,7 @@
 		<!-- Overlay elements -->
 		<Grid Grid.RowSpan="2" Grid.ColumnSpan="3" Margin="-8">
 			<views:SettingsView x:Name="SettingsView" IsVisible="False" />
-			<views:SteamLogInView x:Name="SteamLogInView" IsVisible="False" />
+			<views:SteamLogInView x:Name="SteamLogInView" IsVisible="False" LoggedIn="SteamLogInView_LoggedIn" />
 		</Grid>
 	</Grid>
 </ContentPage>
