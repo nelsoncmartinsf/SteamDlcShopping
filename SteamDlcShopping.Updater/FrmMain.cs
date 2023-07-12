@@ -1,17 +1,10 @@
-using SharpCompress.Archives;
-using SharpCompress.Archives.Zip;
-using SharpCompress.Common;
 using SteamDlcShopping.Core.Controllers;
 using System.Diagnostics;
-using System.IO;
-using ZipArchive = SharpCompress.Archives.Zip.ZipArchive;
 
 namespace SteamDlcShopping.Updater;
 
 public partial class FrmMain : Form
 {
-    private bool _openApp = true;
-
     public FrmMain() => InitializeComponent();
 
     private async void FrmMain_Shown(object sender, EventArgs e)
@@ -22,49 +15,29 @@ public partial class FrmMain : Form
 
             string url = await CoreController.GetLatestVersionUrl();
             using Stream stream = await new HttpClient().GetStreamAsync(url);
-            using FileStream fileStream = new("SteamDlcShopping.zip", FileMode.OpenOrCreate);
-            File.SetAttributes("SteamDlcShopping.zip", FileAttributes.Hidden);
+            using FileStream fileStream = new("SteamDlcShopping.exe", FileMode.OpenOrCreate);
             await stream.CopyToAsync(fileStream);
             fileStream.Close();
 
-            lblProgress.Text = "Unzipping the contents...";
-
-            using ZipArchive archive = ZipArchive.Open("SteamDlcShopping.zip");
-            foreach (ZipArchiveEntry entry in archive.Entries.Where(entry => !entry.IsDirectory))
-            {
-                entry.WriteToDirectory(".", new ExtractionOptions()
-                {
-                    ExtractFullPath = true,
-                    Overwrite = true
-                });
-            }
-
-            archive.Dispose();
-
-            File.Delete("SteamDlcShopping.zip");
-
             lblProgress.ForeColor = Color.Green;
             lblProgress.Text = "SteamDlcShopping successfully updated!";
+
+            string file = "SteamDlcShopping.exe";
+
+            if (!File.Exists(file))
+            {
+                return;
+            }
+
+            await Task.Delay(5000);
+            Process.Start(file);
+            Close();
         }
         catch (Exception ex)
         {
-            _openApp = false;
             lblProgress.ForeColor = Color.Red;
-            lblProgress.Text = "An error was encountered updating SteamDlcShopping!";
+            lblProgress.Text = $"An error was encountered updating SteamDlcShopping!{Environment.NewLine}Try downloading the latest version manually.";
             CoreController.LogException(ex);
         }
-
-        await Task.Delay(5000);
-        Close();
-    }
-
-    private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
-    {
-        if (!_openApp)
-        {
-            return;
-        }
-
-        Process.Start("SteamDlcShopping.exe");
     }
 }

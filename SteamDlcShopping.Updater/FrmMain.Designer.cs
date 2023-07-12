@@ -46,12 +46,12 @@ partial class FrmMain
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(284, 111);
         Controls.Add(lblProgress);
+        FormBorderStyle = FormBorderStyle.FixedSingle;
         MaximizeBox = false;
         MinimizeBox = false;
         Name = "FrmMain";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "Auto Update";
-        FormClosing += FrmMain_FormClosing;
         Shown += FrmMain_Shown;
         ResumeLayout(false);
     }

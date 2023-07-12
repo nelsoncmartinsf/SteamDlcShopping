@@ -2,12 +2,29 @@
 
 public partial class FrmSettings : Form
 {
-    readonly ErrorProvider _erpSteamApiKey;
+    private readonly ErrorProvider _erpSteamApiKey;
 
     public FrmSettings()
     {
         InitializeComponent();
-        _erpSteamApiKey = new();
+
+        //Errors
+        _erpSteamApiKey = new()
+        {
+            BlinkStyle = ErrorBlinkStyle.NeverBlink
+        };
+
+        _erpSteamApiKey.SetIconAlignment(txtSteamApiKey, ErrorIconAlignment.MiddleRight);
+        _erpSteamApiKey.SetIconPadding(txtSteamApiKey, 5);
+
+        //Help icons
+        pbtSteamApiKey.Image = SystemIcons.Information.ToBitmap();
+        ptbSmartLoading.Image = SystemIcons.Information.ToBitmap();
+
+        //Tooltips
+        ToolTip toolTip = new();
+        toolTip.SetToolTip(pbtSteamApiKey, "This key is required in order to retrieve the owned games information.");
+        toolTip.SetToolTip(ptbSmartLoading, "Improves loading times by automatically blacklisting games without DLC after the first time they were loaded.");
     }
 
     //////////////////////////////////////// FORM ////////////////////////////////////////
@@ -32,20 +49,6 @@ public partial class FrmSettings : Form
         ddlPageOpener.SelectedIndex = Settings.Default.OpenPageWithSteam ? 1 : 0;
 
         chkUseMemeLoading.Checked = Settings.Default.UseMemeLoading;
-
-        //Errors
-        _erpSteamApiKey.BlinkStyle = ErrorBlinkStyle.NeverBlink;
-        _erpSteamApiKey.SetIconAlignment(txtSteamApiKey, ErrorIconAlignment.MiddleRight);
-        _erpSteamApiKey.SetIconPadding(txtSteamApiKey, 5);
-
-        //Help icons
-        pbtSteamApiKey.Image = SystemIcons.Information.ToBitmap();
-        ptbSmartLoading.Image = SystemIcons.Information.ToBitmap();
-
-        //Tooltips
-        ToolTip toolTip = new();
-        toolTip.SetToolTip(pbtSteamApiKey, "This key is required in order to retrieve the owned games information.");
-        toolTip.SetToolTip(ptbSmartLoading, "Improves loading times by automatically blacklisting games without DLC after the first time they were loaded.");
     }
 
     //////////////////////////////////////// STEAM API KEY ////////////////////////////////////////
